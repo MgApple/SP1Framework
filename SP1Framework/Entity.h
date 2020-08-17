@@ -16,6 +16,7 @@ protected:
 	};
 	TYPE type;
 	COORD pos;
+	bool isSliding, isAttracted;
 public:
 	Entity(TYPE t);
 	~Entity(void);

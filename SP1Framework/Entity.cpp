@@ -5,6 +5,8 @@ Entity::Entity(TYPE t)
 	pos.X = -1;
 	pos.Y = -1;
 	type = t;
+	isSliding = false;
+	isAttracted = false;
 }
 
 Entity::~Entity(void)
