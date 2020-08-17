@@ -6,6 +6,10 @@
 #include <iostream>
 #include <iomanip>
 #include <sstream>
+#include <fstream>
+
+std::string save;
+int high_score;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -28,8 +32,23 @@ Console g_Console(80, 25, "SP1 Framework");
 //--------------------------------------------------------------
 void init( void )
 {
+    std::ifstream savefile;
+    savefile.open("save.txt");
+    if (savefile) {
+        while (getline(savefile, save))
+        {
+            if (save.substr(0, 11) == "high_score:")
+                high_score = stoi(save.substr(save.find(':') + 1));
+        }
+        savefile.close();
+    }
+    else {
+        std::ofstream newsave("save.txt");
+        newsave << "high_score:0";
+        high_score = 0;
+    }
     // Set precision for floating point output
-    g_dElapsedTime = 0.0;    
+    g_dElapsedTime = 0.0;
 
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
@@ -240,6 +259,7 @@ void moveCharacter()
         //Beep(1440, 30);
         g_sChar.m_cLocation.Y--;       
     }
+
     if (g_skKeyEvent[2].keyDown && g_sChar.m_cLocation.X > 0)
     {
         //Beep(1440, 30);
