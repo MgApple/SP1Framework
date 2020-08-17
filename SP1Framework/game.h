@@ -26,12 +26,16 @@ struct SMouseEvent
 // Enumeration to store the control keys that your game will have
 enum EKEYS
 {
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
+    K_W,
+    K_S,
+    K_A,
+    K_D,
+    K_J,
+    K_K,
+    K_L,
+    K_SHIFT,
     K_SPACE,
+    K_ESCAPE,
     K_COUNT
 };
 

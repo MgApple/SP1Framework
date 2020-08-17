@@ -147,12 +147,16 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     EKEYS key = K_COUNT;
     switch (keyboardEvent.wVirtualKeyCode)
     {
-    case VK_UP: key = K_UP; break;
-    case VK_DOWN: key = K_DOWN; break;
-    case VK_LEFT: key = K_LEFT; break; 
-    case VK_RIGHT: key = K_RIGHT; break; 
+    case 0x57: key = K_W; break;
+    case 0x53: key = K_S; break;
+    case 0x41: key = K_A; break;
+    case 0x44: key = K_D; break;
+    case 0x4A: key = K_J; break;
+    case 0x4B: key = K_K; break;
+    case 0x4C: key = K_L; break;
+    case SHIFT_PRESSED: key = K_SHIFT; break;
     case VK_SPACE: key = K_SPACE; break;
-    case VK_ESCAPE: key = K_ESCAPE; break; 
+    case VK_ESCAPE: key = K_ESCAPE; break;
     }
     // a key pressed event would be one with bKeyDown == true
     // a key released event would be one with bKeyDown == false
@@ -231,22 +235,22 @@ void moveCharacter()
 {    
     // Updating the location of the character based on the key release
     // providing a beep sound whenver we shift the character
-    if (g_skKeyEvent[K_UP].keyReleased && g_sChar.m_cLocation.Y > 0)
+    if (g_skKeyEvent[0].keyDown && g_sChar.m_cLocation.Y > 0)
     {
         //Beep(1440, 30);
         g_sChar.m_cLocation.Y--;       
     }
-    if (g_skKeyEvent[K_LEFT].keyReleased && g_sChar.m_cLocation.X > 0)
+    if (g_skKeyEvent[2].keyDown && g_sChar.m_cLocation.X > 0)
     {
         //Beep(1440, 30);
         g_sChar.m_cLocation.X--;        
     }
-    if (g_skKeyEvent[K_DOWN].keyReleased && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
+    if (g_skKeyEvent[1].keyDown && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
     {
         //Beep(1440, 30);
         g_sChar.m_cLocation.Y++;        
     }
-    if (g_skKeyEvent[K_RIGHT].keyReleased && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
+    if (g_skKeyEvent[3].keyDown && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
     {
         //Beep(1440, 30);
         g_sChar.m_cLocation.X++;        
@@ -380,13 +384,21 @@ void renderInputEvents()
         ss.str("");
         switch (i)
         {
-        case K_UP: key = "UP";
+        case K_W: key = "UP";
             break;
-        case K_DOWN: key = "DOWN";
+        case K_S: key = "DOWN";
             break;
-        case K_LEFT: key = "LEFT";
+        case K_A: key = "LEFT";
             break;
-        case K_RIGHT: key = "RIGHT";
+        case K_D: key = "RIGHT";
+            break;
+        case K_J: key = "Item slot 1";
+            break;
+        case K_K: key = "Item slot 2";
+            break;
+        case K_L: key = "Item slot 3";
+            break;
+        case K_SHIFT: key = "SHIFT";
             break;
         case K_SPACE: key = "SPACE";
             break;
