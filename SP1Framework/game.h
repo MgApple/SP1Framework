@@ -67,7 +67,7 @@ void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
-void renderMainMenu();  // renders the splash screen
+void renderMainMenu();  // renders the main menu
 void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
