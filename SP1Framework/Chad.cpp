@@ -13,6 +13,7 @@ Chad::Chad() : Entity(TYPE::TYPE_CHAD)
 	setPos('y', rand() % 25);
 	//}
 	charColor = 0x0C;
+	isEnd = false;
 }
 
 Chad::~Chad()
@@ -22,11 +23,15 @@ Chad::~Chad()
 
 void Chad::move()
 {
-	if (pos.X < 20)
+	// to be changed
+	if(isEnd == false)
 		++pos.X;
 	if (pos.X > 50)
+		isEnd = true;
+	if (isEnd == true)
 		--pos.X;
-
+	if (pos.X < 20)
+		isEnd = false;
 }
 
 WORD Chad::getCharColor()

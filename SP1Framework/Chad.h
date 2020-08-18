@@ -7,6 +7,7 @@ class Chad : public Entity
 private:
 	WORD charColor;
 	Player* target;
+	bool isEnd;
 
 public:
 	Chad();
