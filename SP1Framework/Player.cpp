@@ -1,12 +1,7 @@
 #include "Player.h"
-#include "game.h"
-
-//SKeyEvent g_skKeyEvent[K_COUNT];
-//SGameChar g_sChar;
 
 Player::Player() : Entity(TYPE::TYPE_PLAYER)
 {
-
 	for (int i = 0; i < 3; i++)
 	{
 		inventory[i] = 0;

@@ -7,6 +7,8 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include "Player.h"
+
 
 std::string save;
 int high_score;
@@ -17,6 +19,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
+Player player;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state s
 
@@ -279,9 +282,8 @@ void moveCharacter()
     {
         g_sChar.m_bActive = !g_sChar.m_bActive;        
     }
-
-   
 }
+
 void processUserInput()
 {
     // quits the game if player hits the escape key
@@ -475,6 +477,4 @@ void renderInputEvents()
     }
     
 }
-
-
 
