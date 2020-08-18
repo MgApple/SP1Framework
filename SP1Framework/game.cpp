@@ -276,7 +276,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player->move();
+    player->move(); // moves the character, collision detection, physics, etc
     //chad->move();
     if (chad->checkCollision()) // pushes the player
     {
@@ -284,7 +284,7 @@ void updateGame()       // gameplay logic
         player->setPos('x', player->getPos('x') + 4);
         player->setPos('y', player->getPos('y') - 3);
                 
-    } //moveCharacter();    // moves the character, collision detection, physics, etc
+    } //moveCharacter();    
                         // sound can be played here too.
 }
 
