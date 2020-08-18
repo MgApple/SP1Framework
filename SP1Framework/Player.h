@@ -1,5 +1,7 @@
 #pragma once
 #include "Entity.h"
+#include "game.h"
+
 class Player : public Entity
 {
 private:
@@ -8,9 +10,17 @@ private:
 	bool speedBuff;
 	bool securityPass;
 	bool alarmClock;
+	bool isActive;
+	SKeyEvent* key;
+	WORD charColor;
 public:
 	Player();
 	~Player();
+	void setActive(bool);
+	bool getActive();
+	void setKey(SKeyEvent*);
+	WORD getCharColor();
 	void move();
+	void render();
 };
 
