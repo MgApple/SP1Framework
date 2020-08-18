@@ -255,7 +255,7 @@ void updateGame()       // gameplay logic
 void gameOverWait()
 {
     if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
-        g_eGameState = S_SPLASHSCREEN;
+        g_eGameState = S_MAINMENU;
 }
 
 void moveCharacter()
@@ -310,7 +310,7 @@ void render()
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {
-    case S_MAINMENU: renderSplashScreen();
+    case S_MAINMENU: renderMainMenu();
         break;
     case S_GAME: renderGame();
         break;
@@ -334,18 +334,38 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
-void renderSplashScreen()  // renders the splash screen
+void renderMainMenu()  // renders the main menu
 {
-    COORD c = g_Console.getConsoleSize();
-    c.Y /= 3;
-    c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "TEST, IF U SEE THIS, MOUSE SHOULD WORK", 0x03);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
-    g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 9;
-    g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
+    std::cout << "      .++/:--.`    " << '\n'
+        << "      oMMMMMMMNNd- " << '\n'
+        << "       .-:/++shMMm`" << '\n'
+        << "              `hMMh" << '\n'
+        << "               .mMMs" << '\n'
+        << "                -NMM/" << '\n'
+        << "                 +MMN//////////////////////////////////////////////-" << '\n'
+        << "                  yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:" << '\n'
+        << "                  `dMMd:/Mo::::sm/::::dy::::/N+::::sm/::::dy::::+MMN-" << '\n'
+        << "                   .NMMo.M:    +d`    ho    .N-    /d`    yo    +MMd`" << '\n'
+        << "                    :MMN+M:    +d`    ho    .N-    /d`    yo    yMMs" << '\n'
+        << "                     +MMNMhssssdNsssssmdssssyNysssshNyssssmdsssyNMM/" << '\n'
+        << "                      yMMM:    +d`    hs   `.N-   `+d`   `ho  `-MMN-" << '\n'
+        << "                      `dMMs    +d`    ho    .N-    /d`    yo   /MMm`" << '\n'
+        << "                       -NMM+   +d`    ho    .N-    +d`    ho   yMMy" << '\n'
+        << "                        /MMMhsshNsssssmdssssyNysssshNsssssmdsssMMM+" << '\n'
+        << "                         oMMm. +d`    ho    .N-    /d`    yo  .MMN-" << '\n'
+        << "                         `hMMh`+d`    ho    .N-    +m.`..-hy/+yMMm`" << '\n'
+        << "                          .mMMs+d...--dh++ooyMhhdmmNMMMMMMMMMMMMNs" << '\n'
+        << "                          `oMMMNMNMMMMMMMMMMNNNmmdhhyssoo+//:--.`" << '\n'
+        << "                        `+mMMNhyyyso++/:--..``" << '\n'
+        << "                      .oNMMm+`   " << '\n'
+        << "                     /NMMd/` " << '\n'
+        << "                    `MMM+ " << '\n'
+        << "                     dMMdo+++++++++++++++++++++++++++++++++++++." << '\n'
+        << "                     `omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMm" << '\n'
+        << "                      /dmmNh:--------------------------sNmmMy--`" << '\n'
+        << "                     :M++s:No                         :N++s-No  " << '\n'
+        << "                     .ddooym:                         .ddooyN:" << '\n'
+        << "                      `:++:`                           `:++:` " << '\n';
 }
 
 void renderGame()
