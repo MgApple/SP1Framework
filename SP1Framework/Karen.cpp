@@ -43,13 +43,13 @@ void Karen::move(void)
 		int movement = rand() % 5;
 		for (int i = 0; i < movement; i++)
 		{
-			if (check == 0)
+			if (check == 0 && pos.X!=0)
 				pos.X--;
-			else if (check == 1)
+			else if (check == 1) //&& pos.X != 0)
 				pos.X++;
-			else if (check == 2)
+			else if (check == 2 && pos.Y != 0)
 				pos.Y--;
-			else
+			else if (check==3)// && pos.Y != 0)
 				pos.Y++;
 		}
 	}
