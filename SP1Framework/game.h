@@ -72,6 +72,7 @@ void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
+void renderChad();
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 void renderInputEvents();   // renders the status of input events
@@ -82,6 +83,5 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent);      // define this fun
 
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent);   // handles keyboard events for gameplay 
 void gameplayMouseHandler(const MOUSE_EVENT_RECORD& mouseEvent); // handles mouse events for gameplay 
-
 
 #endif // _GAME_H

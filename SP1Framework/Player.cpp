@@ -10,13 +10,14 @@ Player::Player() : Entity(TYPE::TYPE_PLAYER)
 	speedBuff = false;
 	securityPass = false;
 	alarmClock = false;
-	isActive = false;
+	isActive = true;
 	key = new SKeyEvent(); 
 	WORD charColor = 0x0C;
 }
 
 Player::~Player()
 {
+	// 
 }
 
 void Player::setActive(bool isActive)
@@ -49,15 +50,44 @@ void Player::move()
 		pos.Y++;
 	if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
 		pos.X++;
-	//if (g_skKeyEvent[K_SPACE].keyReleased)
-
+	//if (key[K_SPACE].keyReleased)
+		
 }
 
 void Player::render()
 {
 	// Draw the location of the character
 	if (isActive)
-	{
 		charColor = 0x0A;
-	}
 }
+
+//void moveCharacter()
+//{    
+//    // Updating the location of the character based on the key release
+//    // providing a beep sound whenver we shift the character
+//    if (g_skKeyEvent[0].keyDown && g_sChar.m_cLocation.Y > 0)
+//    {
+//        //Beep(1440, 30);
+//        g_sChar.m_cLocation.Y--;       
+//    }
+//
+//    if (g_skKeyEvent[2].keyDown && g_sChar.m_cLocation.X > 0)
+//    {
+//        //Beep(1440, 30);
+//        g_sChar.m_cLocation.X--;        
+//    }
+//    if (g_skKeyEvent[1].keyDown && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
+//    {
+//        //Beep(1440, 30);
+//        g_sChar.m_cLocation.Y++;        
+//    }
+//    if (g_skKeyEvent[3].keyDown && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
+//    {
+//        //Beep(1440, 30);
+//        g_sChar.m_cLocation.X++;        
+//    }
+//    if (g_skKeyEvent[K_SPACE].keyReleased)
+//    {
+//        g_sChar.m_bActive = !g_sChar.m_bActive;        
+//    }
+//}
