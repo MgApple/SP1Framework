@@ -58,10 +58,11 @@ void init( void )
     player.setPos('x', g_Console.getConsoleSize().X / 2);
     player.setPos('y', g_Console.getConsoleSize().Y / 2);
     player.setActive(true);
+    player.setKey(g_skKeyEvent);
 
-    g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
+    /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
-    g_sChar.m_bActive = true;
+    g_sChar.m_bActive = true;*/
     // sets the width, height and the font name to use in the console
     g_Console.setConsoleFont(0, 16, L"Consolas");
 

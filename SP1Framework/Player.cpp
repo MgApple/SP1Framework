@@ -45,10 +45,10 @@ void Player::move()
 		pos.Y--;
 	if (key[2].keyDown && pos.X > 0)
 		pos.X--;
-	//if (key[1].keyDown/*&& pos.Y < g_Console.getConsoleSize().Y - 1*/)
-		//pos.Y++;
-	//if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
-		//pos.X++;
+	if (key[1].keyDown/*&& pos.Y < g_Console.getConsoleSize().Y - 1*/)
+		pos.Y++;
+	if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
+		pos.X++;
 	//if (g_skKeyEvent[K_SPACE].keyReleased)
 
 }
