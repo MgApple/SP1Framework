@@ -6,7 +6,7 @@
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
 
-// struct to store keyboard events
+// struct to store keyboard eventss
 // a small subset of KEY_EVENT_RECORD
 struct SKeyEvent
 {
