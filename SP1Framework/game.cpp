@@ -8,6 +8,7 @@
 #include <sstream>
 #include <fstream>
 #include "Player.h"
+#include "Chad.h"
 
 std::string save;
 int high_score;
@@ -18,7 +19,8 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-Player      player;
+Chad*        chad;
+Player*      player;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 
@@ -55,9 +57,13 @@ void init( void )
     // sets the initial state for the game
     g_eGameState = S_MAINMENU;
 
-    player.setPos('x', g_Console.getConsoleSize().X / 2);
-    player.setPos('y', g_Console.getConsoleSize().Y / 2);
-    player.setKey(g_skKeyEvent);
+    player = new Player();
+    player->setPos('x', g_Console.getConsoleSize().X / 2);
+    player->setPos('y', g_Console.getConsoleSize().Y / 2);
+    player->setKey(g_skKeyEvent);
+
+    chad = new Chad();
+    chad->setPlayer(player);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -243,6 +249,7 @@ void update(double dt)
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
     }
+   
 }
 
 
@@ -255,8 +262,13 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player.move();
-    //moveCharacter();    // moves the character, collision detection, physics, etc
+    player->move();
+    chad->move();
+    if (chad->checkCollision())
+    {
+        player->setPos('x', player->getPos('x') + 5);
+        player->setPos('y', player->getPos('y') - 5);
+    } //moveCharacter();    // moves the character, collision detection, physics, etc
                         // sound can be played here too.
 }
 
@@ -265,37 +277,6 @@ void gameOverWait()
     if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
-
-//void moveCharacter()
-//{    
-//    // Updating the location of the character based on the key release
-//    // providing a beep sound whenver we shift the character
-//    if (g_skKeyEvent[0].keyDown && g_sChar.m_cLocation.Y > 0)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.Y--;       
-//    }
-//
-//    if (g_skKeyEvent[2].keyDown && g_sChar.m_cLocation.X > 0)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.X--;        
-//    }
-//    if (g_skKeyEvent[1].keyDown && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.Y++;        
-//    }
-//    if (g_skKeyEvent[3].keyDown && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.X++;        
-//    }
-//    if (g_skKeyEvent[K_SPACE].keyReleased)
-//    {
-//        g_sChar.m_bActive = !g_sChar.m_bActive;        
-//    }
-//}
 
 void processUserInput()
 {
@@ -379,6 +360,7 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
+    renderChad();
 }
 
 void renderGameOver()
@@ -426,12 +408,20 @@ void renderMap()
 void renderCharacter()
 {
     COORD temp;
-    temp.X = player.getPos('x');
-    temp.Y = player.getPos('y');
+    temp.X = player->getPos('x');
+    temp.Y = player->getPos('y');
     // Draw the location of the character
-    player.render();
-    g_Console.writeToBuffer(temp, (char)21
-        , player.getCharColor());
+    player->render();
+    g_Console.writeToBuffer(temp, (char)21, player->getCharColor());
+}
+
+void renderChad()
+{
+    // Draw the location of the character
+    COORD temp;
+    temp.X = chad->getPos('x');
+    temp.Y = chad->getPos('y');
+    g_Console.writeToBuffer(temp, (char)4, chad->getCharColor());
 }
 
 void renderFramerate()
