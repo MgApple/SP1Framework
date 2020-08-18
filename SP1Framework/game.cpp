@@ -233,7 +233,8 @@ void update(double dt)
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
             break;
-        case S_GAMEOVER: 
+        case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
+            break;
     }
 }
 
@@ -364,7 +365,8 @@ void renderGameOver()
         << "                                   dMMMNo-.--/dMMMy  +MMMMMMMMMMMMM+  oMMMo sMMMMM: dMMM.  hMMMM/-------." << "\n"
         << "                                   `sNMMMNNNNMMMMd/ -NMMMh+++++dMMMN- oMMMo .NMMMd  dMMM.  hMMMMNNNNNNNNs" << "\n"
         << "                                     .+shdddhhs+-`  ohhhh.     -hhhhs /hhh/  ohhh:  shhh.  ohhhhhhhhhhhh+" << "\n"
-        << "\n" << "\n" << "\n" << "\n" << "\n" << "\n" << "\n"
+        << "\n" << "\n" << "\n" << "                                  Personal Best: "<<high_score << "\n"
+        <<"                                  Score: " << "\n" << "\n" << "\n"
         << "                                     `:+syhyyo/-    +ssss.     `ssss+ -ssssssssssss/  :sssssssssso/." << "\n"
         << "                                   `omMMMMNMMMMNh:  :NMMMh     sMMMN: +MMMMMMMMMMMMy  +MMMMNmmmMMMMm:" << "\n"
         << "                                   hMMMMs:--+mMMMN:  +MMMM/   -MMMMo  +MMMMs:::::::.  +MMMMo.../MMMMh" << "\n"
