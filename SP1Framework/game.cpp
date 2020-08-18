@@ -20,7 +20,7 @@ SMouseEvent g_mouseEvent;
 // Game specific variables here
 Player      player;
 SGameChar   g_sChar;
-EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state s
+EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 
 // Console object
 Console g_Console(80, 25, "SP1 Framework");
@@ -53,7 +53,7 @@ void init( void )
     g_dElapsedTime = 0.0;
 
     // sets the initial state for the game
-    g_eGameState = S_SPLASHSCREEN;
+    g_eGameState = S_MAINMENU;
 
     player.setPos('x', g_Console.getConsoleSize().X / 2);
     player.setPos('y', g_Console.getConsoleSize().Y / 2);
@@ -123,7 +123,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {    
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: // don't handle anything for the splash screen
+    case S_MAINMENU: // don't handle anything for the splash screen
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
@@ -150,9 +150,9 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
 {    
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: // don't handle anything for the splash screen
+    case S_MAINMENU: gameplayMouseHandler(mouseEvent);
         break;
-    case S_GAME: gameplayMouseHandler(mouseEvent); // handle gameplay mouse event
+    case S_GAME: // handle gameplay mouse event
         break;
     }
 }
@@ -236,7 +236,7 @@ void update(double dt)
 
     switch (g_eGameState)
     {
-        case S_SPLASHSCREEN : splashScreenWait(); // game logic for the splash screen
+        case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
             break;
@@ -263,7 +263,7 @@ void updateGame()       // gameplay logic
 void gameOverWait()
 {
     if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
-        g_eGameState = S_SPLASHSCREEN;
+        g_eGameState = S_MAINMENU;
 }
 
 //void moveCharacter()
@@ -317,7 +317,7 @@ void render()
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: renderSplashScreen();
+    case S_MAINMENU: renderMainMenu();
         break;
     case S_GAME: renderGame();
         break;
@@ -341,18 +341,38 @@ void renderToScreen()
     g_Console.flushBufferToConsole();
 }
 
-void renderSplashScreen()  // renders the splash screen
+void renderMainMenu()  // renders the main menu
 {
-    COORD c = g_Console.getConsoleSize();
-    c.Y /= 3;
-    c.X = c.X / 2 - 9;
-    g_Console.writeToBuffer(c, "A game in 3 seconds", 0x03);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
-    g_Console.writeToBuffer(c, "Press <Space> to change character colour", 0x09);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 2 - 9;
-    g_Console.writeToBuffer(c, "Press 'Esc' to quit", 0x09);
+    std::cout << "      .++/:--.`    " << '\n'
+        << "      oMMMMMMMNNd- " << '\n'
+        << "       .-:/++shMMm`" << '\n'
+        << "              `hMMh" << '\n'
+        << "               .mMMs" << '\n'
+        << "                -NMM/" << '\n'
+        << "                 +MMN//////////////////////////////////////////////-" << '\n'
+        << "                  yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:" << '\n'
+        << "                  `dMMd:/Mo::::sm/::::dy::::/N+::::sm/::::dy::::+MMN-" << '\n'
+        << "                   .NMMo.M:    +d`    ho    .N-    /d`    yo    +MMd`" << '\n'
+        << "                    :MMN+M:    +d`    ho    .N-    /d`    yo    yMMs" << '\n'
+        << "                     +MMNMhssssdNsssssmdssssyNysssshNyssssmdsssyNMM/" << '\n'
+        << "                      yMMM:    +d`    hs   `.N-   `+d`   `ho  `-MMN-" << '\n'
+        << "                      `dMMs    +d`    ho    .N-    /d`    yo   /MMm`" << '\n'
+        << "                       -NMM+   +d`    ho    .N-    +d`    ho   yMMy" << '\n'
+        << "                        /MMMhsshNsssssmdssssyNysssshNsssssmdsssMMM+" << '\n'
+        << "                         oMMm. +d`    ho    .N-    /d`    yo  .MMN-" << '\n'
+        << "                         `hMMh`+d`    ho    .N-    +m.`..-hy/+yMMm`" << '\n'
+        << "                          .mMMs+d...--dh++ooyMhhdmmNMMMMMMMMMMMMNs" << '\n'
+        << "                          `oMMMNMNMMMMMMMMMMNNNmmdhhyssoo+//:--.`" << '\n'
+        << "                        `+mMMNhyyyso++/:--..``" << '\n'
+        << "                      .oNMMm+`   " << '\n'
+        << "                     /NMMd/` " << '\n'
+        << "                    `MMM+ " << '\n'
+        << "                     dMMdo+++++++++++++++++++++++++++++++++++++." << '\n'
+        << "                     `omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMm" << '\n'
+        << "                      /dmmNh:--------------------------sNmmMy--`" << '\n'
+        << "                     :M++s:No                         :N++s-No  " << '\n'
+        << "                     .ddooym:                         .ddooyN:" << '\n'
+        << "                      `:++:`                           `:++:` " << '\n';
 }
 
 void renderGame()
@@ -433,7 +453,7 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
-// this is an example of how you would use the input events
+// this is an example of how you would use the input eventss
 void renderInputEvents()
 {
     // keyboard events
