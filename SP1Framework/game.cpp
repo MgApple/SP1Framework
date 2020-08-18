@@ -15,6 +15,7 @@ int high_score;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
+double g_dPrevElapsedTime;
 SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
@@ -174,6 +175,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
+    float time = g_dElapsedTime - g_dPrevElapsedTime;
+
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
     switch (keyboardEvent.wVirtualKeyCode)
@@ -195,9 +198,12 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        //player.setKey(g_skKeyEvent);
-        g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
-        g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
+        if (time > 0.1f) 
+        {  //player.setKey(g_skKeyEvent);
+            g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
+            g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
+            g_dPrevElapsedTime = g_dElapsedTime;
+        }
     }    
 }
 
