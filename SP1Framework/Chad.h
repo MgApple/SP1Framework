@@ -4,6 +4,7 @@ class Chad : public Entity
 {
 
 private:
-
+	Chad();
+	~Chad();
 };
 
