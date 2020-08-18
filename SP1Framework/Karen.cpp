@@ -40,14 +40,18 @@ void Karen::move(void)
 		//insert code for moving randomly cuz im unsure how to interact with map
 		//or whether i am meant to do tht 
 		int check = rand() % 4;
-		if (check == 0)
-			pos.X--;
-		else if (check == 1)
-			pos.X++;
-		else if (check == 2)
-			pos.Y--;
-		else
-			pos.Y++;
+		int movement = rand() % 5;
+		for (int i = 0; i < movement; i++)
+		{
+			if (check == 0)
+				pos.X--;
+			else if (check == 1)
+				pos.X++;
+			else if (check == 2)
+				pos.Y--;
+			else
+				pos.Y++;
+		}
 	}
 }
 
