@@ -237,7 +237,7 @@ void update(double dt)
 
     switch (g_eGameState)
     {
-        case S_MAINMENU: splashScreenWait();
+        case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
             break;
@@ -453,7 +453,7 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
-// this is an example of how you would use the input events
+// this is an example of how you would use the input eventss
 void renderInputEvents()
 {
     // keyboard events
