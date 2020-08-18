@@ -57,7 +57,6 @@ void init( void )
 
     player.setPos('x', g_Console.getConsoleSize().X / 2);
     player.setPos('y', g_Console.getConsoleSize().Y / 2);
-    player.setActive(true);
     player.setKey(g_skKeyEvent);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
@@ -190,7 +189,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        player.setKey(g_skKeyEvent);
+        //player.setKey(g_skKeyEvent);
         g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
         g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
     }    
@@ -411,7 +410,8 @@ void renderCharacter()
     temp.Y = player.getPos('y');
     // Draw the location of the character
     player.render();
-    g_Console.writeToBuffer(temp, (char)1, player.getCharColor());
+    g_Console.writeToBuffer(temp, (char)21
+        , player.getCharColor());
 }
 
 void renderFramerate()

@@ -10,13 +10,14 @@ Player::Player() : Entity(TYPE::TYPE_PLAYER)
 	speedBuff = false;
 	securityPass = false;
 	alarmClock = false;
-	isActive = false;
+	isActive = true;
 	key = new SKeyEvent(); 
 	WORD charColor = 0x0C;
 }
 
 Player::~Player()
 {
+	// 
 }
 
 void Player::setActive(bool isActive)
@@ -49,8 +50,8 @@ void Player::move()
 		pos.Y++;
 	if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
 		pos.X++;
-	//if (g_skKeyEvent[K_SPACE].keyReleased)
-
+	//if (key[K_SPACE].keyReleased)
+		
 }
 
 void Player::render()
