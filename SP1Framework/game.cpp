@@ -233,6 +233,7 @@ void update(double dt)
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
             break;
+        case S_GAMEOVER: 
     }
 }
 
@@ -248,6 +249,12 @@ void updateGame()       // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
                         // sound can be played here too.
+}
+
+void gameOverWait()
+{
+    if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
+        g_eGameState = S_SPLASHSCREEN;
 }
 
 void moveCharacter()
@@ -306,6 +313,8 @@ void render()
         break;
     case S_GAME: renderGame();
         break;
+    case S_GAMEOVER: renderGameOver();
+        break;
     }
     renderFramerate();      // renders debug information, frame rate, elapsed time, etc
     renderInputEvents();    // renders status of input events
@@ -342,6 +351,29 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
+}
+
+void renderGameOver()
+{
+    std::cout << "                                       .-:::::.`         `-----`      .------    `------`  .------------`" << "\n"
+        << "                                    .omNNMMMMNNms.       yNNNNNy      +NNNNNN:   oNNNNNN.  yNNNNNNNNNNNN/" << "\n"
+        << "                                   /NMMMNysshNMMMm.     +MMMNMMM+     oMMMNMMh  `NMMNMMM.  hMMMMhyyyyyyy-" << "\n"
+        << "                                  .NMMMm.    -:-..     -NMMN:NMMN-    oMMMyNMM: sMMddMMM.  hMMMM+::::::-" << "\n"
+        << "                                  /MMMMo   hddddddo   `mMMM+ oMMMm`   oMMMosMMd.NMM:dMMM.  hMMMMMMMMMMMd" << "\n"
+        << "                                  :MMMMs   hddNMMMy   yMMMN///MMMMy   oMMMo.NMMdMMd dMMM.  hMMMMo++++++/" << "\n"
+        << "                                   dMMMNo-.--/dMMMy  +MMMMMMMMMMMMM+  oMMMo sMMMMM: dMMM.  hMMMM/-------." << "\n"
+        << "                                   `sNMMMNNNNMMMMd/ -NMMMh+++++dMMMN- oMMMo .NMMMd  dMMM.  hMMMMNNNNNNNNs" << "\n"
+        << "                                     .+shdddhhs+-`  ohhhh.     -hhhhs /hhh/  ohhh:  shhh.  ohhhhhhhhhhhh+" << "\n"
+        << "\n" << "\n" << "\n" << "\n" << "\n" << "\n" << "\n"
+        << "                                     `:+syhyyo/-    +ssss.     `ssss+ -ssssssssssss/  :sssssssssso/." << "\n"
+        << "                                   `omMMMMNMMMMNh:  :NMMMh     sMMMN: +MMMMMMMMMMMMy  +MMMMNmmmMMMMm:" << "\n"
+        << "                                   hMMMMs:--+mMMMN:  +MMMM/   -MMMMo  +MMMMs:::::::.  +MMMMo.../MMMMh" << "\n"
+        << "                                  :MMMMy     .MMMMd   yMMMm`  dMMMh   +MMMMdyyyyyyy`  +MMMMy//+hMMMN/" << "\n"
+        << "                                  +MMMM+      MMMMm   `mMMMs +MMMm.   +MMMMNmmmmmmm`  +MMMMNNMMMMms-" << "\n"
+        << "                                  -MMMMh`    :MMMMy    :NMMM/NMMM:    +MMMMo.......   +MMMMs-sMMMNh-" << "\n"
+        << "                                   oNMMMdo++yNMMMm.     +MMMNMMMo     +MMMMhooooooo+  +MMMM+  +NMMMm-" << "\n"
+        << "                                    :hmNMMMMMMNdo`       hMMMMMd`     +MMMMMMMMMMMMN  +MMMM+   /NMMMN:" << "\n"
+        << "                                      .-//++/:-`         `/////.      .////////////:  .////.    -////:" << "\n";
 }
 
 void renderMap()
