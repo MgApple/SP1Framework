@@ -75,7 +75,7 @@ void init( void )
 // Purpose  : Reset before exiting the program
 //            Do your clean up of memory here
 //            This is called once just before the game exits
-// Input    : Void
+// Input    : Voids
 // Output   : void
 //--------------------------------------------------------------
 void shutdown( void )
