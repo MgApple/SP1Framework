@@ -19,6 +19,7 @@ Player::Player() : Entity(TYPE::TYPE_PLAYER)
 Player::~Player()
 {
 	// 
+	delete key;
 }
 
 void Player::setActive(bool isActive)

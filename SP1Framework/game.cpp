@@ -7,11 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
-<<<<<<< HEAD
 #include "Map.h"
-=======
-#include <vector>
->>>>>>> de1e504faa8e476beda11d186faf53061ae56696
 #include "Player.h"
 #include "Chad.h"
 

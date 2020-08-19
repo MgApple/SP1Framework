@@ -35,7 +35,7 @@ void Enemy::move(void)
 			newy = pos.Y++;
 		else
 			break;
-		if (collisionCheck(newx, newy, gamemap) == false)
+		//if (collisionCheck(newx, newy, gamemap) == false)
 		{
 			setPos('x', newx);
 			setPos('y', newy);
