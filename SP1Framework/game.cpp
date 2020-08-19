@@ -436,7 +436,7 @@ void renderCharacter()
 
 void renderChad()
 {
-    // Draw the location of the character
+    // Draw the location of the charactersw
     COORD temp;
     temp.X = chad.getPos('x');
     temp.Y = chad.getPos('y');
