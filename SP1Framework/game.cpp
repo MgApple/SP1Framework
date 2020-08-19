@@ -279,7 +279,7 @@ void updateGame()       // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player->move(); // moves the character, collision detection, physics, etc
     //chad->move();
-    chadPush();
+    chadPush(); // checks if chad pushes player
     //moveCharacter();    
                         // sound can be played here too.
 }
