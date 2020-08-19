@@ -1,5 +1,6 @@
 #pragma once
 #include <windows.h>
+#include "Map.h"
 class Entity
 {
 protected:
@@ -24,6 +25,6 @@ public:
 	int getPos(char p);
 	void setPos(char p, int i);
 	void setState(char att, bool state);
-	virtual void move(void) = 0;
+	virtual void move(Map &map) = 0;
 };
 
