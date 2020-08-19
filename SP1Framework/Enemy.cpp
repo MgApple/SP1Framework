@@ -10,11 +10,14 @@ Enemy::~Enemy()
 	//blank
 }
 
-bool Enemy::collisionCheck(int intendedx, int intendedy,Map &gamemap)
+bool Enemy::collisionCheck(int intendedx, int intendedy,Map &map)
 {
-	if (gamemap.getEntity(intendedx,intendedy)!=' ')
-		return true;
-	return false;
+	for (int i = 0; i < 6; i++)
+	{
+		if (map.getEntity(intendedx, intendedy) == collidingCheck[i])
+			return false;
+	}
+	return true;
 }
 
 void Enemy::move(Map &map)

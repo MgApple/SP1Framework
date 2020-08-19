@@ -2,6 +2,7 @@
 #include "Entity.h"
 class Enemy :public Entity
 {
+	char collidingCheck[6] = {' ','T','A','D','S','P'};
 public:
 	Enemy(TYPE t);
 	~Enemy();
