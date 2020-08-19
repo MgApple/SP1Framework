@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "Player.h"
 #include "Chad.h"
+#include "Cop.h"
 
 std::string save;
 int high_score;
@@ -26,6 +27,7 @@ Entity*      chadPtr;
 Entity*      playerPtr;
 Player       player;
 Chad         chad;
+Cop          cop;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 Map map;
@@ -70,6 +72,7 @@ void init( void )
 
     chadPtr = &chad;
     chad.setPlayer(playerPtr);
+
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -357,6 +360,7 @@ void renderGame()
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderChad();
+    renderCop();
 }
 
 void renderGameOver()
@@ -437,6 +441,15 @@ void renderChad()
     temp.X = chad.getPos('x');
     temp.Y = chad.getPos('y');
     g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
+}
+
+void renderCop()
+{
+    // Draw the location of the character
+    COORD temp;
+    temp.X = cop.getPos('x');
+    temp.Y = cop.getPos('y');
+    g_Console.writeToBuffer(temp,'P', cop.getCharColour());
 }
 
 void renderFramerate()

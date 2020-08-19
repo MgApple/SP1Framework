@@ -1,9 +1,12 @@
 #pragma once
-#include "Entity.h"
+#include "Enemy.h"
 #include "game.h"
-class Karen :public Entity
+class Karen :public Enemy
 {
+private:
 	bool aggrocheck;
+	int LRcheck();
+	int UDcheck();
 public:
 	Karen();
 	~Karen();

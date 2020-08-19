@@ -73,6 +73,7 @@ void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
 void renderChad();
+void renderCop();
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 void renderInputEvents();   // renders the status of input events

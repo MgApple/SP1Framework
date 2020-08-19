@@ -1,6 +1,6 @@
 #include "Karen.h"
 
-Karen::Karen() : Entity(TYPE::TYPE_KAREN)
+Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 {
 	/*int x;
 	int y;
