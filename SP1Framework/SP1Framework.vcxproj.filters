@@ -60,7 +60,7 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Cop.cpp">
+    <ClCompile Include="fakeTP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hoarder.cpp">
@@ -104,7 +104,7 @@
     <ClInclude Include="Enemy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cop.h">
+    <ClInclude Include="fakeTP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hoarder.h">
