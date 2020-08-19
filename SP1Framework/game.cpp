@@ -181,7 +181,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
-    float time = g_dElapsedTime - g_dPrevPlayerTime;
+    double time = g_dElapsedTime - g_dPrevPlayerTime;
 
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
@@ -261,7 +261,7 @@ void update(double dt)
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
     }
-    float time = g_dElapsedTime - g_dPrevChadTime;
+    double time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
         chad.move(map);
@@ -418,7 +418,7 @@ void renderMap()
         colour(colors[i]);
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
-    Map map;
+    //Map map;
     map.loadMap();
     for (int R = 0; R < 24; R++)
     {
@@ -442,7 +442,7 @@ void renderCharacter()
     temp.X = player.getPos('x');
     temp.Y = player.getPos('y');
     // Draw the location of the character
-
+    player.setCharColor(0x0A);
     if(chad.checkCollision())
         player.setCharColor(chad.getCharColor());
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
@@ -483,7 +483,7 @@ void renderInputEvents()
     COORD startPos = {50, 2};
     std::ostringstream ss;
     std::string key;
-    for (int i = 0; i < K_COUNT; ++i)
+    for (short i = 0; i < K_COUNT; ++i)
     {
         ss.str("");
         switch (i)

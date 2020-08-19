@@ -9,6 +9,6 @@ Hoarder::~Hoarder()
 	//
 }
 
-void Hoarder::move()
+void Hoarder::move(Map& map)
 {
 }

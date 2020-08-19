@@ -6,6 +6,6 @@ class Hoarder : public Enemy
 public:
 	Hoarder();
 	~Hoarder();
-	void move();
+	void move(Map &map);
 };
 
