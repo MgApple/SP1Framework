@@ -16,12 +16,12 @@ struct SKeyEvent
 
 // struct to store mouse events
 // a small subset of MOUSE_EVENT_RECORD
-struct SMouseEvent
-{
-    COORD mousePosition;
-    DWORD buttonState;
-    DWORD eventFlags;
-};
+//struct SMouseEvent
+//{
+//    COORD mousePosition;
+//    DWORD buttonState;
+//    DWORD eventFlags;
+//};
 
 // Enumeration to store the control keys that your game will have
 enum EKEYS

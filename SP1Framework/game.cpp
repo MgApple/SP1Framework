@@ -7,7 +7,11 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+<<<<<<< HEAD
+#include "Map.h"
+=======
 #include <vector>
+>>>>>>> de1e504faa8e476beda11d186faf53061ae56696
 #include "Player.h"
 #include "Chad.h"
 
@@ -19,7 +23,7 @@ double  g_dDeltaTime;
 double  g_dPrevPlayerTime;
 double  g_dPrevChadTime;
 SKeyEvent g_skKeyEvent[K_COUNT];
-SMouseEvent g_mouseEvent;
+//SMouseEvent g_mouseEvent;
 
 // Game specific variables here
 Chad*        chad;
@@ -76,7 +80,7 @@ void init( void )
 
     // remember to set your keyboard handler, so that your functions can be notified of input events
     g_Console.setKeyboardHandler(keyboardHandler);
-    g_Console.setMouseHandler(mouseHandler);
+    //g_Console.setMouseHandler(mouseHandler);
 }
 
 //--------------------------------------------------------------
@@ -156,16 +160,16 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 // Input    : const MOUSE_EVENT_RECORD& mouseEvent - reference to a mouse event struct
 // Output   : void
 //--------------------------------------------------------------
-void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
-{    
-    switch (g_eGameState)
-    {
-    case S_MAINMENU: gameplayMouseHandler(mouseEvent);
-        break;
-    case S_GAME: // handle gameplay mouse event
-        break;
-    }
-}
+//void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
+//{    
+//    switch (g_eGameState)
+//    {
+//    case S_MAINMENU: gameplayMouseHandler(mouseEvent);
+//        break;
+//    case S_GAME: // handle gameplay mouse event
+//        break;
+//    }
+//}
 
 //--------------------------------------------------------------
 // Purpose  : This is the keyboard handler in the game state. Whenever there is a keyboard event in the game state, this function will be called.
@@ -201,7 +205,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        if (time > 0.2f) 
+        /*if (time > 0.2f) */
         {  //player.setKey(g_skKeyEvent);
             g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
             g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
@@ -219,15 +223,15 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 // Input    : const KEY_EVENT_RECORD& keyboardEvent
 // Output   : void
 //--------------------------------------------------------------
-void gameplayMouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
-{
-    if (mouseEvent.dwEventFlags & MOUSE_MOVED) // update the mouse position if there are no events
-    {
-        g_mouseEvent.mousePosition = mouseEvent.dwMousePosition;
-    }
-    g_mouseEvent.buttonState = mouseEvent.dwButtonState;
-    g_mouseEvent.eventFlags = mouseEvent.dwEventFlags;
-}
+//void gameplayMouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
+//{
+//    if (mouseEvent.dwEventFlags & MOUSE_MOVED) // update the mouse position if there are no events
+//    {
+//        g_mouseEvent.mousePosition = mouseEvent.dwMousePosition;
+//    }
+//    g_mouseEvent.buttonState = mouseEvent.dwButtonState;
+//    g_mouseEvent.eventFlags = mouseEvent.dwEventFlags;
+//}
 
 //--------------------------------------------------------------
 // Purpose  : Update function
@@ -317,7 +321,7 @@ void render()
         break;
     }
     renderFramerate();      // renders debug information, frame rate, elapsed time, etc
-    renderInputEvents();    // renders status of input events
+    //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
 
@@ -403,16 +407,33 @@ void renderMap()
     // Set up sample colours, and output shadings
     const WORD colors[] = {
         0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6
+        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
+        00
     };
 
     COORD c;
-    for (int i = 0; i < 12; ++i)
+    /*for (int i = 0; i < 12; ++i)
     {
         c.X = 5 * i;
         c.Y = i + 1;
         colour(colors[i]);
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
+    }*/
+    Map map;
+    map.loadMap();
+    for (int R = 0; R < 24; R++)
+    {
+        c.Y = R+1;
+        for (int C = 0; C < 80; C++)
+        {
+            c.X = C;
+            if (map.getEntity(R, C) == 'w')
+                g_Console.writeToBuffer(c, (char)219, colors[0]);
+            else if (map.getEntity(R, C) == ' ')
+                g_Console.writeToBuffer(c, (char)32, colors[12]);
+            else
+                g_Console.writeToBuffer(c, 'n', colors[12]);
+        }
     }
 }
 
@@ -500,7 +521,7 @@ void renderInputEvents()
     }
 
     // mouse events    
-    ss.str("");
+    /*ss.str("");
     ss << "Mouse position (" << g_mouseEvent.mousePosition.X << ", " << g_mouseEvent.mousePosition.Y << ")";
     g_Console.writeToBuffer(g_mouseEvent.mousePosition, ss.str(), 0x59);
     ss.str("");
@@ -536,7 +557,7 @@ void renderInputEvents()
         break;
     default:        
         break;
-    }
+    }*/
     
 }
 

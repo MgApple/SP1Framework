@@ -12,12 +12,12 @@ Map::~Map(void)
 	// empty
 }
 
-int Map::getEntity(char x, char y)
+int Map::getEntity(int x, int y)
 {
 	return map[x][y];
 }
 
-void Map::setEntity(char x, char y, int e)
+void Map::setEntity(int x, int y, int e)
 {
 	map[x][y] = e;
 }
