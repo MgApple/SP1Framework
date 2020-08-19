@@ -322,7 +322,7 @@ void render()
     case S_GAMEOVER: renderGameOver();
         break;
     }
-    renderFramerate();      // renders debug information, frame rate, elapsed time, etc
+    renderHUD();      // renders debug information, frame rate, elapsed time, etc
     //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
@@ -342,8 +342,8 @@ void renderToScreen()
 void renderMainMenu()  // renders the main menu
 {
     COORD c;
-    c.X = 0;
-    c.Y = 1;
+    c.X = 5;
+    c.Y = 2;
     std::ifstream menu;
     std::string line;
     menu.open("menu.txt");
@@ -402,7 +402,7 @@ void renderMap()
         c.X = 5 * i;
         c.Y = i + 1;
         colour(colors[i]);
-        g_Console.writeToBuffer(c, " °±²Û", colors[i]);
+        g_Console.writeToBuffer(c, " Â°Â±Â²Ã›", colors[i]);
     }*/
     //Map map;
     map.loadMap();
@@ -452,7 +452,7 @@ void renderCop()
     g_Console.writeToBuffer(temp,'P', cop.getCharColour());
 }
 
-void renderFramerate()
+void renderHUD()
 {
     COORD c;
     // displays the framerate
@@ -461,14 +461,14 @@ void renderFramerate()
     ss << 1.0 / g_dDeltaTime << "fps";
     c.X = g_Console.getConsoleSize().X - 9;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0xFF);
+    g_Console.writeToBuffer(c, ss.str());
 
     // displays the elapsed time
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0xFF);
+    g_Console.writeToBuffer(c, ss.str());
 }
 
 // this is an example of how you would use the input eventss
