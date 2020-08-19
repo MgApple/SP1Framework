@@ -51,7 +51,6 @@ void Karen::move(void)
 	else
 	{
 		//insert code for moving randomly cuz im unsure how to interact with map
-		//or whether i am meant to do tht 
 		int check = rand() % 4;
 		int movement = rand() % 5;
 		for (int i = 0; i < movement; i++)
