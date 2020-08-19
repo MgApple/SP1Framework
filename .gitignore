@@ -8,3 +8,4 @@ ipch/
 .vs/
 /SP1Framework/Customer.cpp
 /SP1Framework/Customer.h
+/CppProperties.json

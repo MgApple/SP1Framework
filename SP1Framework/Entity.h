@@ -6,7 +6,6 @@ protected:
 	enum TYPE
 	{
 		TYPE_PLAYER,
-		TYPE_ENEMY,
 		TYPE_KAREN,
 		TYPE_CUSTOMER,
 		TYPE_COP,
