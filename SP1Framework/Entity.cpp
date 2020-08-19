@@ -29,3 +29,11 @@ void Entity::setPos(char p, int i)
 	else if (p == 'y')
 		pos.Y = i;
 }
+
+void Entity::setState(char att, bool state)
+{
+	if (att == 's')
+		isSliding = state;
+	else if (att == 'a')
+		isAttracted = state;
+}

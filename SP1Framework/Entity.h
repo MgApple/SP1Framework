@@ -12,6 +12,7 @@ protected:
 		TYPE_CHAD,
 		TYPE_HORDER,
 		TYPE_ITEM,
+		TYPE_ENEMY,
 		TOTAL
 	};
 	TYPE type;
@@ -22,6 +23,7 @@ public:
 	~Entity(void);
 	int getPos(char p);
 	void setPos(char p, int i);
+	void setState(char att, bool state);
 	virtual void move(void) = 0;
 };
 
