@@ -19,7 +19,6 @@ Player::Player() : Entity(TYPE::TYPE_PLAYER)
 Player::~Player()
 {
 	// 
-	delete key;
 }
 
 void Player::setActive(bool isActive)
@@ -47,7 +46,7 @@ void Player::setCharColor(WORD charColor)
 	this->charColor = charColor;
 }
 
-void Player::move()
+void Player::move(Map &map)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{

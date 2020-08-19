@@ -12,7 +12,7 @@ private:
 public:
 	Chad();
 	~Chad();
-	void move();
+	void move(Map &map);
 	WORD getCharColor();
 	void setPlayer(Player*);
 	bool checkCollision();

@@ -17,7 +17,7 @@ bool Enemy::collisionCheck(int intendedx, int intendedy,Map &gamemap)
 	return false;
 }
 
-void Enemy::move(void)
+void Enemy::move(Map &map)
 {
 	int check = rand() % 4;
 	int movement = rand() % 5 + 1;
@@ -35,7 +35,7 @@ void Enemy::move(void)
 			newy = pos.Y++;
 		else
 			break;
-		//if (collisionCheck(newx, newy, gamemap) == false)
+		if (collisionCheck(newx, newy, map) == false)
 		{
 			setPos('x', newx);
 			setPos('y', newy);

@@ -30,7 +30,7 @@ public:
 	void setKey(SKeyEvent*);
 	WORD getCharColor();
 	void setCharColor(WORD);
-	void move();
+	void move(Map &map);
 	void render();
 	enum DIRECTION getDirection();
 };

@@ -21,7 +21,7 @@ Chad::~Chad()
 	//blank for now
 }
 
-void Chad::move()
+void Chad::move(Map &map)
 {
 	// to be changed
 	if(isEnd == false)

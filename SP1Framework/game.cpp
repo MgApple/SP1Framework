@@ -26,6 +26,7 @@ Chad*        chad;
 Player*      player;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
+Map map;
 
 // Console object
 Console g_Console(80, 25, "SP1 Framework");
@@ -261,7 +262,7 @@ void update(double dt)
     float time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
-        chad->move();
+        chad->move(map);
         g_dPrevChadTime = g_dElapsedTime;
     }
 }
@@ -276,7 +277,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player->move(); // moves the character, collision detection, physics, etc
+    player->move(map); // moves the character, collision detection, physics, etc
     //chad->move();
     chadPush(); // checks if chad pushes player
     //moveCharacter();    
@@ -415,7 +416,6 @@ void renderMap()
         colour(colors[i]);
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
-    Map map;
     map.loadMap();
     for (int R = 0; R < 24; R++)
     {
@@ -584,4 +584,3 @@ void chadPush()
         }
     }
 }
-

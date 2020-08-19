@@ -18,7 +18,7 @@ int Entity::getPos(char p)
 {
 	if (p == 'x')
 		return pos.X;
-	else if (p == 'y')
+	else
 		return pos.Y;
 }
 
@@ -26,7 +26,7 @@ void Entity::setPos(char p, int i)
 {
 	if (p == 'x')
 		pos.X = i;
-	else if (p == 'y')
+	else
 		pos.Y = i;
 }
 

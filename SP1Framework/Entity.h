@@ -12,7 +12,7 @@ protected:
 		TYPE_CUSTOMER,
 		TYPE_COP,
 		TYPE_CHAD,
-		TYPE_HOARDER,
+		TYPE_HORDER,
 		TYPE_ITEM,
 		TOTAL
 	};
