@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Chad.h"
 #include "Cop.h"
+#include "Customer.h"
 
 std::string save;
 int high_score;
@@ -19,15 +20,18 @@ double  g_dElapsedTime;
 double  g_dDeltaTime;
 double  g_dPrevPlayerTime;
 double  g_dPrevChadTime;
+double  g_dPrevCustomerTime;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
 // Game specific variables here
 Entity*      chadPtr;
+Entity*      customerPtr;
 Entity*      playerPtr;
 Player       player;
 Chad         chad;
 Cop          cop;
+Customer     customer;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 Map map;
@@ -72,6 +76,8 @@ void init( void )
 
     chadPtr = &chad;
     chad.setPlayer(playerPtr);
+    customerPtr = &customer;
+    customer.setPlayer(playerPtr);
 
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
@@ -270,6 +276,12 @@ void update(double dt)
         chad.move(map);
         g_dPrevChadTime = g_dElapsedTime;
     }
+    double time1 = g_dElapsedTime - g_dPrevCustomerTime;
+    if (time1 > 0.4f)
+    {
+        customer.move(map);
+        g_dPrevCustomerTime = g_dElapsedTime;
+    }
 }
 
 
@@ -285,6 +297,8 @@ void updateGame()       // gameplay logic
     player.move(map); // moves the character, collision detection, physics, etc
     //chad->move();
     chadPush(); // checks if chad pushes player
+    //customer->move();
+    customerBlock();
     //moveCharacter();    
                         // sound can be played here too.
 }
@@ -361,6 +375,7 @@ void renderGame()
     renderCharacter();  // renders the character into the buffer
     renderChad();
     renderCop();
+    renderCustomer();
 }
 
 void renderGameOver()
@@ -450,6 +465,15 @@ void renderCop()
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
     g_Console.writeToBuffer(temp,'P', cop.getCharColour());
+}
+
+void renderCustomer()
+{
+    // Draw the location of the character
+    COORD temp;
+    temp.X = customer.getPos('x');
+    temp.Y = customer.getPos('Y');
+    g_Console.writeToBuffer(temp, 'C', customer.getCharColour());
 }
 
 void renderHUD()
@@ -583,3 +607,30 @@ void chadPush()
     }
 }
 
+void customerBlock()
+{
+    if (customer.checkCollision()) // pushes the player
+    {
+        // to be changed
+        if (player.getDirection() == 0)
+        {
+            //player.setPos('x', player.getPos('x') + 4);
+            player.setPos('y', player.getPos('y') + 1);
+        }
+        else if (player.getDirection() == 1)
+        {
+            player.setPos('x', player.getPos('x') + 1);
+            //player.setPos('y', player.getPos('y') - 1);
+        }
+        else if (player.getDirection() == 2)
+        {
+            //player.setPos('x', player.getPos('x') + 4);
+            player.setPos('y', player.getPos('y') - 1);
+        }
+        else if (player.getDirection() == 3)
+        {
+            player.setPos('x', player.getPos('x') - 1);
+            //player.setPos('y', player.getPos('y') - 1);
+        }
+    }
+}
