@@ -57,12 +57,12 @@ void Player::move(Map &map)
 		pos.X--;
 		direction = LEFT;
 	}
-	if (key[1].keyDown/*&& pos.Y < g_Console.getConsoleSize().Y - 1*/)
+	if (key[1].keyDown && pos.Y < 25 - 1)
 	{
 		pos.Y++;
 		direction = DOWN;
 	}
-	if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
+	if (key[3].keyDown&& pos.X < 80 - 1)
 	{
 		pos.X++;
 		direction = RIGHT;

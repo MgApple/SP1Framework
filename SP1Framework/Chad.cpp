@@ -21,18 +21,18 @@ Chad::~Chad()
 	//blank for now
 }
 
-void Chad::move(Map &map)
-{
-	// to be changed
-	if(isEnd == false)
-		++pos.X;
-	if (pos.X > 50)
-		isEnd = true;
-	if (isEnd == true)
-		--pos.X;
-	if (pos.X < 20)
-		isEnd = false;
-}
+//void Chad::move(Map &map)
+//{
+//	// to be changed
+//	if(isEnd == false)
+//		++pos.X;
+//	if (pos.X > 50)
+//		isEnd = true;
+//	if (isEnd == true)
+//		--pos.X;
+//	if (pos.X < 20)
+//		isEnd = false;
+//}
 
 WORD Chad::getCharColor()
 {
