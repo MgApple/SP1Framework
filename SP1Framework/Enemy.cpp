@@ -10,7 +10,7 @@ Enemy::~Enemy()
 	//blank
 }
 
-bool Enemy::collisionCheck(int intendedx, int intendedy,Map &map)
+bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
 	for (int i = 0; i < 6; i++)
 	{
@@ -43,6 +43,5 @@ void Enemy::move(Map &map)
 			setPos('x', newx);
 			setPos('y', newy);
 		}
-
 	}
 }

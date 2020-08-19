@@ -1,5 +1,6 @@
 // This is the main file to hold everthing together
 
+#include <time.h>
 #include "Framework\timer.h"
 #include "game.h"
 
@@ -18,6 +19,7 @@ void mainLoop( void );
 // You should not be modifying this unless you know what you are doing
 int main( void )
 {
+    srand((unsigned int)time(NULL));
     init();      // initialize your variables
     mainLoop();  // main loop
     shutdown();  // do clean up, if any. free memory.

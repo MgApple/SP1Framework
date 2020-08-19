@@ -562,23 +562,23 @@ void chadPush()
         // to be changed
         if (player.getDirection() == 0)
         {
-            player.setPos('x', player.getPos('x') + 4);
+            //player.setPos('x', player.getPos('x') + 4);
             player.setPos('y', player.getPos('y') + 3);
         }
         else if (player.getDirection() == 1)
         {
             player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') - 1);
+            //player.setPos('y', player.getPos('y') - 1);
         }
         else if (player.getDirection() == 2)
         {
-            player.setPos('x', player.getPos('x') + 4);
+            //player.setPos('x', player.getPos('x') + 4);
             player.setPos('y', player.getPos('y') - 3);
         }
         else if (player.getDirection() == 3)
         {
             player.setPos('x', player.getPos('x') - 4);
-            player.setPos('y', player.getPos('y') - 1);
+            //player.setPos('y', player.getPos('y') - 1);
         }
     }
 }

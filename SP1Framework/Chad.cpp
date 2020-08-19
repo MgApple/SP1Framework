@@ -9,8 +9,8 @@ Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 		x = rand() % 80;
 		y = rand() % 25;
 		if ()*/
-	setPos('x', rand() % 80);
-	setPos('y', rand() % 25);
+	setPos('x', rand() % 80 + 0);
+	setPos('y', rand() % 24 + 0);
 	//}
 	charColor = 0x0C;
 	isEnd = false;
@@ -21,18 +21,18 @@ Chad::~Chad()
 	//blank for now
 }
 
-void Chad::move(Map &map)
-{
-	// to be changed
-	if(isEnd == false)
-		++pos.X;
-	if (pos.X > 50)
-		isEnd = true;
-	if (isEnd == true)
-		--pos.X;
-	if (pos.X < 20)
-		isEnd = false;
-}
+//void Chad::move(Map &map)
+//{
+//	// to be changed
+//	if(isEnd == false)
+//		++pos.X;
+//	if (pos.X > 50)
+//		isEnd = true;
+//	if (isEnd == true)
+//		--pos.X;
+//	if (pos.X < 20)
+//		isEnd = false;
+//}
 
 WORD Chad::getCharColor()
 {
