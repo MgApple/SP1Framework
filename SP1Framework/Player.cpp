@@ -13,6 +13,7 @@ Player::Player() : Entity(TYPE::TYPE_PLAYER)
 	isActive = true;
 	key = new SKeyEvent(); 
 	WORD charColor = 0x0C;
+	direction = NONE;
 }
 
 Player::~Player()
@@ -40,25 +41,47 @@ WORD Player::getCharColor()
 	return charColor;
 }
 
+void Player::setCharColor(WORD charColor)
+{
+	this->charColor = charColor;
+}
+
 void Player::move()
 {
 	if (key[0].keyDown && pos.Y > 0)
+	{
+		if (key[K_SHIFT].keyDown)
+			pos.Y += 2;
 		pos.Y--;
+		direction = UP;
+	}
 	if (key[2].keyDown && pos.X > 0)
+	{
 		pos.X--;
+		direction = LEFT;
+	}
 	if (key[1].keyDown/*&& pos.Y < g_Console.getConsoleSize().Y - 1*/)
+	{
 		pos.Y++;
+		direction = DOWN;
+	}
 	if (key[3].keyDown/*&& pos.X < g_Console.getConsoleSize().X - 1*/)
+	{
 		pos.X++;
-	//if (key[K_SPACE].keyReleased)
-		
+		direction = RIGHT;
+	}
 }
 
 void Player::render()
 {
 	// Draw the location of the character
-	if (isActive)
+	if(isActive)
 		charColor = 0x0A;
+}
+
+enum Player::DIRECTION Player::getDirection()
+{
+	return direction;
 }
 
 //void moveCharacter()

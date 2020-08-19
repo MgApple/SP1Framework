@@ -13,7 +13,6 @@ protected:
 		TYPE_CHAD,
 		TYPE_HORDER,
 		TYPE_ITEM,
-		TYPE_ENEMY,
 		TOTAL
 	};
 	TYPE type;
