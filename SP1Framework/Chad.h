@@ -1,8 +1,8 @@
 #pragma once
-#include "Entity.h"
+#include "Enemy.h"
 #include "Player.h"
 
-class Chad : public Entity
+class Chad : public Enemy
 {
 private:
 	WORD charColor;

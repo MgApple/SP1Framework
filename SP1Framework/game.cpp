@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <sstream>
 #include <fstream>
+#include <vector>
 #include "Player.h"
 #include "Chad.h"
 
@@ -278,13 +279,8 @@ void updateGame()       // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player->move(); // moves the character, collision detection, physics, etc
     //chad->move();
-    if (chad->checkCollision()) // pushes the player
-    {
-        // to be changed
-        player->setPos('x', player->getPos('x') + 4);
-        player->setPos('y', player->getPos('y') - 3);
-                
-    } //moveCharacter();    
+    chadPush(); // checks if chad pushes player
+    //moveCharacter();    
                         // sound can be played here too.
 }
 
@@ -427,7 +423,9 @@ void renderCharacter()
     temp.X = player->getPos('x');
     temp.Y = player->getPos('y');
     // Draw the location of the character
-    player->render();
+
+    if(chad->checkCollision())
+        player->setCharColor(chad->getCharColor());
     g_Console.writeToBuffer(temp, (char)21, player->getCharColor());
 }
 
@@ -541,5 +539,33 @@ void renderInputEvents()
         break;
     }
     
+}
+
+void chadPush()
+{
+    if (chad->checkCollision()) // pushes the player
+    {
+        // to be changed
+        if (player->getDirection() == 0)
+        {
+            player->setPos('x', player->getPos('x') + 4);
+            player->setPos('y', player->getPos('y') + 3);
+        }
+        else if (player->getDirection() == 1)
+        {
+            player->setPos('x', player->getPos('x') + 4);
+            player->setPos('y', player->getPos('y') - 1);
+        }
+        else if (player->getDirection() == 2)
+        {
+            player->setPos('x', player->getPos('x') + 4);
+            player->setPos('y', player->getPos('y') - 3);
+        }
+        else if (player->getDirection() == 3)
+        {
+            player->setPos('x', player->getPos('x') - 4);
+            player->setPos('y', player->getPos('y') - 1);
+        }
+    }
 }
 

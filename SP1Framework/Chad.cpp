@@ -1,6 +1,6 @@
 #include "Chad.h"
 
-Chad::Chad() : Entity(TYPE::TYPE_CHAD)
+Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 {
 	/*int x;
 	int y;

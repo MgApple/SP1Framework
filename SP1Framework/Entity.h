@@ -6,13 +6,13 @@ protected:
 	enum TYPE
 	{
 		TYPE_PLAYER,
+		TYPE_ENEMY,
 		TYPE_KAREN,
 		TYPE_CUSTOMER,
 		TYPE_COP,
 		TYPE_CHAD,
 		TYPE_HORDER,
 		TYPE_ITEM,
-		TYPE_ENEMY,
 		TOTAL
 	};
 	TYPE type;
