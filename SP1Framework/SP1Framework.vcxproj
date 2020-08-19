@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chad.cpp" />
+    <ClCompile Include="Cop.cpp" />
     <ClCompile Include="Customer.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -94,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chad.h" />
+    <ClInclude Include="Cop.h" />
     <ClInclude Include="Customer.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Entity.h" />
