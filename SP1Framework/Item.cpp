@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item() : Entity(TYPE::TYPE_PLAYER)
+Item::Item(ITEM i) : Entity(TYPE::TYPE_PLAYER)
 {
 	/*int x;
 	int y;
@@ -12,7 +12,7 @@ Item::Item() : Entity(TYPE::TYPE_PLAYER)
 	setPos('x', rand() % 80);
 	setPos('y', rand() % 25);
 	//}
-
+	type = i;
 }
 
 Item::~Item()

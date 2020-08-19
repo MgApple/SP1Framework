@@ -1,9 +1,9 @@
 #pragma once
 #include "Entity.h"
-class Item :
-	public Entity
+class Item : public Entity
 {
-	enum item
+protected:
+	enum ITEM
 	{
 		Drink,
 		Soap,
@@ -12,8 +12,9 @@ class Item :
 		Clock,
 		Count
 	};
+	ITEM type;
 public:
-	Item();
-	~Item();
+	Item(ITEM i);
+	~Item(void);
 };
 

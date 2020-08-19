@@ -1,7 +1,5 @@
 #include "Customer.h"
 
-#include "Customer.h"
-
 Customer::Customer() : Entity(TYPE::TYPE_CUSTOMER)
 {
 	/*int x;
@@ -18,12 +16,12 @@ Customer::Customer() : Entity(TYPE::TYPE_CUSTOMER)
 
 Customer::~Customer()
 {
-	//idk what to put here, please help
+	//blank for now
 }
 
 void Customer::move()
 {
-	//honestly not sure what to do here, just copid off karen's randomisation
+	//honestly not sure what to do here, just copied off karen's randomisation
 	int check = rand() % 4;
 	int movement = rand() % 5;
 	for (int i = 0; i < movement; i++)
