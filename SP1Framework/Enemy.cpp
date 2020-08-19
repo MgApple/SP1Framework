@@ -22,7 +22,7 @@ void Enemy::move(void)
 			pos.X++;
 		else if (check == 2 && pos.Y != 0)
 			pos.Y--;
-		else if (check == 3 && pos.Y != 79)
+		else if (check == 3 && pos.Y != 24)
 			pos.Y++;
 		else
 			break;
