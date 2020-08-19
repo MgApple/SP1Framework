@@ -89,6 +89,7 @@
     <ClCompile Include="Karen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Pass.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Karen.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="Pass.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -8,4 +8,5 @@ public:
 	Customer();
 	~Customer();
 	void move();
+	bool checkCollision();
 };
