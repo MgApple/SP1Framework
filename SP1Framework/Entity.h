@@ -20,6 +20,7 @@ protected:
 	COORD pos;
 	bool isSliding, isAttracted;
 public:
+	Entity(void);
 	Entity(TYPE t);
 	~Entity(void);
 	int getPos(char p);

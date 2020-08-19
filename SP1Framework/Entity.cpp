@@ -1,5 +1,14 @@
 #include "Entity.h"
 
+Entity::Entity(void)
+{
+	pos.X = -1;
+	pos.Y = -1;
+	type = TYPE_PLAYER;
+	isSliding = false;
+	isAttracted = false;
+}
+
 Entity::Entity(TYPE t)
 {
 	pos.X = -1;
