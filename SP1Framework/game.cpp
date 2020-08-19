@@ -181,7 +181,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
-    float time = g_dElapsedTime - g_dPrevPlayerTime;
+    double time = g_dElapsedTime - g_dPrevPlayerTime;
 
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
@@ -261,7 +261,7 @@ void update(double dt)
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
     }
-    float time = g_dElapsedTime - g_dPrevChadTime;
+    double time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
         chad.move(map);
@@ -327,7 +327,7 @@ void render()
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
-    g_Console.clearBuffer(0x1F);
+    g_Console.clearBuffer(00);
 }
 
 void renderToScreen()
@@ -338,36 +338,18 @@ void renderToScreen()
 
 void renderMainMenu()  // renders the main menu
 {
-    std::cout << "      .++/:--.`    " << '\n'
-        << "      oMMMMMMMNNd- " << '\n'
-        << "       .-:/++shMMm`" << '\n'
-        << "              `hMMh" << '\n'
-        << "               .mMMs" << '\n'
-        << "                -NMM/" << '\n'
-        << "                 +MMN//////////////////////////////////////////////-" << '\n'
-        << "                  yMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM:" << '\n'
-        << "                  `dMMd:/Mo::::sm/::::dy::::/N+::::sm/::::dy::::+MMN-" << '\n'
-        << "                   .NMMo.M:    +d`    ho    .N-    /d`    yo    +MMd`" << '\n'
-        << "                    :MMN+M:    +d`    ho    .N-    /d`    yo    yMMs" << '\n'
-        << "                     +MMNMhssssdNsssssmdssssyNysssshNyssssmdsssyNMM/" << '\n'
-        << "                      yMMM:    +d`    hs   `.N-   `+d`   `ho  `-MMN-" << '\n'
-        << "                      `dMMs    +d`    ho    .N-    /d`    yo   /MMm`" << '\n'
-        << "                       -NMM+   +d`    ho    .N-    +d`    ho   yMMy" << '\n'
-        << "                        /MMMhsshNsssssmdssssyNysssshNsssssmdsssMMM+" << '\n'
-        << "                         oMMm. +d`    ho    .N-    /d`    yo  .MMN-" << '\n'
-        << "                         `hMMh`+d`    ho    .N-    +m.`..-hy/+yMMm`" << '\n'
-        << "                          .mMMs+d...--dh++ooyMhhdmmNMMMMMMMMMMMMNs" << '\n'
-        << "                          `oMMMNMNMMMMMMMMMMNNNmmdhhyssoo+//:--.`" << '\n'
-        << "                        `+mMMNhyyyso++/:--..``" << '\n'
-        << "                      .oNMMm+`   " << '\n'
-        << "                     /NMMd/` " << '\n'
-        << "                    `MMM+ " << '\n'
-        << "                     dMMdo+++++++++++++++++++++++++++++++++++++." << '\n'
-        << "                     `omMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMm" << '\n'
-        << "                      /dmmNh:--------------------------sNmmMy--`" << '\n'
-        << "                     :M++s:No                         :N++s-No  " << '\n'
-        << "                     .ddooym:                         .ddooyN:" << '\n'
-        << "                      `:++:`                           `:++:` " << '\n';
+    COORD c;
+    c.X = 0;
+    c.Y = 1;
+    std::ifstream menu;
+    std::string line;
+    menu.open("menu.txt");
+    if (menu) {
+        while (getline(menu, line)) {
+            g_Console.writeToBuffer(c, line);
+            c.Y += 1;
+        }
+    }
 }
 
 void renderGame()
@@ -418,7 +400,7 @@ void renderMap()
         colour(colors[i]);
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
-    Map map;
+    //Map map;
     map.loadMap();
     for (int R = 0; R < 24; R++)
     {
@@ -427,7 +409,7 @@ void renderMap()
         {
             c.X = C;
             if (map.getEntity(R, C) == 'w')
-                g_Console.writeToBuffer(c, (char)219, colors[0]);
+                g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
                 g_Console.writeToBuffer(c, (char)32, colors[12]);
             else
@@ -442,7 +424,7 @@ void renderCharacter()
     temp.X = player.getPos('x');
     temp.Y = player.getPos('y');
     // Draw the location of the character
-
+    player.setCharColor(0x0A);
     if(chad.checkCollision())
         player.setCharColor(chad.getCharColor());
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
@@ -466,14 +448,14 @@ void renderFramerate()
     ss << 1.0 / g_dDeltaTime << "fps";
     c.X = g_Console.getConsoleSize().X - 9;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());
+    g_Console.writeToBuffer(c, ss.str(), 0xFF);
 
     // displays the elapsed time
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    g_Console.writeToBuffer(c, ss.str(), 0xFF);
 }
 
 // this is an example of how you would use the input eventss
@@ -483,7 +465,7 @@ void renderInputEvents()
     COORD startPos = {50, 2};
     std::ostringstream ss;
     std::string key;
-    for (int i = 0; i < K_COUNT; ++i)
+    for (short i = 0; i < K_COUNT; ++i)
     {
         ss.str("");
         switch (i)

@@ -1,18 +1,15 @@
 #include "Player.h"
 
-Player::Player() : Entity(TYPE::TYPE_PLAYER)
+Player::Player() : inventory{ 0 }
 {
-	for (int i = 0; i < 3; i++)
-	{
-		inventory[i] = 0;
-	}
+	type = TYPE_PLAYER;
 	stamina = 100;
 	speedBuff = false;
 	securityPass = false;
 	alarmClock = false;
 	isActive = true;
 	key = new SKeyEvent(); 
-	WORD charColor = 0x0C;
+	charColor = 0x0C;
 	direction = NONE;
 }
 
