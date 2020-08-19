@@ -23,7 +23,8 @@ bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 void Enemy::move(Map &map)
 {
 	int check = rand() % 4;
-	int movement = rand() % 5 + 1;
+	//int movement = rand() % 5 + 1;
+	int movement = 1;
 	int newx = pos.X;
 	int newy = pos.Y;
 	for (int i = 0; i < movement; i++)

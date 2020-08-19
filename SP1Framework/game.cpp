@@ -66,8 +66,8 @@ void init( void )
     g_eGameState = S_MAINMENU;
 
     playerPtr = &player;
-    player.setPos('x', g_Console.getConsoleSize().X / 2);
-    player.setPos('y', g_Console.getConsoleSize().Y / 2);
+    playerPtr->setPos('x', g_Console.getConsoleSize().X / 2);
+    playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
     player.setKey(g_skKeyEvent);
 
     chadPtr = &chad;
@@ -207,7 +207,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        /*if (time > 0.2f) */
+        if (time > 0.2f) 
         {  //player.setKey(g_skKeyEvent);
             g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
             g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
@@ -275,14 +275,14 @@ void update(double dt)
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
+    if (g_dElapsedTime > 0.01) // wait for 3 seconds to switch to game mode, else do nothing
         g_eGameState = S_GAME;
 }
 
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player.move(map); // moves the character, collision detection, physics, etc
+    playerPtr->move(map); // moves the character, collision detection, physics, etc
     //chad->move();
     chadPush(); // checks if chad pushes player
     //moveCharacter();    
@@ -323,7 +323,7 @@ void render()
         break;
     }
     renderFramerate();      // renders debug information, frame rate, elapsed time, etc
-    //renderInputEvents();    // renders status of input events
+    renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
 
@@ -425,8 +425,8 @@ void renderMap()
 void renderCharacter()
 {
     COORD temp;
-    temp.X = player.getPos('x');
-    temp.Y = player.getPos('y');
+    temp.X = playerPtr->getPos('x');
+    temp.Y = playerPtr->getPos('y');
     // Draw the location of the character
     player.setCharColor(0x0A);
     if(chad.checkCollision())
@@ -438,8 +438,8 @@ void renderChad()
 {
     // Draw the location of the charactersw
     COORD temp;
-    temp.X = chad.getPos('x');
-    temp.Y = chad.getPos('y');
+    temp.X = chadPtr->getPos('x');
+    temp.Y = chadPtr->getPos('y');
     g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
 }
 
@@ -562,23 +562,19 @@ void chadPush()
         // to be changed
         if (player.getDirection() == 0)
         {
-            //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') + 3);
+            playerPtr->setPos('y', playerPtr->getPos('y') + 3);
         }
         else if (player.getDirection() == 1)
         {
-            player.setPos('x', player.getPos('x') + 4);
-            //player.setPos('y', player.getPos('y') - 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') + 4);
         }
         else if (player.getDirection() == 2)
         {
-            //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') - 3);
+            playerPtr->setPos('y', playerPtr->getPos('y') - 3);
         }
         else if (player.getDirection() == 3)
         {
-            player.setPos('x', player.getPos('x') - 4);
-            //player.setPos('y', player.getPos('y') - 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') - 4);
         }
     }
 }

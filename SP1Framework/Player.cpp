@@ -47,26 +47,38 @@ void Player::move(Map &map)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{
-		if (key[K_SHIFT].keyDown)
-			pos.Y += 2;
-		pos.Y--;
+		if(speedBuff)
+			pos.Y -= 2;
+		else
+			pos.Y--;
 		direction = UP;
 	}
 	if (key[2].keyDown && pos.X > 0)
 	{
-		pos.X--;
+		if (speedBuff)
+			pos.X -= 2;
+		else
+			pos.X--;
 		direction = LEFT;
 	}
 	if (key[1].keyDown && pos.Y < 25 - 1)
 	{
-		pos.Y++;
+		if (speedBuff)
+			pos.Y += 2;
+		else
+			pos.Y++;
 		direction = DOWN;
 	}
-	if (key[3].keyDown&& pos.X < 80 - 1)
+	if (key[3].keyDown && pos.X < 80 - 1)
 	{
-		pos.X++;
+		if (speedBuff)
+			pos.X += 2;
+		else
+			pos.X++;
 		direction = RIGHT;
 	}
+	if (key[K_SHIFT].keyDown && pos.Y > 1)
+		speedBuff = true;
 }
 
 void Player::render()
