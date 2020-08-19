@@ -10,7 +10,7 @@ Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 		y = rand() % 25;
 		if ()*/
 	setPos('x', rand() % 80 + 0);
-	setPos('y', rand() % 24 + 0);
+	setPos('y', rand() % 25 + 0);
 	//}
 	charColor = 0x0C;
 	isEnd = false;

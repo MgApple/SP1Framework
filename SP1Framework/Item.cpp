@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(ITEM i) : Entity(TYPE::TYPE_PLAYER)
+Item::Item(ITEM i) : Entity(TYPE::TYPE_ITEM)
 {
 	/*int x;
 	int y;
