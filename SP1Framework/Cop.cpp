@@ -11,7 +11,7 @@ Cop::~Cop()
 	//nothing
 }
 
-void move()
+void Cop::move()
 {
 	//overload func, nothing
 }

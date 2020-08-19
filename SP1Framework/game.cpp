@@ -259,12 +259,11 @@ void update(double dt)
             break;
     }
     float time = g_dElapsedTime - g_dPrevChadTime;
-    if (time > 0.2f)
+    if (time > 0.4f)
     {
         chad->move();
         g_dPrevChadTime = g_dElapsedTime;
     }
-
 }
 
 
