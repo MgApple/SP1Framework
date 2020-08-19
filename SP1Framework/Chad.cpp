@@ -39,7 +39,7 @@ WORD Chad::getCharColor()
 	return charColor;
 }
 
-void Chad::setPlayer(Player* target)
+void Chad::setPlayer(Entity* target)
 {
 	this->target = target;
 }

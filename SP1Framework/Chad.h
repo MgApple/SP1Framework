@@ -6,7 +6,7 @@ class Chad : public Enemy
 {
 private:
 	WORD charColor;
-	Player* target;
+	Entity* target;
 	bool isEnd;
 
 public:
@@ -14,6 +14,6 @@ public:
 	~Chad();
 	void move(Map &map);
 	WORD getCharColor();
-	void setPlayer(Player*);
+	void setPlayer(Entity*);
 	bool checkCollision();
 };

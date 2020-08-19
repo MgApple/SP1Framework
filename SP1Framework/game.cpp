@@ -22,8 +22,10 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-Chad*        chad;
-Player*      player;
+Entity*      chadPtr;
+Entity*      playerPtr;
+Player       player;
+Chad         chad;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 Map map;
@@ -61,13 +63,13 @@ void init( void )
     // sets the initial state for the game
     g_eGameState = S_MAINMENU;
 
-    player = new Player();
-    player->setPos('x', g_Console.getConsoleSize().X / 2);
-    player->setPos('y', g_Console.getConsoleSize().Y / 2);
-    player->setKey(g_skKeyEvent);
+    playerPtr = &player;
+    player.setPos('x', g_Console.getConsoleSize().X / 2);
+    player.setPos('y', g_Console.getConsoleSize().Y / 2);
+    player.setKey(g_skKeyEvent);
 
-    chad = new Chad();
-    chad->setPlayer(player);
+    chadPtr = &chad;
+    chad.setPlayer(playerPtr);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -262,7 +264,7 @@ void update(double dt)
     float time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
-        chad->move(map);
+        chad.move(map);
         g_dPrevChadTime = g_dElapsedTime;
     }
 }
@@ -277,7 +279,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player->move(map); // moves the character, collision detection, physics, etc
+    player.move(map); // moves the character, collision detection, physics, etc
     //chad->move();
     chadPush(); // checks if chad pushes player
     //moveCharacter();    
@@ -416,6 +418,7 @@ void renderMap()
         colour(colors[i]);
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
+    Map map;
     map.loadMap();
     for (int R = 0; R < 24; R++)
     {
@@ -436,22 +439,22 @@ void renderMap()
 void renderCharacter()
 {
     COORD temp;
-    temp.X = player->getPos('x');
-    temp.Y = player->getPos('y');
+    temp.X = player.getPos('x');
+    temp.Y = player.getPos('y');
     // Draw the location of the character
 
-    if(chad->checkCollision())
-        player->setCharColor(chad->getCharColor());
-    g_Console.writeToBuffer(temp, (char)21, player->getCharColor());
+    if(chad.checkCollision())
+        player.setCharColor(chad.getCharColor());
+    g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
 }
 
 void renderChad()
 {
     // Draw the location of the character
     COORD temp;
-    temp.X = chad->getPos('x');
-    temp.Y = chad->getPos('y');
-    g_Console.writeToBuffer(temp, (char)4, chad->getCharColor());
+    temp.X = chad.getPos('x');
+    temp.Y = chad.getPos('y');
+    g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
 }
 
 void renderFramerate()
@@ -559,28 +562,29 @@ void renderInputEvents()
 
 void chadPush()
 {
-    if (chad->checkCollision()) // pushes the player
+    if (chad.checkCollision()) // pushes the player
     {
         // to be changed
-        if (player->getDirection() == 0)
+        if (player.getDirection() == 0)
         {
-            player->setPos('x', player->getPos('x') + 4);
-            player->setPos('y', player->getPos('y') + 3);
+            player.setPos('x', player.getPos('x') + 4);
+            player.setPos('y', player.getPos('y') + 3);
         }
-        else if (player->getDirection() == 1)
+        else if (player.getDirection() == 1)
         {
-            player->setPos('x', player->getPos('x') + 4);
-            player->setPos('y', player->getPos('y') - 1);
+            player.setPos('x', player.getPos('x') + 4);
+            player.setPos('y', player.getPos('y') - 1);
         }
-        else if (player->getDirection() == 2)
+        else if (player.getDirection() == 2)
         {
-            player->setPos('x', player->getPos('x') + 4);
-            player->setPos('y', player->getPos('y') - 3);
+            player.setPos('x', player.getPos('x') + 4);
+            player.setPos('y', player.getPos('y') - 3);
         }
-        else if (player->getDirection() == 3)
+        else if (player.getDirection() == 3)
         {
-            player->setPos('x', player->getPos('x') - 4);
-            player->setPos('y', player->getPos('y') - 1);
+            player.setPos('x', player.getPos('x') - 4);
+            player.setPos('y', player.getPos('y') - 1);
         }
     }
 }
+
