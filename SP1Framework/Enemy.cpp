@@ -15,9 +15,9 @@ bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 	for (int i = 0; i < 6; i++)
 	{
 		if (map.getEntity(intendedx, intendedy) == collidingCheck[i])
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }
 
 void Enemy::move(Map &map)
@@ -37,8 +37,8 @@ void Enemy::move(Map &map)
 			newy = pos.Y--;
 		else if (check == 3 && pos.Y != 24)
 			newy = pos.Y++;
-		else
-			break;
+
+
 		if (collisionCheck(newx, newy, map) == false)
 		{
 			setPos('x', newx);

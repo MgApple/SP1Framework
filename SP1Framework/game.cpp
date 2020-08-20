@@ -70,8 +70,8 @@ void init( void )
     g_eGameState = S_MAINMENU;
 
     playerPtr = &player;
-    player.setPos('x', g_Console.getConsoleSize().X / 2);
-    player.setPos('y', g_Console.getConsoleSize().Y / 2);
+    playerPtr->setPos('x', g_Console.getConsoleSize().X / 2);
+    playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
     player.setKey(g_skKeyEvent);
 
     chadPtr = &chad;
@@ -273,13 +273,13 @@ void update(double dt)
     double time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
-        chad.move(map);
+        chadPtr->move(map);
         g_dPrevChadTime = g_dElapsedTime;
     }
     double time1 = g_dElapsedTime - g_dPrevCustomerTime;
     if (time1 > 0.4f)
     {
-        customer.move(map);
+        customerPtr->move(map);
         g_dPrevCustomerTime = g_dElapsedTime;
     }
 }
@@ -294,7 +294,7 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player.move(map); // moves the character, collision detection, physics, etc
+    playerPtr->move(map); // moves the character, collision detection, physics, etc
     //chad->move();
     chadPush(); // checks if chad pushes player
     //customer->move();
@@ -440,8 +440,8 @@ void renderMap()
 void renderCharacter()
 {
     COORD temp;
-    temp.X = player.getPos('x');
-    temp.Y = player.getPos('y');
+    temp.X = playerPtr->getPos('x');
+    temp.Y = playerPtr->getPos('y');
     // Draw the location of the character
     player.setCharColor(0x0A);
     if(chad.checkCollision())
@@ -586,23 +586,23 @@ void chadPush()
         // to be changed
         if (player.getDirection() == 0)
         {
-            //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') + 3);
+            //playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+            playerPtr->setPos('y', playerPtr->getPos('y') + 3);
         }
         else if (player.getDirection() == 1)
         {
-            player.setPos('x', player.getPos('x') + 4);
-            //player.setPos('y', player.getPos('y') - 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+            //playerPtr->setPos('y', playerPtr->getPos('y') - 1);
         }
         else if (player.getDirection() == 2)
         {
-            //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') - 3);
+            //playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+            playerPtr->setPos('y', playerPtr->getPos('y') - 3);
         }
         else if (player.getDirection() == 3)
         {
-            player.setPos('x', player.getPos('x') - 4);
-            //player.setPos('y', player.getPos('y') - 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') - 4);
+            //playerPtr->setPos('y', playerPtr->getPos('y') - 1);
         }
     }
 }
