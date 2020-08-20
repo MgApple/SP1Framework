@@ -373,9 +373,7 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
-    renderChad();
-    renderCop();
-    renderCustomer();
+    renderNPC();
 }
 
 void renderGameOver()
@@ -449,28 +447,15 @@ void renderCharacter()
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
 }
 
-void renderChad()
+void renderNPC()
 {
-    // Draw the location of the charactersw
     COORD temp;
     temp.X = chad.getPos('x');
     temp.Y = chad.getPos('y');
     g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
-}
-
-void renderCop()
-{
-    // Draw the location of the character
-    COORD temp;
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
-    g_Console.writeToBuffer(temp,'P', cop.getCharColour());
-}
-
-void renderCustomer()
-{
-    // Draw the location of the character
-    COORD temp;
+    g_Console.writeToBuffer(temp, 'P', cop.getCharColour());
     temp.X = customer.getPos('x');
     temp.Y = customer.getPos('Y');
     g_Console.writeToBuffer(temp, 'C', customer.getCharColour());
