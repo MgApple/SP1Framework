@@ -6,6 +6,7 @@ class Hoarder : public Enemy
 public:
 	Hoarder();
 	~Hoarder();
-	void move(Map &map);
+	void setPlayer(Entity*);
+	bool checkCollision();
 };
 

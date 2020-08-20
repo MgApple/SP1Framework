@@ -8,7 +8,6 @@ Player::Player() : inventory{ 0 }
 	securityPass = false;
 	alarmClock = false;
 	isActive = true;
-	key = new SKeyEvent(); 
 	charColor = 0x0C;
 	direction = NONE;
 }
@@ -28,12 +27,11 @@ bool Player::getActive()
 	return isActive;
 }
 
-void Player::setKey(SKeyEvent* g_skKeyEvent)
+void Player::move(Map& map)
 {
-	key = g_skKeyEvent;
 }
 
-void Player::move(Map &map)
+void Player::movement(Map &map, SKeyEvent* key)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{
@@ -70,8 +68,8 @@ void Player::move(Map &map)
 	if (key[K_SHIFT].keyDown && pos.Y > 1)
 		speedBuff = true;
 
-	int test = map.getEntity(pos.Y - 1, pos.X);
-	if (test == 'w')
+	int wall = map.getEntity(pos.Y - 1, pos.X);
+	if (wall == 'w')
 	{
 		if (direction == UP)
 			pos.Y++;

@@ -19,15 +19,14 @@ private:
 	bool securityPass;
 	bool alarmClock;
 	bool isActive;
-	SKeyEvent* key;
 	DIRECTION direction;
 public:
 	Player();
 	~Player();
 	void setActive(bool);
 	bool getActive();
-	void setKey(SKeyEvent*);
-	void move(Map &map);
+	void move(Map& map);
+	void movement(Map &map, SKeyEvent* key);
 	void render();
 	enum DIRECTION getDirection();
 };
