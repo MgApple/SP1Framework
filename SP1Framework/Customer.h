@@ -1,6 +1,6 @@
 #pragma once
 #include "Enemy.h"
-#include "game.h"
+#include "Player.h"
 
 class Customer : public Enemy
 {
