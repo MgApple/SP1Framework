@@ -1,12 +1,17 @@
 #pragma once
-#include "Entity.h"
+#include "Enemy.h"
 #include "game.h"
 
-class Customer : public Entity
+class Customer : public Enemy
 {
+private:
+	WORD charColour;
+	Entity* target;
 public:
 	Customer();
 	~Customer();
-	void move();
+	//void move();
+	WORD getCharColour();
+	void setPlayer(Entity*);
 	bool checkCollision();
 };
