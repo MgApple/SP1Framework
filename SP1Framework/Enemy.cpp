@@ -12,12 +12,18 @@ Enemy::~Enemy()
 
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
+	bool check = false;
+	char placeholder = map.getEntity(intendedy, intendedx);
 	for (int i = 0; i < 6; i++)
-	{
-		if (map.getEntity(intendedx, intendedy) == collidingCheck[i])
-			return false;
+	{//the issue's in the map i think either map isnt following the map.text exactly
+		//or the conversion into the colours we're using makes a diff position
+		if (collidingCheck[i] == placeholder)
+		{
+			check = true;
+			break;
+		}
 	}
-	return true;
+	return check;
 }
 
 void Enemy::move(Map &map)
@@ -25,24 +31,23 @@ void Enemy::move(Map &map)
 	int check = rand() % 4;
 	//int movement = rand() % 5 + 1;
 	int movement = 1;
-	int newx = pos.X;
-	int newy = pos.Y;
+	COORD checker;
+	checker.X = getPos('x');
+	checker.Y = getPos('y');
 	for (int i = 0; i < movement; i++)
 	{
-		if (check == 0 && pos.X != 0)
-			newx = pos.X--;
-		else if (check == 1 && pos.X != 79)
-			newx = pos.X++;
-		else if (check == 2 && pos.Y != 0)
-			newy = pos.Y--;
-		else if (check == 3 && pos.Y != 24)
-			newy = pos.Y++;
-
-
-		if (collisionCheck(newx, newy, map) == false)
+		if (check == 0 && getPos('x') != 0)
+			checker.X--;
+		else if (check == 1 && getPos('x') != 79)
+			checker.X++;
+		else if (check == 2 && getPos('y') != 0)
+			checker.Y--;
+		else if (check == 3 && getPos('y') != 24)
+			checker.Y++;
+		if (collisionCheck(checker.X, checker.Y, map) == false)
 		{
-			setPos('x', newx);
-			setPos('y', newy);
+			setPos('x', checker.X);
+			setPos('y', checker.Y);
 		}
 	}
 }

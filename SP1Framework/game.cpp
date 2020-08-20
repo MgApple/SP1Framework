@@ -12,6 +12,7 @@
 #include "Chad.h"
 #include "Cop.h"
 #include "Customer.h"
+#include "Hoarder.h"
 
 std::string save;
 int high_score;
@@ -27,11 +28,13 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 // Game specific variables here HELP
 Entity*      chadPtr;
 Entity*      customerPtr;
+Entity*      hoarderPtr;
 Entity*      playerPtr;
 Player       player;
 Chad         chad;
 Cop          cop;
 Customer     customer;
+Hoarder      hoarder;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
 Map map;
@@ -78,7 +81,7 @@ void init( void )
     chad.setPlayer(playerPtr);
     customerPtr = &customer;
     customer.setPlayer(playerPtr);
-
+    hoarderPtr = &hoarder;
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -459,6 +462,9 @@ void renderNPC()
     temp.X = customer.getPos('x');
     temp.Y = customer.getPos('Y');
     g_Console.writeToBuffer(temp, 'C', customer.getCharColor());
+    temp.X = hoarder.getPos('x');
+    temp.Y = hoarder.getPos('y');
+    g_Console.writeToBuffer(temp, 'H', hoarder.getCharColor());
 }
 
 void renderHUD()
