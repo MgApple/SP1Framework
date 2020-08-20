@@ -72,7 +72,16 @@ void Player::move(Map &map)
 
 	int test = map.getEntity(pos.Y - 1, pos.X);
 	if (test == 'w')
-		pos.X++;
+	{
+		if (direction == UP)
+			pos.Y++;
+		if(direction == LEFT)
+			pos.X++;
+		if (direction == DOWN)
+			pos.Y--;
+		if (direction == RIGHT)
+			pos.X--;
+	}
 }
 
 void Player::render()
