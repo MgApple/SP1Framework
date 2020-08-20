@@ -15,8 +15,7 @@ bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 	bool check = false;
 	char placeholder = map.getEntity(intendedy-1, intendedx);
 	for (int i = 0; i < 6; i++)
-	{//the issue's in the map i think either map isnt following the map.text exactly
-		//or the conversion into the colours we're using makes a diff position
+	{
 		if (collidingCheck[i] == placeholder)
 		{
 			check = true;
@@ -41,7 +40,7 @@ void Enemy::move(Map &map)
 			y++;
 		else if (check == 2 && getPos('y') != 0)
 			x--;
-		else if (check == 3 && getPos('y') != 24)
+		else if (check == 3 && getPos('y') != 23)
 			x++;
 		if (collisionCheck(x, y, map) == false)
 		{
