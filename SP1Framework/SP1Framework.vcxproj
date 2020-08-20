@@ -94,6 +94,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="TutorialMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chad.h" />
@@ -111,6 +112,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pass.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="TutorialMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
