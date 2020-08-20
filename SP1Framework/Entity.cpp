@@ -46,3 +46,8 @@ void Entity::setState(char att, bool state)
 	else if (att == 'a')
 		isAttracted = state;
 }
+
+WORD Entity::getCharColour()
+{
+	return charColor;
+}

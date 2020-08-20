@@ -10,7 +10,7 @@ Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 		y = rand() % 25;
 		if ()*/
 	setPos('x', rand() % 79 + 1);
-	setPos('y', rand() % 25 + 0);
+	setPos('y', rand() % 24 + 0);
 	//}
 	charColor = 0x0C;
 	isEnd = false;
@@ -33,11 +33,6 @@ Chad::~Chad()
 //	if (pos.X < 20)
 //		isEnd = false;
 //}
-
-WORD Chad::getCharColor()
-{
-	return charColor;
-}
 
 void Chad::setPlayer(Entity* target)
 {

@@ -15,9 +15,9 @@ bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 	for (int i = 0; i < 6; i++)
 	{
 		if (map.getEntity(intendedx, intendedy) == collidingCheck[i])
-			return true;
+			return false;
 	}
-	return false;
+	return true;
 }
 
 void Enemy::move(Map &map)

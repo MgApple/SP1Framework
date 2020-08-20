@@ -11,18 +11,13 @@ Customer::Customer() : Enemy(TYPE::TYPE_CUSTOMER)
 		if ()*/
 	setPos('x', rand() % 80);
 	setPos('y', rand() % 25);
-	charColour = 0x0f;
+	charColor = 0x0f;
 	//}
 }
 
 Customer::~Customer()
 {
 	//blank for now
-}
-
-WORD Customer::getCharColour()
-{
-	return charColour;
 }
 
 void Customer::setPlayer(Entity* target)

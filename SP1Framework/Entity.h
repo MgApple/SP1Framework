@@ -19,6 +19,8 @@ protected:
 	TYPE type;
 	COORD pos;
 	bool isSliding, isAttracted;
+	WORD charColor;
+
 public:
 	Entity(void);
 	Entity(TYPE t);
@@ -27,5 +29,6 @@ public:
 	void setPos(char p, int i);
 	void setState(char att, bool state);
 	virtual void move(Map &map) = 0;
+	virtual WORD getCharColour();
 };
 
