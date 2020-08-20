@@ -443,7 +443,7 @@ void renderCharacter()
     // Draw the location of the character
     player.setCharColor(0x0A);
     if(chad.checkCollision())
-        player.setCharColor(chad.getCharColor());
+        player.setCharColor(chadPtr->getCharColor());
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
 }
 
@@ -452,13 +452,13 @@ void renderNPC()
     COORD temp;
     temp.X = chad.getPos('x');
     temp.Y = chad.getPos('y');
-    g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
+    g_Console.writeToBuffer(temp, (char)4, chadPtr->getCharColor());
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
-    g_Console.writeToBuffer(temp, 'P', cop.getCharColour());
+    g_Console.writeToBuffer(temp, 'P', cop.getCharColor());
     temp.X = customer.getPos('x');
     temp.Y = customer.getPos('Y');
-    g_Console.writeToBuffer(temp, 'C', customer.getCharColour());
+    g_Console.writeToBuffer(temp, 'C', customer.getCharColor());
 }
 
 void renderHUD()

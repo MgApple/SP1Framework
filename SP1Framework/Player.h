@@ -20,7 +20,6 @@ private:
 	bool alarmClock;
 	bool isActive;
 	SKeyEvent* key;
-	WORD charColor;
 	DIRECTION direction;
 public:
 	Player();
@@ -28,8 +27,6 @@ public:
 	void setActive(bool);
 	bool getActive();
 	void setKey(SKeyEvent*);
-	WORD getCharColor();
-	void setCharColor(WORD);
 	void move(Map &map);
 	void render();
 	enum DIRECTION getDirection();

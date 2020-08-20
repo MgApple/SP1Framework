@@ -33,16 +33,6 @@ void Player::setKey(SKeyEvent* g_skKeyEvent)
 	key = g_skKeyEvent;
 }
 
-WORD Player::getCharColor()
-{
-	return charColor;
-}
-
-void Player::setCharColor(WORD charColor)
-{
-	this->charColor = charColor;
-}
-
 void Player::move(Map &map)
 {
 	if (key[0].keyDown && pos.Y > 0)

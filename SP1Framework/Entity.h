@@ -29,6 +29,7 @@ public:
 	void setPos(char p, int i);
 	void setState(char att, bool state);
 	virtual void move(Map &map) = 0;
-	virtual WORD getCharColour();
+	virtual WORD getCharColor();
+	virtual void setCharColor(WORD);
 };
 
