@@ -13,7 +13,7 @@ Enemy::~Enemy()
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
 	bool check = false;
-	char placeholder = map.getEntity(intendedy, intendedx);
+	char placeholder = map.getEntity(intendedy-1, intendedx);
 	for (int i = 0; i < 6; i++)
 	{//the issue's in the map i think either map isnt following the map.text exactly
 		//or the conversion into the colours we're using makes a diff position
@@ -31,23 +31,22 @@ void Enemy::move(Map &map)
 	int check = rand() % 4;
 	//int movement = rand() % 5 + 1;
 	int movement = 1;
-	COORD checker;
-	checker.X = getPos('x');
-	checker.Y = getPos('y');
+	int x = getPos('x');
+	int y = getPos('y');
 	for (int i = 0; i < movement; i++)
 	{
 		if (check == 0 && getPos('x') != 0)
-			checker.X--;
+			y--;
 		else if (check == 1 && getPos('x') != 79)
-			checker.X++;
+			y++;
 		else if (check == 2 && getPos('y') != 0)
-			checker.Y--;
+			x--;
 		else if (check == 3 && getPos('y') != 24)
-			checker.Y++;
-		if (collisionCheck(checker.X, checker.Y, map) == false)
+			x++;
+		if (collisionCheck(x, y, map) == false)
 		{
-			setPos('x', checker.X);
-			setPos('y', checker.Y);
+			setPos('x', x);
+			setPos('y', y);
 		}
 	}
 }

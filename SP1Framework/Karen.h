@@ -11,6 +11,6 @@ public:
 	Karen();
 	~Karen();
 	bool aggro();
-	void move(void);
+	void move(Map &map);
 };
 
