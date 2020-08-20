@@ -8,11 +8,6 @@
 #include <sstream>
 #include <fstream>
 #include "Map.h"
-#include "Player.h"
-#include "Chad.h"
-#include "Cop.h"
-#include "Customer.h"
-#include "Hoarder.h"
 
 std::string save;
 int high_score;
@@ -25,18 +20,9 @@ double  g_dPrevCustomerTime;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
-// Game specific variables here HELP
-Entity*      chadPtr;
-Entity*      customerPtr;
-Entity*      hoarderPtr;
-Entity*      playerPtr;
-Player       player;
-Chad         chad;
-Cop          cop;
-Customer     customer;
-Hoarder      hoarder;
+// Game specific variables here
 SGameChar   g_sChar;
-EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
+EGAMESTATES g_eGameState = S_MAINMENU; // initial state
 Map map;
 
 // Console object
@@ -49,7 +35,7 @@ Console g_Console(80, 25, "SP1 Framework");
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
-void init( void )
+void init(Entity *playerPtr, Player &player, Chad &chad, Customer &customer)
 {
     std::ifstream savefile;
     savefile.open("save.txt");
@@ -72,16 +58,11 @@ void init( void )
     // sets the initial state for the game
     g_eGameState = S_MAINMENU;
 
-    playerPtr = &player;
     playerPtr->setPos('x', g_Console.getConsoleSize().X / 2);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
     player.setKey(g_skKeyEvent);
-
-    chadPtr = &chad;
     chad.setPlayer(playerPtr);
-    customerPtr = &customer;
     customer.setPlayer(playerPtr);
-    hoarderPtr = &hoarder;
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -258,7 +239,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 // Input    : dt = deltatime
 // Output   : void
 //--------------------------------------------------------------
-void update(double dt)
+void update(double dt, Entity *playerPtr, Entity*chadPtr, Entity*customerPtr, Player &player, Chad &chad, Customer &customer)
 {
     // get the delta time
     g_dElapsedTime += dt;
@@ -268,7 +249,7 @@ void update(double dt)
     {
         case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
             break;
-        case S_GAME: updateGame(); // gameplay logic when we are in the game
+        case S_GAME: updateGame(playerPtr, player, chad, customer); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
@@ -294,14 +275,14 @@ void splashScreenWait()    // waits for time to pass in splash screen
         g_eGameState = S_GAME;
 }
 
-void updateGame()       // gameplay logic
+void updateGame(Entity *playerPtr, Player &player, Chad &chad, Customer &customer) // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     playerPtr->move(map); // moves the character, collision detection, physics, etc
     //chad->move();
-    chadPush(); // checks if chad pushes player
+    chadPush(playerPtr, player, chad); // checks if chad pushes player
     //customer->move();
-    customerBlock();
+    customerBlock(playerPtr, player, customer);
     //moveCharacter();    
                         // sound can be played here too.
 }
@@ -327,14 +308,14 @@ void processUserInput()
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
-void render()
+void render(Entity *playerPtr, Entity *chadPtr, Entity *copPtr, Entity *customerPtr, Entity *hoarderPtr, Player &player, Chad &chad, Cop &cop, Customer &customer, Hoarder &hoarder)
 {
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {
     case S_MAINMENU: renderMainMenu();
         break;
-    case S_GAME: renderGame();
+    case S_GAME: renderGame(playerPtr, chadPtr, copPtr, customerPtr, hoarderPtr, player, chad, cop, customer, hoarder);
         break;
     case S_GAMEOVER: renderGameOver();
         break;
@@ -372,11 +353,11 @@ void renderMainMenu()  // renders the main menu
     }
 }
 
-void renderGame()
+void renderGame(Entity *playerPtr, Entity *chadPtr, Entity *copPtr, Entity *customerPtr, Entity *hoarderPtr, Player &player, Chad &chad, Cop &cop, Customer &customer, Hoarder &hoarder)
 {
     renderMap();        // renders the map to the buffer first
-    renderCharacter();  // renders the character into the buffer
-    renderNPC();
+    renderCharacter(playerPtr, chadPtr, player, chad);  // renders the character into the buffer
+    renderNPC(chadPtr, copPtr, customerPtr, hoarderPtr, chad, cop, customer, hoarder);
 }
 
 void renderGameOver()
@@ -438,7 +419,7 @@ void renderMap()
     }
 }
 
-void renderCharacter()
+void renderCharacter(Entity* playerPtr, Entity* chadPtr, Player& player, Chad& chad)
 {
     COORD temp;
     temp.X = playerPtr->getPos('x');
@@ -450,7 +431,7 @@ void renderCharacter()
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
 }
 
-void renderNPC()
+void renderNPC(Entity *chadPtr, Entity *copPtr, Entity *customerPtr, Entity *hoarderPtr, Chad &chad, Cop &cop, Customer &customer, Hoarder &hoarder)
 {
     COORD temp;
     temp.X = chad.getPos('x');
@@ -458,13 +439,13 @@ void renderNPC()
     g_Console.writeToBuffer(temp, (char)4, chadPtr->getCharColor());
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
-    g_Console.writeToBuffer(temp, 'P', cop.getCharColor());
+    g_Console.writeToBuffer(temp, 'P', copPtr->getCharColor());
     temp.X = customer.getPos('x');
     temp.Y = customer.getPos('Y');
-    g_Console.writeToBuffer(temp, 'C', customer.getCharColor());
+    g_Console.writeToBuffer(temp, 'C', customerPtr->getCharColor());
     temp.X = hoarder.getPos('x');
     temp.Y = hoarder.getPos('y');
-    g_Console.writeToBuffer(temp, 'H', hoarder.getCharColor());
+    g_Console.writeToBuffer(temp, 'H', hoarderPtr->getCharColor());
 }
 
 void renderHUD()
@@ -570,7 +551,7 @@ void renderInputEvents()
     
 }
 
-void chadPush()
+void chadPush(Entity *playerPtr, Player &player, Chad &chad)
 {
     if (chad.checkCollision()) // pushes the player
     {
@@ -598,7 +579,7 @@ void chadPush()
     }
 }
 
-void customerBlock()
+void customerBlock(Entity *playerPtr, Player &player, Customer &customer)
 {
     if (customer.checkCollision()) // pushes the player
     {
@@ -606,21 +587,21 @@ void customerBlock()
         if (player.getDirection() == 0)
         {
             //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') + 1);
+            playerPtr->setPos('y', playerPtr->getPos('y') + 1);
         }
         else if (player.getDirection() == 1)
         {
-            player.setPos('x', player.getPos('x') + 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') + 1);
             //player.setPos('y', player.getPos('y') - 1);
         }
         else if (player.getDirection() == 2)
         {
             //player.setPos('x', player.getPos('x') + 4);
-            player.setPos('y', player.getPos('y') - 1);
+            playerPtr->setPos('y', playerPtr->getPos('y') - 1);
         }
         else if (player.getDirection() == 3)
         {
-            player.setPos('x', player.getPos('x') - 1);
+            playerPtr->setPos('x', playerPtr->getPos('x') - 1);
             //player.setPos('y', player.getPos('y') - 1);
         }
     }

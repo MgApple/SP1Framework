@@ -2,6 +2,11 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
+#include "Player.h"
+#include "Chad.h"
+#include "Cop.h"
+#include "Customer.h"
+#include "Hoarder.h"
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -55,30 +60,30 @@ struct SGameChar
     bool  m_bActive;
 };
 
-void init        ( void );      // initialize your variables, allocate memory, etc
+void init(Entity *playerPtr, Player &player, Chad &chad, Customer &customer); // initialize your variables, allocate memory, etc
 void getInput    ( void );      // get input from player
-void update      ( double dt ); // update the game and the state of the game
-void render      ( void );      // renders the current state of the game to the console
+void update(double dt, Entity* playerPtr, Entity* chadPtr, Entity* customerPtr, Player& player, Chad& chad, Customer& customer); // update the game and the state of the game
+void render(Entity* playerPtr, Entity* chadPtr, Entity* copPtr, Entity* customerPtr, Entity* hoarderPtr, Player& player, Chad& chad, Cop& cop, Customer& customer, Hoarder& hoarder); // renders the current state of the game to the console
 void shutdown    ( void );      // do clean up, free memory
 
 void splashScreenWait();    // waits for time to pass in splash screen
-void updateGame();          // gameplay logic
+void updateGame(Entity* playerPtr, Player& player, Chad& chad, Customer& customer); // gameplay logic
 void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderMainMenu();  // renders the main menu
-void renderGame();          // renders the game stuff
+void renderGame(Entity* playerPtr, Entity* chadPtr, Entity* copPtr, Entity* customerPtr, Entity* hoarderPtr, Player& player, Chad& chad, Cop& cop, Customer& customer, Hoarder& hoarder); // renders the game stuff
 void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
-void renderCharacter();     // renders the character into the buffer
-void renderNPC();
+void renderCharacter(Entity* playerPtr, Entity* chadPtr, Player &player, Chad &chad);     // renders the character into the buffer
+void renderNPC(Entity* chadPtr, Entity* copPtr, Entity* customerPtr, Entity* hoarderPtr, Chad& chad, Cop& cop, Customer& customer, Hoarder& hoarder);
 //void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderHUD();
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 void renderInputEvents();   // renders the status of input events
-void chadPush();
-void customerBlock();
+void chadPush(Entity* playerPtr, Player &player, Chad &chad);
+void customerBlock(Entity* playerPtr, Player& player, Customer& customer);
 
 // keyboard and mouse input event managers
 void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent);  // define this function for the console to call when there are keyboard events
