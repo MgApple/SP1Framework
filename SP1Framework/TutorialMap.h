@@ -2,7 +2,7 @@
 class TutorialMap
 {
 private:
-	char map[24][50]
+	char map[24][50];
 
 public:
 	TutorialMap();
