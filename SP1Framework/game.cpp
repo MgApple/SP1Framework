@@ -79,6 +79,7 @@ void init( void )
     customerPtr = &customer;
     customer.setPlayer(playerPtr);
 
+
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
     g_sChar.m_bActive = true;*/
@@ -372,9 +373,7 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
-    renderChad();
-    renderCop();
-    renderCustomer();
+    renderNPC();
 }
 
 void renderGameOver()
@@ -444,32 +443,19 @@ void renderCharacter()
     // Draw the location of the character
     player.setCharColor(0x0A);
     if(chad.checkCollision())
-        player.setCharColor(chadPtr->getCharColour());
+        player.setCharColor(chad.getCharColor());
     g_Console.writeToBuffer(temp, (char)21, player.getCharColor());
 }
 
-void renderChad()
+void renderNPC()
 {
-    // Draw the location of the charactersw
     COORD temp;
     temp.X = chad.getPos('x');
     temp.Y = chad.getPos('y');
-    g_Console.writeToBuffer(temp, (char)4, chadPtr->getCharColour());
-}
-
-void renderCop()
-{
-    // Draw the location of the character
-    COORD temp;
+    g_Console.writeToBuffer(temp, (char)4, chad.getCharColor());
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
-    g_Console.writeToBuffer(temp,'P', cop.getCharColour());
-}
-
-void renderCustomer()
-{
-    // Draw the location of the character
-    COORD temp;
+    g_Console.writeToBuffer(temp, 'P', cop.getCharColour());
     temp.X = customer.getPos('x');
     temp.Y = customer.getPos('Y');
     g_Console.writeToBuffer(temp, 'C', customer.getCharColour());
