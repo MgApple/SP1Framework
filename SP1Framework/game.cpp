@@ -24,7 +24,7 @@ double  g_dPrevCustomerTime;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
-// Game specific variables here
+// Game specific variables here HELP
 Entity*      chadPtr;
 Entity*      customerPtr;
 Entity*      playerPtr;
