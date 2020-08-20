@@ -12,12 +12,16 @@ Enemy::~Enemy()
 
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
+	bool check = false;
 	for (int i = 0; i < 6; i++)
-	{
-		if (map.getEntity(intendedx, intendedy) == collidingCheck[i])
-			return false;
+	{//cuz of how the current map is like, this should be rite? idk anymore
+		if (map.getEntity(intendedy, intendedx) == collidingCheck[i])
+		{
+			check = true;
+			break;
+		}
 	}
-	return true;
+	return check;
 }
 
 void Enemy::move(Map &map)
@@ -25,24 +29,23 @@ void Enemy::move(Map &map)
 	int check = rand() % 4;
 	//int movement = rand() % 5 + 1;
 	int movement = 1;
-	int newx = pos.X;
-	int newy = pos.Y;
+	COORD checker;
+	checker.X = getPos('x');
+	checker.Y = getPos('y');
 	for (int i = 0; i < movement; i++)
 	{
-		if (check == 0 && pos.X != 0)
-			newx = pos.X--;
-		else if (check == 1 && pos.X != 79)
-			newx = pos.X++;
-		else if (check == 2 && pos.Y != 0)
-			newy = pos.Y--;
-		else if (check == 3 && pos.Y != 24)
-			newy = pos.Y++;
-
-
-		if (collisionCheck(newx, newy, map) == false)
+		if (check == 0 && getPos('x') != 0)
+			checker.X--;
+		else if (check == 1 && getPos('x') != 79)
+			checker.X++;
+		else if (check == 2 && getPos('y') != 0)
+			checker.Y--;
+		else if (check == 3 && getPos('y') != 24)
+			checker.Y++;
+		if (collisionCheck(checker.X, checker.Y, map) == false)
 		{
-			setPos('x', newx);
-			setPos('y', newy);
+			setPos('x', checker.X);
+			setPos('y', checker.Y);
 		}
 	}
 }
