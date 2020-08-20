@@ -13,9 +13,11 @@ Enemy::~Enemy()
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
 	bool check = false;
+	char placeholder = map.getEntity(intendedy, intendedx);
 	for (int i = 0; i < 6; i++)
-	{//cuz of how the current map is like, this should be rite? idk anymore
-		if (map.getEntity(intendedy, intendedx) == collidingCheck[i])
+	{//the issue's in the map i think either map isnt following the map.text exactly
+		//or the conversion into the colours we're using makes a diff position
+		if (collidingCheck[i] == placeholder)
 		{
 			check = true;
 			break;
