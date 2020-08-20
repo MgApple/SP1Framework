@@ -69,6 +69,10 @@ void Player::move(Map &map)
 	}
 	if (key[K_SHIFT].keyDown && pos.Y > 1)
 		speedBuff = true;
+
+	int test = map.getEntity(pos.Y - 1, pos.X);
+	if (test == 'w')
+		pos.X++;
 }
 
 void Player::render()

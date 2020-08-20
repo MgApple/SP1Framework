@@ -2,8 +2,8 @@
 
 Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 {
-	setPos('x', rand() % 80 + 0);
-	setPos('y', rand() % 24 + 0);
+	pos.X = rand() % 80 + 0;
+	pos.Y = rand() % 24 + 0;
 	charColor = 0x0C;
 	isEnd = false;
 }

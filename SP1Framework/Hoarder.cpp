@@ -4,7 +4,8 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
 {
     setPos('x', 15);
     setPos('y', 16);
-    charColor = 0x06;
+    charColor = 0x06
+        ;
 }
 
 Hoarder::~Hoarder()
@@ -23,7 +24,7 @@ void Hoarder::move(Map& map)
         {
             c.X = C;
             if (map.getEntity(R, C) == 'w')
-                setPos('x', getPos('x') + 1);
+                pos.X++;
         }
     }
 }
