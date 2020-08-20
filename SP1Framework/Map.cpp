@@ -24,7 +24,7 @@ void Map::setEntity(int x, int y, int e)
 
 void Map::loadMap(void)
 {
-	std::fstream mapFile;
+	std::ifstream mapFile;
 	std::string line;
 	mapFile.open("map.txt");
 	if (mapFile) {
