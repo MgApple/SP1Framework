@@ -69,10 +69,10 @@
     <ClCompile Include="Cop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialMap.cpp">
+    <ClCompile Include="Soap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Soap.cpp">
+    <ClCompile Include="Inventory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -122,10 +122,10 @@
     <ClInclude Include="Cop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialMap.h">
+    <ClInclude Include="Soap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Soap.h">
+    <ClInclude Include="Inventory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

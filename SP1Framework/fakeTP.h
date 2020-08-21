@@ -7,5 +7,6 @@ class fakeTP : public Item
 public:
 	fakeTP();
 	~fakeTP();
+	void faketile(Map& map, int x, int y);
 };
 

@@ -2,7 +2,6 @@
 
 Soap::Soap() : Item(Item::Soap)
 {
-	character = 'S';
 }
 
 Soap::~Soap()

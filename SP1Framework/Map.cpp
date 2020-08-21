@@ -38,3 +38,20 @@ void Map::loadMap(void)
 		}
 	}
 }
+
+void Map::loadtutorial(void)
+{
+	std::ifstream tutorial;
+	std::string line;
+	tutorial.open("Tutorial_LVL.txt");
+	if (tutorial) {
+		int lineNbr = 0;
+		while (getline(tutorial, line)) {
+			for (unsigned int i = 0; i < line.length(); i++)
+			{
+				map[lineNbr][i] = line[i];
+			}
+			lineNbr++;
+		}
+	}
+}

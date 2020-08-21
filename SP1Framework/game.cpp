@@ -37,7 +37,7 @@ Cop          cop;
 Customer     customer;
 Hoarder      hoarder;
 SGameChar   g_sChar;
-EGAMESTATES g_eGameState = S_MAINMENU; // initial state s
+EGAMESTATES g_eGameState = S_TITLE; // initial state s
 Map map;
 
 // Console object
@@ -71,7 +71,7 @@ void init( void )
     g_dElapsedTime = 0.0;
 
     // sets the initial state for the game
-    g_eGameState = S_MAINMENU;
+    g_eGameState = S_TITLE;
 
     playerPtr = new Player; 
     player = dynamic_cast<Player*>(playerPtr);
@@ -268,6 +268,8 @@ void update(double dt)
 
     switch (g_eGameState)
     {
+        case S_TITLE: Titlewait();
+            break;
         case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
@@ -280,8 +282,14 @@ void update(double dt)
 
 void splashScreenWait()    // waits for time to pass in splash screen
 {
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
+    if (g_dElapsedTime > 5.0) // wait for 3 seconds to switch to game mode, else do nothing
         g_eGameState = S_GAME;
+}
+
+void Titlewait()
+{
+    if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
+        g_eGameState = S_MAINMENU;
 }
 
 void updateGame()       // gameplay logic
@@ -342,6 +350,8 @@ void render()
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {
+    case S_TITLE: renderTitle();
+        break;
     case S_MAINMENU: renderMainMenu();
         break;
     case S_GAME: renderGame();
@@ -378,6 +388,22 @@ void renderMainMenu()  // renders the main menu
         while (getline(menu, line)) {
             g_Console.writeToBuffer(c, line);
             c.Y += 1;
+        }
+    }
+}
+
+void renderTitle()
+{
+    COORD t;
+    t.X = 7;
+    t.Y = 5;
+    std::ifstream title;
+    std::string line;
+    title.open("TITLE.txt");
+    if (title) {
+        while (getline(title, line)) {
+            g_Console.writeToBuffer(t, line);
+            t.Y += 1;
         }
     }
 }

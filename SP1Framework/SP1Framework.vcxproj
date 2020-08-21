@@ -88,6 +88,7 @@
     <ClCompile Include="Framework\timer.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Hoarder.cpp" />
+    <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Karen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -95,7 +96,6 @@
     <ClCompile Include="Pass.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Soap.cpp" />
-    <ClCompile Include="TutorialMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chad.h" />
@@ -108,13 +108,13 @@
     <ClInclude Include="Framework\timer.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="Hoarder.h" />
+    <ClInclude Include="Inventory.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Karen.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pass.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Soap.h" />
-    <ClInclude Include="TutorialMap.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
