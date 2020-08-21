@@ -69,9 +69,6 @@
     <ClCompile Include="Cop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Soap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -120,9 +117,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TutorialMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Soap.h">
