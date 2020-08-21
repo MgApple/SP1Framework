@@ -609,29 +609,26 @@ void renderInputEvents()
 void chadPush()
 {
     if (chad->checkCollision() &&
-        playerPtr->getPos('x') < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') < g_Console.getConsoleSize().Y)// pushes the player
+        playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
+        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
+        playerPtr->getPos('x') - 5 < g_Console.getConsoleSize().X &&
+        playerPtr->getPos('y') - 5 < g_Console.getConsoleSize().Y) // pushes the player
     {
-        // to be changed
         if (player->getDirection() == 0)
         {
-            //playerPtr->setPos('x', playerPtr->getPos('x') + 4);
             playerPtr->setPos('y', playerPtr->getPos('y') + 3);
         }
         else if (player->getDirection() == 1)
         {
             playerPtr->setPos('x', playerPtr->getPos('x') + 4);
-            //playerPtr->setPos('y', playerPtr->getPos('y') - 1);
         }
         else if (player->getDirection() == 2)
         {
-            //playerPtr->setPos('x', playerPtr->getPos('x') + 4);
             playerPtr->setPos('y', playerPtr->getPos('y') - 3);
         }
         else if (player->getDirection() == 3)
         {
             playerPtr->setPos('x', playerPtr->getPos('x') - 4);
-            //playerPtr->setPos('y', playerPtr->getPos('y') - 1);
         }
     }
 }
