@@ -18,15 +18,17 @@ protected:
 	};
 	TYPE type;
 	COORD pos;
-	bool isSliding, isAttracted;
+	bool isSliding, isAttracted, isHoldingTP;
 	WORD charColor;
 
 public:
 	Entity(void);
 	Entity(TYPE t);
 	~Entity(void);
+	int getType(void);
 	int getPos(char p);
 	void setPos(char p, int i);
+	bool getState(char att);
 	void setState(char att, bool state);
 	virtual void move(Map &map) = 0;
 	virtual WORD getCharColor();

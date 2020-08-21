@@ -7,6 +7,8 @@ Entity::Entity(void)
 	type = TYPE_PLAYER;
 	isSliding = false;
 	isAttracted = false;
+	isHoldingTP = false;
+	charColor = 0xFF;
 }
 
 Entity::Entity(TYPE t)
@@ -16,11 +18,18 @@ Entity::Entity(TYPE t)
 	type = t;
 	isSliding = false;
 	isAttracted = false;
+	isHoldingTP = false;
+	charColor = 0xFF;
 }
 
 Entity::~Entity(void)
 {
 	// empty
+}
+
+int Entity::getType(void)
+{
+	return type;
 }
 
 int Entity::getPos(char p)
@@ -45,6 +54,20 @@ void Entity::setState(char att, bool state)
 		isSliding = state;
 	else if (att == 'a')
 		isAttracted = state;
+	else if (att == 't')
+		isHoldingTP = state;
+}
+
+bool Entity::getState(char att)
+{
+	if (att == 's')
+		return isSliding;
+	else if (att == 'a')
+		return isAttracted;
+	else if (att == 't')
+		return isHoldingTP;
+	else
+		return false;
 }
 
 WORD Entity::getCharColor()

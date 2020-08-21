@@ -4,9 +4,9 @@ Player::Player() : inventory{ 0 }
 {
 	type = TYPE_PLAYER;
 	stamina = 100;
-	speedBuff = false;
-	securityPass = false;
-	alarmClock = false;
+	hasSpeedBuff = false;
+	hasStaminaBuff = false;
+	hasSecurityPass = false;
 	isActive = true;
 	charColor = 0x0C;
 	direction = NONE;
@@ -15,6 +15,34 @@ Player::Player() : inventory{ 0 }
 Player::~Player()
 {
 	// 
+}
+
+int Player::getInventory(int idx)
+{
+	return inventory[idx];
+}
+
+void Player::setInventory(int idx, int item)
+{
+	inventory[idx] = item;
+}
+
+bool Player::getPState(char att)
+{
+	if (att == 's')
+		return hasStaminaBuff;
+	else if (att == 'p')
+		return hasSecurityPass;
+	else
+		return false;
+}
+
+void Player::setPState(char att, bool state)
+{
+	if (att == 's')
+		hasStaminaBuff = state;
+	else if (att == 'p')
+		hasSecurityPass = state;
 }
 
 void Player::setActive(bool isActive)
@@ -29,12 +57,12 @@ bool Player::getActive()
 
 void Player::setSpeed(bool speedBuff)
 {
-	this->speedBuff = speedBuff;
+	this->hasSpeedBuff = speedBuff;
 }
 
 bool Player::getSpeed()
 {
-	return speedBuff;
+	return hasSpeedBuff;
 }
 
 void Player::move(Map& map)
@@ -45,7 +73,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{
-		if (speedBuff)
+		if (hasSpeedBuff)
 			pos.Y -= 2;
 		else
 			pos.Y--;
@@ -53,7 +81,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 	}
 	else if (key[2].keyDown && pos.X > 0)
 	{
-		if (speedBuff)
+		if (hasSpeedBuff)
 			pos.X -= 2;
 		else
 			pos.X--;
@@ -61,7 +89,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 	}
 	else if (key[1].keyDown && pos.Y < 25 - 1)
 	{
-		if (speedBuff)
+		if (hasSpeedBuff)
 			pos.Y += 2;
 		else
 			pos.Y++;
@@ -69,14 +97,14 @@ void Player::movement(Map& map, SKeyEvent* key)
 	}
 	else if (key[3].keyDown && pos.X < 80 - 1)
 	{
-		if (speedBuff)
+		if (hasSpeedBuff)
 			pos.X += 2;
 		else
 			pos.X++;
 		direction = RIGHT;
 	}
 	if (key[K_SHIFT].keyDown && pos.Y > 1)
-		speedBuff = true;
+		hasSpeedBuff = true;
 
 	int wall = map.getEntity(pos.Y - 1, pos.X);
 	if (wall == 'w')

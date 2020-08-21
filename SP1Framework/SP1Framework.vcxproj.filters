@@ -54,22 +54,13 @@
     <ClCompile Include="Item.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Pass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="fakeTP.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hoarder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Cop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Soap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Inventory.cpp">
@@ -107,22 +98,13 @@
     <ClInclude Include="Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Pass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Enemy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="fakeTP.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hoarder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Cop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Soap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Inventory.h">
