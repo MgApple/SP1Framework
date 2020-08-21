@@ -549,7 +549,7 @@ void renderHUD()
     std::ostringstream ss;
     ss << std::fixed << std::setprecision(3);
     ss << 1.0 / g_dDeltaTime << "fps";
-    c.X = g_Console.getConsoleSize().X - 9;
+    c.X = 71;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
@@ -560,12 +560,46 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
-    //displays inventory
+    // displays inventory
     ss.str("");
-    ss << player.getInventory(0) << "|" << player.getInventory(1) << "|" << player.getInventory(2);
-    c.X = g_Console.getConsoleSize().X - 25;
+    for (int i = 0; i < 3; i++) // TODO: find an ascii char to represent each item.
+    {
+        int itemid = player.getInventory(i);
+        if (i == 0)
+            ss << '|';
+        if (itemid == 0)
+            ss << ' ';
+        else if (itemid == 1)
+            ss << ' ';
+        else if (itemid == 2)
+            ss << ' ';
+        else if (itemid == 3)
+            ss << ' ';
+        else if (itemid == 4)
+            ss << ' ';
+        else if (itemid == 5)
+            ss << ' ';
+        else if (itemid == 6)
+            ss << ' ';
+        if (i != 3)
+            ss << '|';
+    }
+    c.X = 55;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
+
+    // displays high score
+    ss.str("");
+    ss << "High score:" << high_score;
+    c.X = 15;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str());
+
+    /*ss.str(""); TODO
+    ss << "Current score:" << current_score;
+    c.X = 15;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str());*/
 }
 
 // this is an example of how you would use the input eventss

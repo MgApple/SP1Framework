@@ -97,6 +97,8 @@ void Item::pickedUp(Map& map, Entity *entity, Player &player)
 			removeItem(map);
 		}
 		break;
+	default:
+		break;
 	}
 }
 
