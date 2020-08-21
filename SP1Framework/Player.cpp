@@ -41,17 +41,17 @@ void Player::move(Map& map)
 {
 }
 
-void Player::movement(Map &map, SKeyEvent* key)
+void Player::movement(Map& map, SKeyEvent* key)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{
-		if(speedBuff)
+		if (speedBuff)
 			pos.Y -= 2;
 		else
 			pos.Y--;
 		direction = UP;
 	}
-	if (key[2].keyDown && pos.X > 0)
+	else if (key[2].keyDown && pos.X > 0)
 	{
 		if (speedBuff)
 			pos.X -= 2;
@@ -59,7 +59,7 @@ void Player::movement(Map &map, SKeyEvent* key)
 			pos.X--;
 		direction = LEFT;
 	}
-	if (key[1].keyDown && pos.Y < 25 - 1)
+	else if (key[1].keyDown && pos.Y < 25 - 1)
 	{
 		if (speedBuff)
 			pos.Y += 2;
@@ -67,7 +67,7 @@ void Player::movement(Map &map, SKeyEvent* key)
 			pos.Y++;
 		direction = DOWN;
 	}
-	if (key[3].keyDown && pos.X < 80 - 1)
+	else if (key[3].keyDown && pos.X < 80 - 1)
 	{
 		if (speedBuff)
 			pos.X += 2;
@@ -83,11 +83,11 @@ void Player::movement(Map &map, SKeyEvent* key)
 	{
 		if (direction == UP)
 			pos.Y++;
-		if(direction == LEFT)
+		else if (direction == LEFT)
 			pos.X++;
-		if (direction == DOWN)
+		else if (direction == DOWN)
 			pos.Y--;
-		if (direction == RIGHT)
+		else if (direction == RIGHT)
 			pos.X--;
 	}
 }
