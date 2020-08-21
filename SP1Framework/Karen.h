@@ -10,7 +10,7 @@ private:
 public:
 	Karen();
 	~Karen();
-	bool aggro();
+	bool aggro(Entity* player,Map &map);
 	void move(Map &map);
 };
 
