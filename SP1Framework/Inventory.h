@@ -1,4 +1,5 @@
 #pragma once
+#include "item.h"
 class Inventory
 {
 	char inventoryArray[3];

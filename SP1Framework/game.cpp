@@ -13,6 +13,7 @@
 #include "Cop.h"
 #include "Customer.h"
 #include "Hoarder.h"
+#include "Inventory.h"
 
 std::string save;
 int high_score;
@@ -36,6 +37,7 @@ Chad*         chad;
 Cop          cop;
 Customer     customer;
 Hoarder      hoarder;
+Inventory   inventory;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
 Map map;
@@ -518,6 +520,13 @@ void renderHUD()
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str());
+
+    //displays inventory
+    ss.str("");
+    ss << inventory.getItem(1) << "|" << inventory.getItem(2) << "|" << inventory.getItem(3);
+    c.X = g_Console.getConsoleSize().X - 25;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 }
