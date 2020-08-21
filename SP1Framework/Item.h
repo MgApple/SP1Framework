@@ -10,7 +10,8 @@ protected:
 		Soda, //no run cooldown
 		Pass, //pass by mall cop
 		Clock, //alert npcs
-		fakeTP //distract npcs
+		fakeTP, //distract npcs
+		goal
 	};
 	ITEM type;
 public:
