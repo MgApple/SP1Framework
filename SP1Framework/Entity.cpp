@@ -70,6 +70,10 @@ bool Entity::getState(char att)
 		return false;
 }
 
+void Entity::move(Map& map)
+{
+}
+
 WORD Entity::getCharColor()
 {
 	return charColor;

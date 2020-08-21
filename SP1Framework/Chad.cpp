@@ -37,7 +37,10 @@ bool Chad::checkCollision()
 	targetPos.X = target->getPos('x');
 	targetPos.Y = target->getPos('y');
 
-	if (targetPos.X == pos.X && targetPos.Y == pos.Y)
+	if ((targetPos.X == pos.X + 1 && targetPos.Y == pos.Y) ||
+		(targetPos.X == pos.X - 1 && targetPos.Y == pos.Y) ||
+		(targetPos.X == pos.X && targetPos.Y == pos.Y + 1) ||
+		(targetPos.X == pos.X && targetPos.Y == pos.Y - 1))
 		return true;
 	else
 		return false;

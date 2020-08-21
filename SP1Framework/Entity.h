@@ -3,7 +3,7 @@
 #include "Map.h"
 class Entity
 {
-protected:
+public:
 	enum TYPE
 	{
 		TYPE_PLAYER,
@@ -16,12 +16,6 @@ protected:
 		TYPE_ITEM,
 		TOTAL
 	};
-	TYPE type;
-	COORD pos;
-	bool isSliding, isAttracted, isHoldingTP;
-	WORD charColor;
-
-public:
 	Entity(void);
 	Entity(TYPE t);
 	~Entity(void);
@@ -30,8 +24,15 @@ public:
 	void setPos(char p, int i);
 	bool getState(char att);
 	void setState(char att, bool state);
-	virtual void move(Map &map) = 0;
+
+	virtual void move(Map &map); // pure virtual won't allow usage of Entity as an object
 	virtual WORD getCharColor();
 	virtual void setCharColor(WORD);
+protected:
+	TYPE type;
+	COORD pos;
+	bool isSliding, isAttracted, isHoldingTP;
+	WORD charColor;
+
 };
 
