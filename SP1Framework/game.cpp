@@ -273,6 +273,20 @@ void update(double dt)
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
     }
+}
+
+
+void splashScreenWait()    // waits for time to pass in splash screen
+{
+    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
+        g_eGameState = S_GAME;
+}
+
+void updateGame()       // gameplay logic
+{
+    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+    player->movement(map,g_skKeyEvent); // moves the character, collision detection, physics, etc
+    
     double time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {
@@ -286,21 +300,7 @@ void update(double dt)
         customerPtr->move(map);
         g_dPrevCustomerTime = g_dElapsedTime;
     }
-}
-
-
-void splashScreenWait()    // waits for time to pass in splash screen
-{
-    if (g_dElapsedTime > 3.0) // wait for 3 seconds to switch to game mode, else do nothing
-        g_eGameState = S_GAME;
-}
-
-void updateGame()       // gameplay logic
-{
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    Player* player = dynamic_cast<Player*>(playerPtr);
-    player->movement(map,g_skKeyEvent); // moves the character, collision detection, physics, etc
-    //chad->move();
+                                        //chad->move();
     chadPush(); // checks if chad pushes player
     //customer->move();
     customerBlock();
