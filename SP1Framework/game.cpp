@@ -381,7 +381,7 @@ void renderToScreen()
 void renderMainMenu()  // renders the main menu
 {
     COORD c;
-    c.X = 5;
+    c.X = 1;
     c.Y = 2;
     std::ifstream menu;
     std::string line;
