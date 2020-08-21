@@ -13,7 +13,6 @@
 #include "Cop.h"
 #include "Customer.h"
 #include "Hoarder.h"
-#include "Inventory.h"
 
 std::string save;
 int high_score;
@@ -33,11 +32,10 @@ Entity*      customerPtr;
 Entity*      hoarderPtr;
 Entity*      playerPtr;
 Player*      player;
-Chad*         chad;
+Chad*        chad;
 Cop          cop;
 Customer     customer;
 Hoarder      hoarder;
-Inventory   inventory;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
 Map map;
@@ -428,7 +426,7 @@ void renderGameOver()
         << "                                   dMMMNo-.--/dMMMy  +MMMMMMMMMMMMM+  oMMMo sMMMMM: dMMM.  hMMMM/-------." << "\n"
         << "                                   `sNMMMNNNNMMMMd/ -NMMMh+++++dMMMN- oMMMo .NMMMd  dMMM.  hMMMMNNNNNNNNs" << "\n"
         << "                                     .+shdddhhs+-`  ohhhh.     -hhhhs /hhh/  ohhh:  shhh.  ohhhhhhhhhhhh+" << "\n"
-        << "\n" << "\n" << "\n" << "                                  Personal Best: "<<high_score << "\n"
+        << "\n" << "\n" << "\n" << "                                  Personal Best: "<< high_score << "\n"
         <<"                                  Score: " << "\n" << "\n" << "\n"
         << "                                     `:+syhyyo/-    +ssss.     `ssss+ -ssssssssssss/  :sssssssssso/." << "\n"
         << "                                   `omMMMMNMMMMNh:  :NMMMh     sMMMN: +MMMMMMMMMMMMy  +MMMMNmmmMMMMm:" << "\n"
@@ -525,7 +523,7 @@ void renderHUD()
 
     //displays inventory
     ss.str("");
-    ss << inventory.getItem(1) << "|" << inventory.getItem(2) << "|" << inventory.getItem(3);
+    ss << player->getInventory(0) << "|" << player->getInventory(1) << "|" << player->getInventory(2);
     c.X = g_Console.getConsoleSize().X - 25;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
