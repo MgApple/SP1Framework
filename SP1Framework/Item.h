@@ -13,10 +13,8 @@ protected:
 		fakeTP //distract npcs
 	};
 	ITEM type;
-	char character;
 public:
 	Item(ITEM i);
 	~Item(void);
-	void setTile(Map& map, int x, int y);
 };
 

@@ -2,7 +2,6 @@
 
 Item::Item(ITEM i) : Entity(TYPE::TYPE_ITEM)
 {
-	character = ' ';
 	/*int x;
 	int y;
 	while (true)
@@ -19,9 +18,4 @@ Item::Item(ITEM i) : Entity(TYPE::TYPE_ITEM)
 Item::~Item()
 {
 	//blank for now
-}
-
-void Item::setTile(Map& map, int x, int y)
-{
-	map.setEntity(x, y, character);
 }
