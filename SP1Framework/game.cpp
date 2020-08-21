@@ -32,7 +32,7 @@ Entity*      customerPtr;
 Entity*      hoarderPtr;
 Entity*      playerPtr;
 Player*      player;
-Chad         chad;
+Chad*         chad;
 Cop          cop;
 Customer     customer;
 Hoarder      hoarder;
@@ -78,8 +78,9 @@ void init( void )
     playerPtr->setPos('x', g_Console.getConsoleSize().X / 2);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
 
-    chadPtr = &chad;
-    chad.setPlayer(playerPtr);
+    chadPtr = new Chad;
+    chad = dynamic_cast<Chad*>(chadPtr);
+    chad->setPlayer(playerPtr);
     customerPtr = &customer;
     customer.setPlayer(playerPtr);
     hoarderPtr = &hoarder;
@@ -287,7 +288,7 @@ void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player->movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
-
+  
     double coolDown = g_dElapsedTime - g_dCooldown;
     if (player->getSpeed() && coolDown > 5.0f)
     {
@@ -454,7 +455,7 @@ void renderCharacter()
     temp.Y = playerPtr->getPos('y');
     // Draw the location of the character
     playerPtr->setCharColor(0x0A);
-    if(chad.checkCollision())
+    if(chad->checkCollision())
         playerPtr->setCharColor(chadPtr->getCharColor());
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
@@ -462,8 +463,8 @@ void renderCharacter()
 void renderNPC()
 {
     COORD temp;
-    temp.X = chad.getPos('x');
-    temp.Y = chad.getPos('y');
+    temp.X = chad->getPos('x');
+    temp.Y = chad->getPos('y');
     g_Console.writeToBuffer(temp, (char)4, chadPtr->getCharColor());
     temp.X = cop.getPos('x');
     temp.Y = cop.getPos('y');
@@ -581,7 +582,9 @@ void renderInputEvents()
 
 void chadPush()
 {
-    if (chad.checkCollision()) // pushes the player
+    if (chad->checkCollision() &&
+        playerPtr->getPos('x') < g_Console.getConsoleSize().X &&
+        playerPtr->getPos('y') < g_Console.getConsoleSize().Y)// pushes the player
     {
         // to be changed
         if (player->getDirection() == 0)
