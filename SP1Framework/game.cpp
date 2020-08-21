@@ -79,7 +79,7 @@ void init( void )
     g_eGameState = S_TITLE;
 
     playerPtr = &player;
-    playerPtr->setPos('x', g_Console.getConsoleSize().X / 2);
+    playerPtr->setPos('x', 1);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
