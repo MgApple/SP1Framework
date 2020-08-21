@@ -22,6 +22,7 @@ double  g_dDeltaTime;
 double  g_dPrevPlayerTime;
 double  g_dPrevChadTime;
 double  g_dPrevCustomerTime;
+double  g_dCooldown;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
@@ -285,8 +286,14 @@ void splashScreenWait()    // waits for time to pass in splash screen
 void updateGame()       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player->movement(map,g_skKeyEvent); // moves the character, collision detection, physics, etc
-    
+    player->movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
+
+    double coolDown = g_dElapsedTime - g_dCooldown;
+    if (player->getSpeed() && coolDown > 5.0f)
+    {
+        player->setSpeed(false);
+        g_dCooldown = g_dElapsedTime;
+    }
     double time = g_dElapsedTime - g_dPrevChadTime;
     if (time > 0.4f)
     {

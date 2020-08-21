@@ -27,6 +27,16 @@ bool Player::getActive()
 	return isActive;
 }
 
+void Player::setSpeed(bool speedBuff)
+{
+	this->speedBuff = speedBuff;
+}
+
+bool Player::getSpeed()
+{
+	return speedBuff;
+}
+
 void Player::move(Map& map)
 {
 }
