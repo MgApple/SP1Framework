@@ -25,6 +25,8 @@ public:
 	~Player();
 	void setActive(bool);
 	bool getActive();
+	void setSpeed(bool);
+	bool getSpeed();
 	void move(Map& map);
 	void movement(Map &map, SKeyEvent* key);
 	void render();
