@@ -18,13 +18,13 @@ void Hoarder::createPath(Map& map)
     nodes = new Node[consoleWidth * consoleHeight];
     for (int x = 0; x < consoleWidth; ++x)
     {
-        for (int y = 0; y < consoleHeight; ++y) // y = 1 because the top row is not included?
+        for (int y = 0; y < consoleHeight; ++y) 
         {
             int i = y * consoleWidth + x;
             nodes[i].pos.X = x; // to find which n6ode
             nodes[i].pos.Y = y;
             // if it's a wall, set bObstacle to true
-            if (map.getEntity(y, x) == 'w')
+            if (map.getEntity(y - 1, x) == 'w')
                 nodes[i].bObstacle = true;
             else
                 nodes[i].bObstacle = false;
