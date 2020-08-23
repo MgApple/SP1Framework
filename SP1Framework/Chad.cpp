@@ -6,6 +6,7 @@ Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 	pos.Y = rand() % 24 + 0;
 	charColor = 0x0C;
 	isEnd = false;
+	target = NULL;
 }
 
 Chad::~Chad()

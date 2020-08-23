@@ -10,12 +10,12 @@ private:
 	{
 		bool bObstacle = false;
 		bool bVisited = false;
-		float globalGoal; // INFINITY is a float type
-		float localGoal;
-		COORD pos;
+		float globalGoal = INFINITY; // INFINITY is a float type
+		float localGoal = INFINITY;
+		COORD pos = { 0, 0 };
 		std::vector<Node*> neighbours;
-		Node* parent;
-		Node* child;
+		Node* parent = NULL;
+		Node* child = NULL;
 	};
 
 	Node* nodes = NULL;

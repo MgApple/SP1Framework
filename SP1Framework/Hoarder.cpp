@@ -81,7 +81,7 @@ bool Hoarder::solveAStar(Map& map)
     // pythagoras' theorem - sqrt((x1-x2)^2 + (y1-y2)^2)
     auto distance = [](Node* a, Node* b)
     {
-        return sqrtf((a->pos.X - b->pos.X) * (a->pos.X - b->pos.X) + (a->pos.Y - b->pos.Y) * (a->pos.Y - b->pos.Y));
+        return sqrtf((float)((a->pos.X - b->pos.X) * (a->pos.X - b->pos.X) + (a->pos.Y - b->pos.Y) * (a->pos.Y - b->pos.Y)));
     };
 
     auto heuristic = [distance](Node* a, Node* b)
@@ -124,13 +124,13 @@ bool Hoarder::solveAStar(Map& map)
             if (!nodeNeighbour->bVisited && nodeNeighbour->bObstacle == false)
                 notTestedNodes.push_back(nodeNeighbour);
 
-            float fPossiblyLowerGoal = current->localGoal + distance(current, nodeNeighbour);
+            float possiblyLowerGoal = current->localGoal + distance(current, nodeNeighbour);
 
             // FIX LOCAL GOAL AND GLOBAL GOAL NOT UPDATING
-            if (fPossiblyLowerGoal < nodeNeighbour->localGoal)
+            if (possiblyLowerGoal < nodeNeighbour->localGoal)
             {
                 nodeNeighbour->parent = current;
-                nodeNeighbour->localGoal = fPossiblyLowerGoal;
+                nodeNeighbour->localGoal = possiblyLowerGoal;
                 nodeNeighbour->globalGoal = nodeNeighbour->localGoal + heuristic(nodeNeighbour, end);
             }
         }
@@ -143,12 +143,8 @@ void Hoarder::move(Map& map)
     if (end->parent != NULL)
     {
         Node* ptr = end->parent;
-        if (ptr != NULL)
-        {
-            // set next node to this node's parent
-            Node* temp = ptr;
-            pos = ptr->pos;
-        }
+        pos = ptr->pos;
+        // set next node to this node's parent
         end = end->parent;
     }
 }
