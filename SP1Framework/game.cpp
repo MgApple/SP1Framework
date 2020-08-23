@@ -21,6 +21,7 @@ std::vector<Entity*> entityList;
 int chadCount;
 int copCount;
 int customerCount;
+int hoarderCount;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -32,9 +33,6 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
 // Game specific variables here HELP
-Entity*      chadPtr;
-Entity*      customerPtr;
-Entity*      hoarderPtr;
 Entity*      playerPtr;
 Player       player;
 
@@ -317,6 +315,16 @@ void updateGame()       // gameplay logic
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
+    }
+
+    while (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        hoarder->solveAStar(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
     }
 
     double time = g_dElapsedTime - g_dPrevChadTime;
