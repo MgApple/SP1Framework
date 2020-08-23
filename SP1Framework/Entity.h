@@ -25,7 +25,7 @@ public:
 	bool getState(char att);
 	void setState(char att, bool state);
 
-	virtual void move(Map &map); // pure virtual won't allow usage of Entity as an object
+	virtual void move(Map& map) = 0; // pure virtual won't allow usage of Entity as an object
 	virtual WORD getCharColor();
 	virtual void setCharColor(WORD);
 protected:
