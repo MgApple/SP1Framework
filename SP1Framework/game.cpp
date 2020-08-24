@@ -471,7 +471,7 @@ void renderGame()
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        renderNPC(entity,map);
+        renderNPC(entity);
     }
     renderBar();
 }
