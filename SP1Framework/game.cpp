@@ -471,7 +471,7 @@ void renderGame()
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        renderNPC(entity);
+        renderNPC(entity,map);
     }
     renderBar();
 }
@@ -546,7 +546,7 @@ void renderCharacter()
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
 
-void renderNPC(Entity* entity)
+void renderNPC(Entity* entity, Map &map)
 {
     COORD temp;
     temp.X = entity->getPos('x');
@@ -554,15 +554,19 @@ void renderNPC(Entity* entity)
     switch (entity->getType())
     {
     case Entity::TYPE_CHAD:
+        map.setEntity(temp.X, temp.Y, 'B');
         g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
         break;
     case Entity::TYPE_COP:
+        map.setEntity(temp.X, temp.Y, 'P');
         g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
         break;
     case Entity::TYPE_CUSTOMER:
+        map.setEntity(temp.X, temp.Y, 'C');
         g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
         break;
     case Entity::TYPE_HOARDER:
+        map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
         break;
     }

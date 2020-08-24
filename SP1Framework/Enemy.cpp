@@ -4,7 +4,7 @@ Enemy::Enemy(TYPE t) : Entity(TYPE::TYPE_ENEMY)
 {
 	type = t;
 	elapsedTime = 0;
-	moveTime = 0.2;
+	moveTime = 0.35;
 }
 
 Enemy::~Enemy()
