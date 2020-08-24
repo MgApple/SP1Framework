@@ -65,7 +65,7 @@ void shutdown    ( void );      // do clean up, free memory
 
 void splashScreenWait(); // waits for time to pass in splash screen //TEMP
 void Titlewait();
-void updateGame();          // gameplay logic
+void updateGame(double dt);          // gameplay logic
 void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit

@@ -273,7 +273,7 @@ void update(double dt)
             break;
         case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
             break;
-        case S_GAME: updateGame(); // gameplay logic when we are in the game
+        case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
@@ -293,7 +293,7 @@ void Titlewait()
         g_eGameState = S_MAINMENU;
 }
 
-void updateGame()       // gameplay logic
+void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
@@ -343,28 +343,28 @@ void updateGame()       // gameplay logic
         ++hoarderCount;
     }
 
-    double time = g_dElapsedTime - g_dPrevChadTime;
-    if (time > 0.2f)
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
-        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() != Entity::TYPE_COP)
+            entity->move(map, dt);
+        if (entity->getType() == Entity::TYPE_CHAD)
         {
-            Entity* entity = (Entity*)*it;
-            if (entity->getType() != Entity::TYPE_COP)
-                entity->move(map);
-            if (entity->getType() == Entity::TYPE_CHAD)
-            {
-                Chad* chad = dynamic_cast<Chad*>(entity);
-                if (chad->checkCollision())
-                    chadPush();
-            }
-            if (entity->getType() == Entity::TYPE_CUSTOMER)
-            {
-                Customer* customer = dynamic_cast<Customer*>(entity);
-                if (customer->checkCollision())
-                    customerBlock();
-            }
+            Chad* chad = dynamic_cast<Chad*>(entity);
+            if (chad->checkCollision())
+                chadPush();
         }
-        g_dPrevChadTime = g_dElapsedTime;
+        if (entity->getType() == Entity::TYPE_CUSTOMER)
+        {
+            Customer* customer = dynamic_cast<Customer*>(entity);
+            if (customer->checkCollision())
+                customerBlock();
+        }
+        if (entity->getType() == Entity::TYPE_HOARDER)
+        {
+            Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            hoarder->movement(map, dt);
+        }
     }
 
     double coolDown = g_dElapsedTime - g_dCooldown;

@@ -11,7 +11,6 @@ private:
 public:
 	Chad();
 	~Chad();
-	//void move(Map &map);
 	void setPlayer(Entity*);
 	bool checkCollision();
 };

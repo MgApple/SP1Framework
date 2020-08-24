@@ -5,6 +5,7 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
     pos.X = 78;
     pos.Y = 12;
     charColor = 0x06;
+    moveTime = 0.4;
 }
 
 Hoarder::~Hoarder()
@@ -29,7 +30,6 @@ void Hoarder::createPath(Map& map)
             else
                 nodes[i].bObstacle = false;
             nodes[i].parent = NULL;
-            nodes[i].child = NULL;
             nodes[i].bVisited = false;
         }
     }
@@ -74,7 +74,6 @@ bool Hoarder::solveAStar(Map& map)
             nodes[i].globalGoal = INFINITY;
             nodes[i].localGoal = INFINITY;
             nodes[i].parent = NULL;
-            nodes[i].child = NULL;
         }
     }
 
@@ -138,13 +137,23 @@ bool Hoarder::solveAStar(Map& map)
     return true;
 }
 
-void Hoarder::move(Map& map)
+void Hoarder::movement(Map& map, const double dt)
 {
-    if (end->parent != NULL)
+    elapsedTime += dt;
+
+    if (elapsedTime > moveTime)
     {
-        Node* ptr = end->parent;
-        pos = ptr->pos;
-        // set next node to this node's parent
-        end = end->parent;
+        if (end->parent != NULL)
+        {
+            Node* ptr = end->parent;
+            pos = ptr->pos;
+            // set next node to this node's parent
+            end = end->parent;
+        }
+        else
+        {
+            move(map, dt);
+        }
+        elapsedTime = 0.0;
     }
 }

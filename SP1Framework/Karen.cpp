@@ -52,7 +52,7 @@ bool Karen::aggro(Entity* player,Map &map)
 	return aggrocheck;
 }
 
-void Karen::move(Map &map)
+void Karen::move(Map &map, const double dt)
 {
 	if (aggro(getTarget(), map) == true)
 	{
@@ -60,7 +60,7 @@ void Karen::move(Map &map)
 	}
 	else
 	{
-		Enemy::move(map);
+		move(map, dt);
 	}
 }
 

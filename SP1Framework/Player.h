@@ -17,6 +17,7 @@ private:
 	int stamina;
 	bool hasSpeedBuff, hasStaminaBuff, hasSecurityPass, isActive;
 	DIRECTION direction;
+
 public:
 	Player();
 	~Player();
@@ -28,7 +29,7 @@ public:
 	bool getActive();
 	void setSpeed(bool);
 	bool getSpeed();
-	void move(Map& map);
+	void move(Map& map, const double dt);
 	void movement(Map &map, SKeyEvent* key);
 	void render();
 	enum DIRECTION getDirection();

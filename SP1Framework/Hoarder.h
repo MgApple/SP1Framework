@@ -15,7 +15,6 @@ private:
 		COORD pos = { 0, 0 };
 		std::vector<Node*> neighbours;
 		Node* parent = NULL;
-		Node* child = NULL;
 	};
 
 	Node* nodes = NULL;
@@ -31,6 +30,6 @@ public:
 	void createPath(Map& map);
 	bool checkCollision();
 	bool solveAStar(Map& map);
-	void move(Map& map);
+	void movement(Map& map, const double dt);
 };
 
