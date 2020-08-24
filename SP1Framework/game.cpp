@@ -477,26 +477,27 @@ void renderGame()
 
 void renderGameOver()
 {
-    std::cout << "                                       .-:::::.`         `-----`      .------    `------`  .------------`" << "\n"
-        << "                                    .omNNMMMMNNms.       yNNNNNy      +NNNNNN:   oNNNNNN.  yNNNNNNNNNNNN/" << "\n"
-        << "                                   /NMMMNysshNMMMm.     +MMMNMMM+     oMMMNMMh  `NMMNMMM.  hMMMMhyyyyyyy-" << "\n"
-        << "                                  .NMMMm.    -:-..     -NMMN:NMMN-    oMMMyNMM: sMMddMMM.  hMMMM+::::::-" << "\n"
-        << "                                  /MMMMo   hddddddo   `mMMM+ oMMMm`   oMMMosMMd.NMM:dMMM.  hMMMMMMMMMMMd" << "\n"
-        << "                                  :MMMMs   hddNMMMy   yMMMN///MMMMy   oMMMo.NMMdMMd dMMM.  hMMMMo++++++/" << "\n"
-        << "                                   dMMMNo-.--/dMMMy  +MMMMMMMMMMMMM+  oMMMo sMMMMM: dMMM.  hMMMM/-------." << "\n"
-        << "                                   `sNMMMNNNNMMMMd/ -NMMMh+++++dMMMN- oMMMo .NMMMd  dMMM.  hMMMMNNNNNNNNs" << "\n"
-        << "                                     .+shdddhhs+-`  ohhhh.     -hhhhs /hhh/  ohhh:  shhh.  ohhhhhhhhhhhh+" << "\n"
-        << "\n" << "\n" << "\n" << "                                  Personal Best: "<< high_score << "\n"
-        <<"                                  Score: " << "\n" << "\n" << "\n"
-        << "                                     `:+syhyyo/-    +ssss.     `ssss+ -ssssssssssss/  :sssssssssso/." << "\n"
-        << "                                   `omMMMMNMMMMNh:  :NMMMh     sMMMN: +MMMMMMMMMMMMy  +MMMMNmmmMMMMm:" << "\n"
-        << "                                   hMMMMs:--+mMMMN:  +MMMM/   -MMMMo  +MMMMs:::::::.  +MMMMo.../MMMMh" << "\n"
-        << "                                  :MMMMy     .MMMMd   yMMMm`  dMMMh   +MMMMdyyyyyyy`  +MMMMy//+hMMMN/" << "\n"
-        << "                                  +MMMM+      MMMMm   `mMMMs +MMMm.   +MMMMNmmmmmmm`  +MMMMNNMMMMms-" << "\n"
-        << "                                  -MMMMh`    :MMMMy    :NMMM/NMMM:    +MMMMo.......   +MMMMs-sMMMNh-" << "\n"
-        << "                                   oNMMMdo++yNMMMm.     +MMMNMMMo     +MMMMhooooooo+  +MMMM+  +NMMMm-" << "\n"
-        << "                                    :hmNMMMMMMNdo`       hMMMMMd`     +MMMMMMMMMMMMN  +MMMM+   /NMMMN:" << "\n"
-        << "                                      .-//++/:-`         `/////.      .////////////:  .////.    -////:" << "\n";
+    COORD t;
+    t.X = 25;
+    t.Y = 2;
+    std::ifstream gameover;
+    std::string line;
+    gameover.open("gameover.txt");
+    if (gameover) {
+        while (getline(gameover, line)) {
+            g_Console.writeToBuffer(t, line);
+            t.Y += 1;
+        }
+        std::ostringstream ss;
+        t.Y += 1;
+        ss << "Personal Best: " << high_score;
+        t.X += 4;
+        g_Console.writeToBuffer(t, ss.str());
+        ss.str("");
+        t.Y += 2;
+        ss << "Score: ";
+        g_Console.writeToBuffer(t, ss.str());
+    }
 }
 
 void renderMap()
