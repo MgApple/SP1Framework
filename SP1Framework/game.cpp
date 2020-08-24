@@ -22,6 +22,8 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int spamCount;
+int spamIncrease;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -72,6 +74,10 @@ void init( void )
 
     chadCount = 0;
     copCount = 0;
+    customerCount = 0;
+    hoarderCount = 0;
+    spamCount = 0;
+    spamIncrease = 30;
 
     // sets the initial state for the game
     g_eGameState = S_TITLE;
@@ -292,6 +298,15 @@ void updateGame()       // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
+    if (g_skKeyEvent[K_SPACE].keyDown && spamCount < 49)
+    {
+        ++spamCount;
+    }
+    if (spamCount > 5)
+    {
+        ++spamIncrease;
+        spamCount = 0;
+    }
     while (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
@@ -400,6 +415,7 @@ void render()
         break;
     }
     renderHUD();      // renders debug information, frame rate, elapsed time, etc
+    renderBar();
     //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
@@ -608,6 +624,19 @@ void renderHUD()
     c.X = 15;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());*/
+}
+
+void renderBar()
+{
+    COORD pos;
+    for (int i = 0; i < 20; ++i)
+    {
+        pos.X = 30 + i;
+        pos.Y = 24;
+        g_Console.writeToBuffer(pos, (char)176, 0x2B);
+    }
+    COORD pos2 = { spamIncrease,24 };
+    g_Console.writeToBuffer(pos2, (char)178, 0x2B);
 }
 
 // this is an example of how you would use the input eventss
