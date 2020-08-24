@@ -472,7 +472,8 @@ void renderGame()
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        renderNPC(entity);
+        if (cameracheck(entity))
+            renderNPC(entity);
     }
 }
 
@@ -559,6 +560,22 @@ void renderMap()
 
         }
     }
+}
+
+bool cameracheck(Entity* entity)
+{
+    COORD camera;
+    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
+    {
+        camera.Y = r + 1;
+        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 12; c++)
+        {
+            camera.X = c;
+            if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
+                return true;
+        }
+    }
+    return false;
 }
 
 void renderCharacter()
