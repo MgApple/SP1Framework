@@ -54,6 +54,7 @@ Console g_Console(80, 25, "SP1 Framework");
 //--------------------------------------------------------------
 void init( void )
 {
+    map.loadMap();
     std::ifstream savefile;
     savefile.open("save.txt");
     if (savefile) {
@@ -509,7 +510,6 @@ void renderMap()
         00
     };
 
-    COORD c;
     /*for (int i = 0; i < 12; ++i)
     {
         c.X = 5 * i;
@@ -518,7 +518,7 @@ void renderMap()
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
     //Map map;
-    map.loadMap();
+    
     /*for (int R = 0; R < 24; R++)
     {
         c.Y = R+1;
@@ -534,12 +534,12 @@ void renderMap()
         }
     }*/
     COORD camera;
-    camera.X = playerPtr->getPos('x')- 10;
+    camera.X = playerPtr->getPos('x')- 12;
     camera.Y = playerPtr->getPos('y')- 5;
-    if (camera.X < 10)
-        camera.X = 10;
-    else if (camera.X > g_Console.getConsoleSize().X - 10)
-        camera.X = g_Console.getConsoleSize().X - 10;
+    if (camera.X < 12)
+        camera.X = 12;
+    else if (camera.X > g_Console.getConsoleSize().X - 12)
+        camera.X = g_Console.getConsoleSize().X - 12;
     if (camera.Y < 5)
         camera.Y = 5;
     else if (camera.Y > g_Console.getConsoleSize().Y - 5)
@@ -547,49 +547,19 @@ void renderMap()
     for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
     {
         camera.Y = r + 1;
-        for (int c = playerPtr->getPos('x') - 10; c < playerPtr->getPos('x') + 10; c++)
+        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 12; c++)
         {
             camera.X = c;
             if (map.getEntity(r, c) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
             else if (map.getEntity(r, c) == ' ')
-                g_Console.writeToBuffer(camera, (char)32, colors[12]);
+                g_Console.writeToBuffer(camera, (char)32, colors[6]);
             else
-                g_Console.writeToBuffer(camera, 'n', colors[12]);
+                g_Console.writeToBuffer(camera, 'n', colors[6]);
 
         }
     }
 }
-
-//void renderCamera()
-//{
-//    COORD camera;
-//    camera.X = playerPtr->getPos('x');
-//    camera.Y = playerPtr->getPos('y');
-//    if (camera.X < 5)
-//        camera.X = 5;
-//    else if (camera.X > g_Console.getConsoleSize().X - 5)
-//        camera.X = g_Console.getConsoleSize().X - 5;
-//    if (camera.Y < 5)
-//        camera.Y = 5;
-//    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
-//        camera.Y = g_Console.getConsoleSize().Y - 5;
-//    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
-//    {
-//        camera.Y = r + 1;
-//        for (int c = playerPtr->getPos('x') - 5; r < playerPtr->getPos('x') + 5; r++)
-//        {
-//            camera.X = c;
-//            if (map.getEntity(r, c) == 'w')
-//                g_Console.writeToBuffer(camera, (char)219, colors[4]);
-//            else if (map.getEntity(r, c) == ' ')
-//                g_Console.writeToBuffer(camera, (char)32, colors[12]);
-//            else
-//                g_Console.writeToBuffer(camera, 'n', colors[12]);
-//
-//        }
-//    }
-//}
 
 void renderCharacter()
 {
