@@ -75,6 +75,7 @@ void renderTitle();
 void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
+void renderCamera();
 void renderCharacter();     // renders the character into the buffer
 void renderNPC(Entity*);
 //void renderFramerate();     // renders debug information, frame rate, elapsed time, etc

@@ -519,7 +519,7 @@ void renderMap()
     }*/
     //Map map;
     map.loadMap();
-    for (int R = 0; R < 24; R++)
+    /*for (int R = 0; R < 24; R++)
     {
         c.Y = R+1;
         for (int C = 0; C < 80; C++)
@@ -532,8 +532,64 @@ void renderMap()
             else
                 g_Console.writeToBuffer(c, 'n', colors[12]);
         }
+    }*/
+    COORD camera;
+    camera.X = playerPtr->getPos('x');
+    camera.Y = playerPtr->getPos('y');
+    if (camera.X < 5)
+        camera.X = 5;
+    else if (camera.X > g_Console.getConsoleSize().X - 5)
+        camera.X = g_Console.getConsoleSize().X - 5;
+    if (camera.Y < 5)
+        camera.Y = 5;
+    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
+        camera.Y = g_Console.getConsoleSize().Y - 5;
+    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
+    {
+        camera.Y = r + 1;
+        for (int c = playerPtr->getPos('x') - 5; r < playerPtr->getPos('x') + 5; r++)
+        {
+            camera.X = c;
+            if (map.getEntity(r, c) == 'w')
+                g_Console.writeToBuffer(camera, (char)219, colors[4]);
+            else if (map.getEntity(r, c) == ' ')
+                g_Console.writeToBuffer(camera, (char)32, colors[12]);
+            else
+                g_Console.writeToBuffer(camera, 'n', colors[12]);
+
+        }
     }
 }
+
+//void renderCamera()
+//{
+//    COORD camera;
+//    camera.X = playerPtr->getPos('x');
+//    camera.Y = playerPtr->getPos('y');
+//    if (camera.X < 5)
+//        camera.X = 5;
+//    else if (camera.X > g_Console.getConsoleSize().X - 5)
+//        camera.X = g_Console.getConsoleSize().X - 5;
+//    if (camera.Y < 5)
+//        camera.Y = 5;
+//    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
+//        camera.Y = g_Console.getConsoleSize().Y - 5;
+//    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
+//    {
+//        camera.Y = r + 1;
+//        for (int c = playerPtr->getPos('x') - 5; r < playerPtr->getPos('x') + 5; r++)
+//        {
+//            camera.X = c;
+//            if (map.getEntity(r, c) == 'w')
+//                g_Console.writeToBuffer(camera, (char)219, colors[4]);
+//            else if (map.getEntity(r, c) == ' ')
+//                g_Console.writeToBuffer(camera, (char)32, colors[12]);
+//            else
+//                g_Console.writeToBuffer(camera, 'n', colors[12]);
+//
+//        }
+//    }
+//}
 
 void renderCharacter()
 {
