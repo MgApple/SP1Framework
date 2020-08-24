@@ -298,15 +298,16 @@ void updateGame()       // gameplay logic
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
-    if (g_skKeyEvent[K_SPACE].keyDown && spamCount < 49)
+    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 49)
     {
         ++spamCount;
     }
-    if (spamCount > 5)
+    if (spamCount > 4)
     {
         ++spamIncrease;
         spamCount = 0;
     }
+
     while (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
@@ -415,7 +416,6 @@ void render()
         break;
     }
     renderHUD();      // renders debug information, frame rate, elapsed time, etc
-    renderBar();
     //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
@@ -473,6 +473,7 @@ void renderGame()
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
     }
+    renderBar();
 }
 
 void renderGameOver()
