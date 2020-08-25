@@ -276,6 +276,8 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
+        case S_TUTORIAL: updateTutorial(dt);
+            break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
@@ -340,7 +342,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            resetScore();
+            g_eMenuState = S_RESET;
             break;
         }
         else
@@ -362,27 +364,15 @@ void updateMenu()
     
 }
 
-void resetScore()
-{
-    COORD t;
-    t.X = 7;
-    t.Y = 5;
-    std::ifstream reset;
-    std::string line;
-    reset.open("reset.txt");
-    if (reset) {
-        while (getline(reset, line)) {
-            g_Console.writeToBuffer(t, line);
-            t.Y += 1;
-        }
-    }
-    high_score = 0;
-}
-
 void Titlewait()
 {
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
+}
+
+void updateTutorial(double dt)
+{
+
 }
 
 void updateGame(double dt)       // gameplay logic
@@ -577,6 +567,20 @@ void renderMainMenu()  // renders the main menu
                 c.Y += 1;
             }
         }
+        break;
+    case S_RESET:
+        c.X = 6;
+        c.Y = 5;
+        menu.open("reset.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        high_score = 0;
+        
+        g_eMenuState = S_OPTION1;
         break;
     }
 }
