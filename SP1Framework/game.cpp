@@ -535,8 +535,8 @@ void renderMap()
         }
     }*/
     COORD camera;
-    camera.X = playerPtr->getPos('x')- 12;
-    camera.Y = playerPtr->getPos('y')- 5;
+    camera.X = playerPtr->getPos('x') - 12;
+    camera.Y = playerPtr->getPos('y') - 5;
     if (camera.X < 12)
         camera.X = 12;
     else if (camera.X > g_Console.getConsoleSize().X - 12)
@@ -545,10 +545,10 @@ void renderMap()
         camera.Y = 5;
     else if (camera.Y > g_Console.getConsoleSize().Y - 5)
         camera.Y = g_Console.getConsoleSize().Y - 5;
-    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
+    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 4; r++)
     {
         camera.Y = r + 1;
-        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 12; c++)
+        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 13; c++)
         {
             camera.X = c;
             if (map.getEntity(r, c) == 'w')
@@ -565,10 +565,10 @@ void renderMap()
 bool cameracheck(Entity* entity)
 {
     COORD camera;
-    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 5; r++)
+    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 4; r++)
     {
         camera.Y = r + 1;
-        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 12; c++)
+        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 13; c++)
         {
             camera.X = c;
             if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
