@@ -47,10 +47,19 @@ enum EGAMESTATES
     S_GAME,
     S_GAMEOVER,
     S_TITLE,
+    S_TUTORIAL,
     S_COUNT
 };
 
-// struct for the game character
+enum EMENUSTATE
+{
+    S_MENU1,
+    S_MENU2,
+    S_MENU3,
+    S_OPTION1,
+    S_OPTION2
+};
+// struct for the game characters
 struct SGameChar
 {
     COORD m_cLocation;
@@ -63,7 +72,8 @@ void update      ( double dt ); // update the game and the state of the game
 void render      ( void );      // renders the current state of the game to the console
 void shutdown    ( void );      // do clean up, free memory
 
-void splashScreenWait(); // waits for time to pass in splash screen //TEMP
+void updateMenu();
+void resetScore();
 void Titlewait();
 void updateGame(double dt);          // gameplay logic
 void gameOverWait();        // waits for time to pass in gameover screen
