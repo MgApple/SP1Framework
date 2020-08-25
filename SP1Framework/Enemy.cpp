@@ -3,6 +3,8 @@
 Enemy::Enemy(TYPE t) : Entity(TYPE::TYPE_ENEMY)
 {
 	type = t;
+	elapsedTime = 0;
+	moveTime = 0.35;
 }
 
 Enemy::~Enemy()
@@ -35,27 +37,33 @@ bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 	return check;
 }
 
-void Enemy::move(Map &map)
+void Enemy::move(Map& map, const double dt)
 {
+	elapsedTime += dt;
+
 	int check = rand() % 4;
 	//int movement = rand() % 5 + 1;
 	int movement = 1;
 	int x = getPos('x');
 	int y = getPos('y');
-	for (int i = 0; i < movement; i++)
+	if (elapsedTime > moveTime)
 	{
-		if (check == 0 && getPos('x') != 0)
-			y--;
-		else if (check == 1 && getPos('x') != 79)
-			y++;
-		else if (check == 2 && getPos('y') != 0)
-			x--;
-		else if (check == 3 && getPos('y') != 23)
-			x++;
-		if (collisionCheck(x, y, map) == false)
+		for (int i = 0; i < movement; i++)
 		{
-			setPos('x', x);
-			setPos('y', y);
+			if (check == 0 && getPos('x') != 0)
+				y--;
+			else if (check == 1 && getPos('x') != 79)
+				y++;
+			else if (check == 2 && getPos('y') != 0)
+				x--;
+			else if (check == 3 && getPos('y') != 23)
+				x++;
+			if (collisionCheck(x, y, map) == false)
+			{
+				setPos('x', x);
+				setPos('y', y);
+			}
 		}
+		elapsedTime = 0.0;
 	}
 }

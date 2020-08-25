@@ -65,7 +65,7 @@ bool Player::getSpeed()
 	return hasSpeedBuff;
 }
 
-void Player::move(Map& map)
+void Player::move(Map& map, const double dt)
 {
 }
 

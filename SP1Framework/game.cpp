@@ -14,6 +14,7 @@
 #include "Cop.h"
 #include "Customer.h"
 #include "Hoarder.h"
+#include "Item.h"
 
 std::string save;
 int high_score;
@@ -70,6 +71,7 @@ void init( void )
         newsave << "high_score:0";
         high_score = 0;
     }
+    map.loadMap();
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
 
@@ -274,7 +276,7 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
-        case S_GAME: updateGame(); // gameplay logic when we are in the game
+        case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
             break;
@@ -383,21 +385,22 @@ void Titlewait()
         g_eGameState = S_MAINMENU;
 }
 
-void updateGame()       // gameplay logic
+void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
-    if (g_skKeyEvent[K_SPACE].keyDown && spamCount < 49)
+    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 49)
     {
         ++spamCount;
     }
-    if (spamCount > 5)
+    if (spamCount > 4)
     {
         ++spamIncrease;
         spamCount = 0;
     }
-    while (chadCount < 3)
+
+    if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
         Chad* chad = dynamic_cast<Chad*>(chadPtr);
@@ -406,14 +409,14 @@ void updateGame()       // gameplay logic
         ++chadCount;
     }
 
-    while (copCount < 2)
+    if (copCount < 2)
     {
         Entity* copPtr = new Cop;
         entityList.push_back(copPtr);
         ++copCount;
     }
 
-    while (customerCount < 9)
+    if (customerCount < 9)
     {
         Entity* customerPtr = new Customer;
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
@@ -422,7 +425,7 @@ void updateGame()       // gameplay logic
         ++customerCount;
     }
 
-    while (hoarderCount < 1)
+    if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
@@ -432,28 +435,28 @@ void updateGame()       // gameplay logic
         ++hoarderCount;
     }
 
-    double time = g_dElapsedTime - g_dPrevChadTime;
-    if (time > 0.2f)
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
-        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() == Entity::TYPE_HOARDER)
         {
-            Entity* entity = (Entity*)*it;
-            if (entity->getType() != Entity::TYPE_COP)
-                entity->move(map);
-            if (entity->getType() == Entity::TYPE_CHAD)
-            {
-                Chad* chad = dynamic_cast<Chad*>(entity);
-                if (chad->checkCollision())
-                    chadPush();
-            }
-            if (entity->getType() == Entity::TYPE_CUSTOMER)
-            {
-                Customer* customer = dynamic_cast<Customer*>(entity);
-                if (customer->checkCollision())
-                    customerBlock();
-            }
+            Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            hoarder->movement(map, dt);
         }
-        g_dPrevChadTime = g_dElapsedTime;
+        else if (entity->getType() != Entity::TYPE_COP)
+            entity->move(map, dt);
+        if (entity->getType() == Entity::TYPE_CHAD)
+        {
+            Chad* chad = dynamic_cast<Chad*>(entity);
+            if (chad->checkCollision())
+                chadPush();
+        }
+        if (entity->getType() == Entity::TYPE_CUSTOMER)
+        {
+            Customer* customer = dynamic_cast<Customer*>(entity);
+            if (customer->checkCollision())
+                customerBlock();
+        }
     }
 
     double coolDown = g_dElapsedTime - g_dCooldown;
@@ -505,7 +508,6 @@ void render()
         break;
     }
     renderHUD();      // renders debug information, frame rate, elapsed time, etc
-    renderBar();
     //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
@@ -604,6 +606,7 @@ void renderGame()
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
     }
+    renderBar();
 }
 
 void renderGameOver()
@@ -649,7 +652,6 @@ void renderMap()
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
     //Map map;
-    map.loadMap();
     for (int R = 0; R < 24; R++)
     {
         c.Y = R+1;
@@ -684,16 +686,48 @@ void renderNPC(Entity* entity)
     switch (entity->getType())
     {
     case Entity::TYPE_CHAD:
+        //map.setEntity(temp.X, temp.Y, 'B');
         g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
         break;
     case Entity::TYPE_COP:
+        //map.setEntity(temp.X, temp.Y, 'P');
         g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
         break;
     case Entity::TYPE_CUSTOMER:
+        //map.setEntity(temp.X, temp.Y, 'C');
         g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
         break;
     case Entity::TYPE_HOARDER:
+        //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    }
+}
+
+void renderItem(Item* item)
+{
+    COORD temp;
+    temp.X = item->getPos('x');
+    temp.Y = item->getPos('y');
+    switch (item->getItemType())
+    {
+    case 1:
+        g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
+        break;
+    case 2:
+        g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
+        break;
+    case 3:
+        g_Console.writeToBuffer(temp, (char)43, item->getCharColor());
+        break;
+    case 4:
+        g_Console.writeToBuffer(temp, (char)127, item->getCharColor());
+        break;
+    case 5:
+        g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
+        break;
+    case 6:
+        g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
         break;
     }
 }
