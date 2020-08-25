@@ -278,6 +278,8 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
+        case S_TUTORIAL: updateTutorial(dt);
+            break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
@@ -342,7 +344,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            resetScore();
+            g_eMenuState = S_RESET;
             break;
         }
         else
@@ -451,25 +453,13 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 
 void resetScore()
 {
-    COORD t;
-    t.X = 7;
-    t.Y = 5;
-    std::ifstream reset;
-    std::string line;
-    reset.open("reset.txt");
-    if (reset) {
-        while (getline(reset, line)) {
-            g_Console.writeToBuffer(t, line);
-            t.Y += 1;
-        }
-    }
-    high_score = 0;
-}
-
-void Titlewait()
-{
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
+}
+
+void updateTutorial(double dt)
+{
+
 }
 
 void updateGame(double dt)       // gameplay logic
@@ -673,6 +663,20 @@ void renderMainMenu()  // renders the main menu
                 c.Y += 1;
             }
         }
+        break;
+    case S_RESET:
+        c.X = 6;
+        c.Y = 5;
+        menu.open("reset.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        high_score = 0;
+        
+        g_eMenuState = S_OPTION1;
         break;
     }
 }
@@ -1017,31 +1021,12 @@ void chadPush()
 
 void customerBlock()
 {
-    if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') - 5 < g_Console.getConsoleSize().Y) // pushes the player
-    {
-        // to be changed
-        if (player.getDirection() == 0)
-        {
-            //player.setPos('x', player.getPos('x') + 4);
-            playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-        }
-        else if (player.getDirection() == 1)
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-            //player.setPos('y', player.getPos('y') - 1);
-        }
-        else if (player.getDirection() == 2)
-        {
-            //player.setPos('x', player.getPos('x') + 4);
-            playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-        }
-        else if (player.getDirection() == 3)
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') - 1);
-            //player.setPos('y', player.getPos('y') - 1);
-        }
-    }
+    if (player.getDirection() == 0)
+        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
+    else if (player.getDirection() == 1)
+        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
+    else if (player.getDirection() == 2)
+        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
+    else if (player.getDirection() == 3)
+        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }

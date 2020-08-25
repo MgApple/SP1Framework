@@ -58,7 +58,8 @@ enum EMENUSTATE
     S_MENU2,
     S_MENU3,
     S_OPTION1,
-    S_OPTION2
+    S_OPTION2,
+    S_RESET
 };
 // struct for the game characters
 struct SGameChar
@@ -77,6 +78,7 @@ void updateMenu();
 void resetScore();
 void Titlewait();
 void updateGame(double dt);          // gameplay logic
+void updateTutorial(double dt);
 void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
