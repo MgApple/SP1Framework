@@ -106,7 +106,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 	if (key[K_SHIFT].keyDown && pos.Y > 1)
 		hasSpeedBuff = true;
 
-	int wall = map.getEntity(pos.Y - 1, pos.X);
+	int wall = map.getEntity(pos.X, pos.Y - 1);
 	if (wall == 'w')
 	{
 		if (direction == UP)

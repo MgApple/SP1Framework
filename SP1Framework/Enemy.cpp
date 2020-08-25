@@ -25,7 +25,7 @@ Entity* Enemy::getTarget()
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
 	bool check = false;
-	char placeholder = map.getEntity(intendedy-1, intendedx);
+	char placeholder = map.getEntity(intendedx, intendedy-1);
 	for (int i = 0; i < 6; i++)
 	{
 		if (collidingCheck[i] == placeholder)
@@ -60,19 +60,19 @@ void Enemy::move(Map& map, const double dt)
 				x++;
 			if (collisionCheck(x, y, map) == false)
 			{
-				map.setEntity(getPos('y') - 1, getPos('x'), ' ');
+				map.setEntity(getPos('x'), getPos('y') - 1, ' ');
 				setPos('x', x);
 				setPos('y', y);
 				if (getType() == 2)
-					map.setEntity(y-1, x, 'K');
+					map.setEntity(x, y - 1, 'K');
 				else if (getType() == 3)
-					map.setEntity(y - 1, x, 'C');
+					map.setEntity(x, y - 1, 'C');
 				else if (getType() == 4)
-					map.setEntity(y - 1, x, 'P');
+					map.setEntity(x, y - 1, 'P');
 				else if (getType() == 5)
-					map.setEntity(y - 1, x, char(4));
+					map.setEntity(x, y - 1, char(4));
 				else if (getType() == 6)
-					map.setEntity(y - 1, x, 'H');
+					map.setEntity(x, y - 1, 'H');
 			}
 		}
 		elapsedTime = 0.0;

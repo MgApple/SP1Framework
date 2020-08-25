@@ -22,10 +22,10 @@ void Hoarder::createPath(Map& map)
         for (int y = 0; y < consoleHeight; ++y) 
         {
             int i = y * consoleWidth + x;
-            nodes[i].pos.X = x; // to find which n6ode
+            nodes[i].pos.X = x; // to find which node
             nodes[i].pos.Y = y;
             // if it's a wall, set bObstacle to true
-            if (map.getEntity(y - 1, x) == 'w')
+            if (map.getEntity(x, y - 1) == 'w')
                 nodes[i].bObstacle = true;
             else
                 nodes[i].bObstacle = false;

@@ -2,7 +2,7 @@
 class Map
 {
 private:
-	char map[24][80];
+	char map[80][24];
 	char tutorial[24][50];
 public:
 	Map(void);

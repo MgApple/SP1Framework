@@ -32,7 +32,7 @@ void Map::loadMap(void)
 		while (getline(mapFile, line)) {
 			for (unsigned int i = 0; i < line.length(); i++)
 			{
-				map[lineNbr][i] = line[i];
+				map[i][lineNbr] = line[i];
 			}
 			lineNbr++;
 		}

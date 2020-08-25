@@ -457,7 +457,6 @@ void resetScore()
         g_eGameState = S_MAINMENU;
 }
 
-
 void titleWait()
 {
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
@@ -763,12 +762,12 @@ void renderMap()
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
     //Map map;
-    for (int R = 0; R < 24; R++)
+    for (int C = 0; C < 24; C++)
     {
-        c.Y = R+1;
-        for (int C = 0; C < 80; C++)
+        c.Y = C+1;
+        for (int R = 0; R < 80; R++)
         {
-            c.X = C;
+            c.X = R;
             if (map.getEntity(R, C) == 'w')
                 g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
