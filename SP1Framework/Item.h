@@ -26,5 +26,4 @@ public:
 	WORD getCharColor(void);
 	void removeItem(Map& map);
 	void move(Map& map, const double dt = 0);
-	void reLoc(void);
 };
