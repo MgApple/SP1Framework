@@ -14,6 +14,7 @@
 #include "Cop.h"
 #include "Customer.h"
 #include "Hoarder.h"
+#include "Item.h"
 
 std::string save;
 int high_score;
@@ -69,6 +70,7 @@ void init( void )
         newsave << "high_score:0";
         high_score = 0;
     }
+    map.loadMap();
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
 
@@ -308,7 +310,7 @@ void updateGame(double dt)       // gameplay logic
         spamCount = 0;
     }
 
-    while (chadCount < 3)
+    if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
         Chad* chad = dynamic_cast<Chad*>(chadPtr);
@@ -317,14 +319,14 @@ void updateGame(double dt)       // gameplay logic
         ++chadCount;
     }
 
-    while (copCount < 2)
+    if (copCount < 2)
     {
         Entity* copPtr = new Cop;
         entityList.push_back(copPtr);
         ++copCount;
     }
 
-    while (customerCount < 9)
+    if (customerCount < 9)
     {
         Entity* customerPtr = new Customer;
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
@@ -333,7 +335,7 @@ void updateGame(double dt)       // gameplay logic
         ++customerCount;
     }
 
-    while (hoarderCount < 1)
+    if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
@@ -519,7 +521,6 @@ void renderMap()
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
     //Map map;
-    map.loadMap();
     for (int R = 0; R < 24; R++)
     {
         c.Y = R+1;
@@ -568,6 +569,34 @@ void renderNPC(Entity* entity)
     case Entity::TYPE_HOARDER:
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    }
+}
+
+void renderItem(Item* item)
+{
+    COORD temp;
+    temp.X = item->getPos('x');
+    temp.Y = item->getPos('y');
+    switch (item->getItemType())
+    {
+    case 1:
+        g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
+        break;
+    case 2:
+        g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
+        break;
+    case 3:
+        g_Console.writeToBuffer(temp, (char)43, item->getCharColor());
+        break;
+    case 4:
+        g_Console.writeToBuffer(temp, (char)127, item->getCharColor());
+        break;
+    case 5:
+        g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
+        break;
+    case 6:
+        g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
         break;
     }
 }

@@ -12,6 +12,11 @@ Item::~Item()
 	//blank for now
 }
 
+int Item::getItemType(void)
+{
+	return type;
+}
+
 void Item::removeItem(Map& map)
 {
 	map.setEntity(getPos('x'), getPos('y'), ' ');

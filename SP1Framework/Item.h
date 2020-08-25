@@ -18,6 +18,7 @@ private:
 public:
 	Item(ITEM i);
 	~Item(void);
+	int getItemType(void);
 	void removeItem(Map& map);
 	void pickedUp(Map& map, Entity *entity, Player &player);
 	void move(Map& map);
