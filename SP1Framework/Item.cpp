@@ -1,13 +1,61 @@
 #include "Item.h"
+#include <cstdlib>
 
-Item::Item(ITEM i) : Entity(TYPE::TYPE_ITEM)
+Item::Item(void)
 {
-	setPos('x', rand() % 80);
-	setPos('y', rand() % 24);
-	type = i;
+	int i = rand() % 5 + 1;
+	switch (i)
+	{
+	case 1:
+		type = Soap;
+		break;
+	case 2:
+		type = Soda;
+		break;
+	case 3:
+		type = Pass;
+		break;
+	case 4:
+		type = Clock;
+		break;
+	case 5:
+		type = fakeTP;
+		break;
+	}
+	pos.X = rand() % 79 + 1;
+	pos.Y = rand() % 23 + 1;
+	charColor = 0x6f;
 }
 
-Item::~Item()
+Item::Item(int i)
+{
+	switch (i)
+	{
+	case 1:
+		type = TP;
+		break;
+	case 2:
+		type = Soap;
+		break;
+	case 3:
+		type = Soda;
+		break;
+	case 4:
+		type = Pass;
+		break;
+	case 5:
+		type = Clock;
+		break;
+	case 6:
+		type = fakeTP;
+		break;
+	}
+	pos.X = rand() % 79 + 1;
+	pos.Y = rand() % 23 + 1;
+	charColor = 0x6f;
+}
+
+Item::~Item(void)
 {
 	//blank for now
 }
@@ -17,97 +65,25 @@ int Item::getItemType(void)
 	return type;
 }
 
+int Item::getPos(char p)
+{
+	if (p == 'x')
+		return pos.X;
+	else
+		return pos.Y;
+}
+
+WORD Item::getCharColor(void)
+{
+	return charColor;
+}
+
 void Item::removeItem(Map& map)
 {
-	map.setEntity(getPos('x'), getPos('y'), ' ');
+	map.setEntity(pos.X, pos.Y, ' ');
 }
 
-void Item::pickedUp(Map& map, Entity *entity, Player &player)
-{
-	switch(type) {
-	case TP:
-		if (!(entity->getState('t'))) { // if is not holding toilet paper
-			entity->setState('t', true);
-			removeItem(map);
-		}
-		break;
-	case Soap:
-		if (entity->getType() == 0) { // if is a player
-			for (int i = 0; i < 3; i++)
-			{
-				if (player.getInventory(i) == 0) { // if the player has an empty inventory slot
-					player.setInventory(i, Soap);
-					removeItem(map);
-				}
-			}
-		}
-		else {
-			removeItem(map);
-		}
-		break;
-	case Soda:
-		if (entity->getType() == 0) {
-			for (int i = 0; i < 3; i++)
-			{
-				if (player.getInventory(i) == 0) {
-					player.setInventory(i, Soda);
-					removeItem(map);
-				}
-			}
-		}
-		else {
-			removeItem(map);
-		}
-		break;
-	case Pass:
-		if (entity->getType() == 0) {
-			for (int i = 0; i < 3; i++)
-			{
-				if (player.getInventory(i) == 0) {
-					player.setInventory(i, fakeTP);
-					player.setPState('p', true);
-					removeItem(map);
-				}
-			}
-		}
-		else {
-			removeItem(map);
-		}
-		break;
-	case Clock:
-		if (entity->getType() == 0) {
-			for (int i = 0; i < 3; i++)
-			{
-				if (player.getInventory(i) == 0) {
-					player.setInventory(i, Clock);
-					removeItem(map);
-				}
-			}
-		}
-		else {
-			removeItem(map);
-		}
-		break;
-	case fakeTP:
-		if (entity->getType() == 0) {
-			for (int i = 0; i < 3; i++)
-			{
-				if (player.getInventory(i) == 0) {
-					player.setInventory(i, fakeTP);
-					removeItem(map);
-				}
-			}
-		}
-		else {
-			removeItem(map);
-		}
-		break;
-	default:
-		break;
-	}
-}
-
-void Item::move(Map& map)
+void Item::move(Map& map, const double dt)
 {
 	// empty (override)
 }

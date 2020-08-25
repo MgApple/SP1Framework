@@ -9,8 +9,8 @@ Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 		x = rand() % 80;
 		y = rand() % 25;
 		if ()*/
-	setPos('x', rand() % 80);
-	setPos('y', rand() % 25);
+	setPos('x', rand() % 79 + 1);
+	setPos('y', rand() % 23 + 1);
 	//}
 	aggrocheck = false;
 }

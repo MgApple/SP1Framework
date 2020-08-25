@@ -9,8 +9,8 @@ Customer::Customer() : Enemy(TYPE::TYPE_CUSTOMER)
 		x = rand() % 80;
 		y = rand() % 25;
 		if ()*/
-	setPos('x', rand() % 80);
-	setPos('y', rand() % 24);
+	setPos('x', rand() % 79 + 1);
+	setPos('y', rand() % 23 + 1);
 	charColor = 0x0f;
 	//}
 }

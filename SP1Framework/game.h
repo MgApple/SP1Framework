@@ -3,6 +3,7 @@
 
 #include "Framework\timer.h"
 #include "Entity.h"
+#include "Item.h"
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -75,7 +76,7 @@ void shutdown    ( void );      // do clean up, free memory
 
 void updateMenu();
 void resetScore();
-void Titlewait();
+void titleWait();
 void updateGame(double dt);          // gameplay logic
 void updateTutorial(double dt);
 void gameOverWait();        // waits for time to pass in gameover screen
@@ -89,6 +90,7 @@ void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
 void renderNPC(Entity*);
+void renderItem(Item* itemPtr);
 //void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderHUD();
 void renderBar();
@@ -96,6 +98,7 @@ void renderToScreen();      // dump the contents of the buffer to the screen, on
 void renderInputEvents();   // renders the status of input events
 void chadPush();
 void customerBlock();
+void checkLocation(Map map, Entity*);
 
 // keyboard and mouse input event managers
 void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent);  // define this function for the console to call when there are keyboard events
