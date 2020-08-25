@@ -23,6 +23,7 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int itemCount;
 int spamCount;
 int spamIncrease;
 
@@ -38,6 +39,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 // Game specific variables here HELP
 Entity*      playerPtr;
 Player       player;
+Item*        itemPtr[4];
 
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
@@ -364,7 +366,92 @@ void updateMenu()
     
 }
 
-void Titlewait()
+void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
+{
+    switch (item->getItemType()) {
+    case 1:
+        if (!(entity->getState('t'))) { // if is not holding toilet paper
+            entity->setState('t', true);
+            item->removeItem(map);
+        }
+        break;
+    case 2:
+        if (entity->getType() == 0) { // if is a player
+            for (int i = 0; i < 3; i++)
+            {
+                if (player.getInventory(i) == 0) { // if the player has an empty inventory slot
+                    player.setInventory(i, 2);
+                    item->removeItem(map);
+                }
+            }
+        }
+        else {
+            item->removeItem(map);
+        }
+        break;
+    case 3:
+        if (entity->getType() == 0) {
+            for (int i = 0; i < 3; i++)
+            {
+                if (player.getInventory(i) == 0) {
+                    player.setInventory(i, 3);
+                    item->removeItem(map);
+                }
+            }
+        }
+        else {
+            item->removeItem(map);
+        }
+        break;
+    case 4:
+        if (entity->getType() == 0) {
+            for (int i = 0; i < 3; i++)
+            {
+                if (player.getInventory(i) == 0) {
+                    player.setInventory(i, 4);
+                    player.setPState('p', true);
+                    item->removeItem(map);
+                }
+            }
+        }
+        else {
+            item->removeItem(map);
+        }
+        break;
+    case 5:
+        if (entity->getType() == 0) {
+            for (int i = 0; i < 3; i++)
+            {
+                if (player.getInventory(i) == 0) {
+                    player.setInventory(i, 5);
+                    item->removeItem(map);
+                }
+            }
+        }
+        else {
+            item->removeItem(map);
+        }
+        break;
+    case 6:
+        if (entity->getType() == 0) {
+            for (int i = 0; i < 3; i++)
+            {
+                if (player.getInventory(i) == 0) {
+                    player.setInventory(i, 6);
+                    item->removeItem(map);
+                }
+            }
+        }
+        else {
+            item->removeItem(map);
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+void resetScore()
 {
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
@@ -389,7 +476,6 @@ void updateGame(double dt)       // gameplay logic
         ++spamIncrease;
         spamCount = 0;
     }
-
     if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
@@ -398,14 +484,12 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(chadPtr);
         ++chadCount;
     }
-
     if (copCount < 2)
     {
         Entity* copPtr = new Cop;
         entityList.push_back(copPtr);
         ++copCount;
     }
-
     if (customerCount < 9)
     {
         Entity* customerPtr = new Customer;
@@ -414,7 +498,6 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(customerPtr);
         ++customerCount;
     }
-
     if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
@@ -424,7 +507,20 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
-
+    if (itemCount < 4)
+    {
+        bool hasTP = false;
+        for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
+        {
+            if (itemPtr[i]->getItemType() == 1)
+                hasTP = true;
+        }
+        if (hasTP)
+            itemPtr[itemCount] = new Item();
+        else
+            itemPtr[itemCount] = new Item(1);
+        ++itemCount;
+    }
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
@@ -464,7 +560,6 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
-    g_dElapsedTime = 0.0;
     if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
@@ -611,6 +706,10 @@ void renderGame()
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
     }
+    for (int i = 0; i < itemCount; i++)
+    {
+        renderItem(itemPtr[i]);
+    }
     renderBar();
 }
 
@@ -717,7 +816,7 @@ void renderItem(Item* item)
     switch (item->getItemType())
     {
     case 1:
-        g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
+        g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
         break;
     case 2:
         g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
@@ -732,7 +831,7 @@ void renderItem(Item* item)
         g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
         break;
     case 6:
-        g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
+        g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
         break;
     }
 }

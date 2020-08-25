@@ -3,6 +3,7 @@
 
 #include "Framework\timer.h"
 #include "Entity.h"
+#include "Item.h"
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -89,6 +90,7 @@ void renderGameOver();      // renders game over screen
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
 void renderNPC(Entity*);
+void renderItem(Item* itemPtr);
 //void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
 void renderHUD();
 void renderBar();
