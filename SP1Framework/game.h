@@ -47,7 +47,17 @@ enum EGAMESTATES
     S_GAME,
     S_GAMEOVER,
     S_TITLE,
+    S_TUTORIAL,
     S_COUNT
+};
+
+enum EMENUSTATE
+{
+    S_MENU1,
+    S_MENU2,
+    S_MENU3,
+    S_OPTION1,
+    S_OPTION2
 };
 
 // struct for the game character
@@ -63,9 +73,11 @@ void update      ( double dt ); // update the game and the state of the game
 void render      ( void );      // renders the current state of the game to the console
 void shutdown    ( void );      // do clean up, free memory
 
-void splashScreenWait(); // waits for time to pass in splash screen //TEMP
+
 void Titlewait();
-void updateGame();          // gameplay logic
+void updateGame(); // gameplay logic
+void updateMenu();
+void resetScore();
 void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit

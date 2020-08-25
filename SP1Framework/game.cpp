@@ -40,6 +40,7 @@ Player       player;
 
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
+EMENUSTATE g_eMenuState = S_MENU1;
 Map map;
 
 // Console object
@@ -150,7 +151,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {    
     switch (g_eGameState)
     {
-    case S_MAINMENU: // don't handle anything for the splash screen
+    case S_MAINMENU: gameplayKBHandler(keyboardEvent);
         break;
 
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
@@ -271,7 +272,7 @@ void update(double dt)
     {
         case S_TITLE: Titlewait();
             break;
-        case S_MAINMENU: splashScreenWait(); //temp thing until we can get menu buttons to work
+        case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
         case S_GAME: updateGame(); // gameplay logic when we are in the game
             break;
@@ -281,10 +282,99 @@ void update(double dt)
 }
 
 
-void splashScreenWait()    // waits for time to pass in splash screen
+void updateMenu()
 {
-    if (g_dElapsedTime > 5.0) // wait for 3 seconds to switch to game mode, else do nothing
-        g_eGameState = S_GAME;
+    switch (g_eMenuState)
+    {
+    case S_MENU1:
+        if (g_skKeyEvent[K_S].keyDown)
+        {
+            g_eMenuState = S_MENU2;
+            break;
+        }
+        else if (g_skKeyEvent[K_SPACE].keyDown)
+        {
+            g_eGameState = S_GAME;
+            break;
+        }
+        else
+        break;
+    case S_MENU2:
+        if (g_skKeyEvent[K_S].keyDown)
+        {
+            g_eMenuState = S_MENU3;
+            break;
+        }
+        else if (g_skKeyEvent[K_W].keyDown)
+        {
+            g_eMenuState = S_MENU1;
+            break;
+        }
+        else if (g_skKeyEvent[K_SPACE].keyDown)
+        {
+            g_eGameState = S_TUTORIAL;
+            break;
+        }
+        else
+        break;
+    case S_MENU3:
+        if (g_skKeyEvent[K_W].keyDown)
+        {
+            g_eMenuState = S_MENU2;
+            break;
+        }
+        else if (g_skKeyEvent[K_SPACE].keyDown)
+        {
+            g_eMenuState = S_OPTION1;
+            break;
+        }
+        else
+        break;
+    case S_OPTION1:
+        if (g_skKeyEvent[K_S].keyDown)
+        {
+            g_eMenuState = S_OPTION2;
+            break;
+        }
+        else if (g_skKeyEvent[K_SPACE].keyDown)
+        {
+            resetScore();
+            break;
+        }
+        else
+        break;
+    case S_OPTION2:
+        if (g_skKeyEvent[K_W].keyDown)
+        {
+            g_eMenuState = S_OPTION1;
+            break;
+        }
+        else if (g_skKeyEvent[K_SPACE].keyDown)
+        {
+            g_eMenuState = S_MENU3;
+            break;
+        }
+        else
+        break;
+    }
+    
+}
+
+void resetScore()
+{
+    COORD t;
+    t.X = 7;
+    t.Y = 5;
+    std::ifstream reset;
+    std::string line;
+    reset.open("reset.txt");
+    if (reset) {
+        while (getline(reset, line)) {
+            g_Console.writeToBuffer(t, line);
+            t.Y += 1;
+        }
+    }
+    high_score = 0;
 }
 
 void Titlewait()
@@ -439,12 +529,53 @@ void renderMainMenu()  // renders the main menu
     c.Y = 2;
     std::ifstream menu;
     std::string line;
-    menu.open("menu.txt");
-    if (menu) {
-        while (getline(menu, line)) {
-            g_Console.writeToBuffer(c, line);
-            c.Y += 1;
+    switch (g_eMenuState)
+    {
+    case S_MENU1:
+        menu.open("menu.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
         }
+        break;
+    case S_MENU2:
+        menu.open("menu2.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        break;
+    case S_MENU3:
+        menu.open("menu3.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        break;
+    case S_OPTION1:
+        menu.open("option.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        break;
+    case S_OPTION2:
+        menu.open("option2.txt");
+        if (menu) {
+            while (getline(menu, line)) {
+                g_Console.writeToBuffer(c, line);
+                c.Y += 1;
+            }
+        }
+        break;
     }
 }
 
