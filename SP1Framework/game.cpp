@@ -457,6 +457,7 @@ void resetScore()
         g_eGameState = S_MAINMENU;
 }
 
+
 void titleWait()
 {
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
