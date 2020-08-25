@@ -29,8 +29,6 @@ int spamIncrease;
 double  g_dElapsedTime;
 double  g_dDeltaTime;
 double  g_dPrevPlayerTime;
-double  g_dPrevChadTime;
-double  g_dPrevCustomerTime;
 double  g_dCooldown;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
@@ -360,6 +358,8 @@ void updateMenu()
         }
         else
         break;
+    case S_RESET:
+
     }
     
 }
@@ -464,8 +464,7 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
-    g_dElapsedTime = 0.0;
-    if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
+    if (g_dElapsedTime > 2.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
@@ -580,9 +579,12 @@ void renderMainMenu()  // renders the main menu
             }
         }
         high_score = 0;
-        
-        g_eMenuState = S_OPTION1;
-        break;
+
+        if (g_dElapsedTime > 3.0)
+        {
+            g_eMenuState = S_OPTION1;
+            break;
+        }
     }
 }
 
