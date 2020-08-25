@@ -2,7 +2,7 @@
 #include "Entity.h"
 class Enemy :public Entity
 {
-	char collidingCheck[6] = { 'w','C','B','P','H','K'};
+	char collidingCheck[6] = { 'w','C',char(4),'P','H','K'};
 	Entity* target;
 
 protected:
