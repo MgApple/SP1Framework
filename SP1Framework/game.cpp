@@ -75,7 +75,7 @@ void init( void )
     }
     map.loadMap();
     // Set precision for floating point output
-    g_dElapsedTime = 0.0;
+    g_dElapsedTime = 60.0;
 
     chadCount = 0;
     copCount = 0;
@@ -269,7 +269,6 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 void update(double dt)
 {
     // get the delta time
-    g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
     switch (g_eGameState)
@@ -471,6 +470,7 @@ void updateTutorial(double dt)
 
 void updateGame(double dt)       // gameplay logic
 {
+    g_dElapsedTime -= dt;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
@@ -486,6 +486,7 @@ void updateGame(double dt)       // gameplay logic
     if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
+        checkLocation(map, chadPtr);
         Chad* chad = dynamic_cast<Chad*>(chadPtr);
         chad->setPlayer(playerPtr);
         entityList.push_back(chadPtr);
@@ -494,12 +495,14 @@ void updateGame(double dt)       // gameplay logic
     if (copCount < 2)
     {
         Entity* copPtr = new Cop;
+        checkLocation(map, copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
     if (customerCount < 9)
     {
         Entity* customerPtr = new Customer;
+        checkLocation(map, customerPtr);
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
@@ -508,6 +511,7 @@ void updateGame(double dt)       // gameplay logic
     if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         hoarder->createPath(map);
         hoarder->solveAStar(map);
@@ -1037,3 +1041,12 @@ void customerBlock()
     else if (player.getDirection() == 3)
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
+
+void checkLocation(Map map, Entity* entity)
+{
+    while (map.getEntity(entity->getPos('y') + 1, entity->getPos('x')) != ' ')
+    {
+        entity->reLoc();
+    }
+}
+
