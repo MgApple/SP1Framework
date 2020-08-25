@@ -898,8 +898,8 @@ void chadPush()
 {
     if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
         playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') - 5 < g_Console.getConsoleSize().Y) // pushes the player
+        playerPtr->getPos('x') - 5 > 0 &&
+        playerPtr->getPos('y') - 5 > 0) // pushes the player
     {
         if (player.getDirection() == 0)
         {
