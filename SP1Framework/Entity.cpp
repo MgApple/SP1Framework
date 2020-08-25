@@ -58,12 +58,6 @@ void Entity::setState(char att, bool state)
 		isHoldingTP = state;
 }
 
-void Entity::reLoc(void)
-{
-	pos.X = rand() % 79 + 1;
-	pos.Y = rand() % 23 + 1;
-}
-
 bool Entity::getState(char att)
 {
 	if (att == 's')

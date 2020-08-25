@@ -24,7 +24,6 @@ public:
 	void setPos(char p, int i);
 	bool getState(char att);
 	void setState(char att, bool state);
-	void reLoc(void);
 
 	virtual void move(Map& map, const double dt = 0) = 0; // pure virtual won't allow usage of Entity as an object
 	virtual WORD getCharColor();
