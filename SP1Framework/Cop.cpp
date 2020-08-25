@@ -2,8 +2,8 @@
 
 Cop::Cop() : Enemy(TYPE::TYPE_COP)
 {
-	setPos('x', rand() % 80 + 0);
-	setPos('y', rand() % 24 + 0);
+	setPos('x', rand() % 79 + 1);
+	setPos('y', rand() % 23 + 1);
 	charColor = 0x1F;
 }
 

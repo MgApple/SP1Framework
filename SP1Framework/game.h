@@ -76,7 +76,7 @@ void shutdown    ( void );      // do clean up, free memory
 
 void updateMenu();
 void resetScore();
-void Titlewait();
+void titleWait();
 void updateGame(double dt);          // gameplay logic
 void updateTutorial(double dt);
 void gameOverWait();        // waits for time to pass in gameover screen

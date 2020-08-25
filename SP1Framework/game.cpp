@@ -274,7 +274,7 @@ void update(double dt)
 
     switch (g_eGameState)
     {
-        case S_TITLE: Titlewait();
+        case S_TITLE: titleWait();
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
@@ -457,7 +457,7 @@ void resetScore()
         g_eGameState = S_MAINMENU;
 }
 
-void Titlewait()
+void titleWait()
 {
     if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;

@@ -23,7 +23,7 @@ Item::Item(void)
 		break;
 	}
 	pos.X = rand() % 79 + 1;
-	pos.Y = rand() % 24 + 1;
+	pos.Y = rand() % 23 + 1;
 	charColor = 0x6f;
 }
 
@@ -51,7 +51,7 @@ Item::Item(int i)
 		break;
 	}
 	pos.X = rand() % 79 + 1;
-	pos.Y = rand() % 23 + 2;
+	pos.Y = rand() % 23 + 1;
 	charColor = 0x6f;
 }
 
