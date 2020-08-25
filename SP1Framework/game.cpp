@@ -474,6 +474,7 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
+    g_dElapsedTime = 0.0;
     if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
