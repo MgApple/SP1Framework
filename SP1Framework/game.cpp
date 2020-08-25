@@ -917,31 +917,12 @@ void chadPush()
 
 void customerBlock()
 {
-    if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') - 5 < g_Console.getConsoleSize().Y) // pushes the player
-    {
-        // to be changed
-        if (player.getDirection() == 0)
-        {
-            //player.setPos('x', player.getPos('x') + 4);
-            playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-        }
-        else if (player.getDirection() == 1)
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-            //player.setPos('y', player.getPos('y') - 1);
-        }
-        else if (player.getDirection() == 2)
-        {
-            //player.setPos('x', player.getPos('x') + 4);
-            playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-        }
-        else if (player.getDirection() == 3)
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') - 1);
-            //player.setPos('y', player.getPos('y') - 1);
-        }
-    }
+    if (player.getDirection() == 0)
+        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
+    else if (player.getDirection() == 1)
+        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
+    else if (player.getDirection() == 2)
+        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
+    else if (player.getDirection() == 3)
+        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
