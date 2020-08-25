@@ -87,3 +87,9 @@ void Item::move(Map& map, const double dt)
 {
 	// empty (override)
 }
+
+void Item::reLoc(void)
+{
+	pos.X = rand() % 79 + 1;
+	pos.Y = rand() % 23 + 1;
+}
