@@ -79,3 +79,9 @@ void Entity::setCharColor(WORD charColor)
 {
 	this->charColor = charColor;
 }
+
+void Entity::reLoc(void)
+{
+	pos.X = rand() % 79 + 1;
+	pos.Y = rand() % 23 + 1;
+}

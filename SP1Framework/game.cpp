@@ -485,6 +485,7 @@ void updateGame(double dt)       // gameplay logic
     if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
+        checkLocation(map, chadPtr);
         Chad* chad = dynamic_cast<Chad*>(chadPtr);
         chad->setPlayer(playerPtr);
         entityList.push_back(chadPtr);
@@ -493,12 +494,14 @@ void updateGame(double dt)       // gameplay logic
     if (copCount < 2)
     {
         Entity* copPtr = new Cop;
+        checkLocation(map, copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
     if (customerCount < 9)
     {
         Entity* customerPtr = new Customer;
+        checkLocation(map, customerPtr);
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
@@ -507,6 +510,7 @@ void updateGame(double dt)       // gameplay logic
     if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         hoarder->createPath(map);
         hoarder->solveAStar(map);
@@ -525,6 +529,7 @@ void updateGame(double dt)       // gameplay logic
             itemPtr[itemCount] = new Item();
         else
             itemPtr[itemCount] = new Item(1);
+        checkItem(map, itemPtr[itemCount]);
         ++itemCount;
     }
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
@@ -1035,4 +1040,20 @@ void customerBlock()
         playerPtr->setPos('y', playerPtr->getPos('y') - 1);
     else if (player.getDirection() == 3)
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
+}
+
+void checkLocation(Map map, Entity* entity)
+{
+    while (map.getEntity(entity->getPos('x'), entity->getPos('y') - 1) != ' ')
+    {
+        entity->reLoc();
+    }
+}
+
+void checkItem(Map map, Item* item)
+{
+    while (map.getEntity(item->getPos('x'), item->getPos('y') - 1) != ' ')
+    {
+        item->reLoc();
+    }
 }

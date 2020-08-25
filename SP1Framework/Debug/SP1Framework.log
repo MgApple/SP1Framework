@@ -1,2 +1,14 @@
-﻿  Enemy.cpp
-  SP1Framework.vcxproj -> D:\Documents\School\DM2196-STUDIO PROJECT 1\SP1Framework\Debug\SP1Framework.exe
+﻿  Chad.cpp
+  Cop.cpp
+  Customer.cpp
+  Enemy.cpp
+  Entity.cpp
+  Hoarder.cpp
+  Item.cpp
+  Karen.cpp
+  Player.cpp
+  game.cpp
+C:\Users\QTY\source\repos\SP1\SP1Framework\game.cpp(919,20): warning C4838: conversion from 'int' to 'SHORT' requires a narrowing conversion
+  main.cpp
+  Generating Code...
+  SP1Framework.vcxproj -> C:\Users\QTY\source\repos\SP1\Debug\SP1Framework.exe
