@@ -60,8 +60,19 @@ void Enemy::move(Map& map, const double dt)
 				x++;
 			if (collisionCheck(x, y, map) == false)
 			{
+				map.setEntity(getPos('y') - 1, getPos('x'), ' ');
 				setPos('x', x);
 				setPos('y', y);
+				if (getType() == 2)
+					map.setEntity(y-1, x, 'K');
+				else if (getType() == 3)
+					map.setEntity(y - 1, x, 'C');
+				else if (getType() == 4)
+					map.setEntity(y - 1, x, 'P');
+				else if (getType() == 5)
+					map.setEntity(y - 1, x, char(4));
+				else if (getType() == 6)
+					map.setEntity(y - 1, x, 'H');
 			}
 		}
 		elapsedTime = 0.0;
