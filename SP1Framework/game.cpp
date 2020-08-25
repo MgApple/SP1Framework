@@ -346,7 +346,12 @@ void updateGame(double dt)       // gameplay logic
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        if (entity->getType() != Entity::TYPE_COP)
+        if (entity->getType() == Entity::TYPE_HOARDER)
+        {
+            Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            hoarder->movement(map, dt);
+        }
+        else if (entity->getType() != Entity::TYPE_COP)
             entity->move(map, dt);
         if (entity->getType() == Entity::TYPE_CHAD)
         {
@@ -359,11 +364,6 @@ void updateGame(double dt)       // gameplay logic
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision())
                 customerBlock();
-        }
-        if (entity->getType() == Entity::TYPE_HOARDER)
-        {
-            Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
-            hoarder->movement(map, dt);
         }
     }
 
