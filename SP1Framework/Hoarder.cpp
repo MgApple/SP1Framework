@@ -6,6 +6,8 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
     pos.Y = 12;
     charColor = 0x06;
     moveTime = 0.4;
+    // supposed to be location of items
+    start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
 }
 
 Hoarder::~Hoarder()
@@ -37,7 +39,6 @@ void Hoarder::createPath(Map& map)
     // to create connections between the nodes
     for (int x = 0; x < consoleWidth; ++x)
     {
-        // y = 1 because the top row is not included
         for (int y = 0; y < consoleHeight; ++y)
         {
             int i = y * consoleWidth + x;
@@ -51,10 +52,8 @@ void Hoarder::createPath(Map& map)
                 nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x + 1)]);
         }
     }
-
-    end = &nodes[pos.Y * consoleWidth + pos.X];
-    // supposed to be location of items
-    start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
+    // hoarder position
+    end = &nodes[pos.Y * consoleWidth + pos.X]; 
 }
 
 bool Hoarder::checkCollision()
@@ -156,4 +155,9 @@ void Hoarder::movement(Map& map, const double dt)
         }
         elapsedTime = 0.0;
     }
+}
+
+void Hoarder::setStart(int x, int y)
+{
+    start = &nodes[y * consoleWidth + x];
 }
