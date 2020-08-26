@@ -554,6 +554,11 @@ void updateGame(double dt)       // gameplay logic
             if (customer->checkCollision())
                 customerBlock();
         }
+        for (int i = 0; i < itemCount; i++)
+        {
+            if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
+                pickedUpItem(map, itemPtr[i], entity, player);
+        }
     }
 
     double coolDown = g_dElapsedTime - g_dCooldown;
