@@ -449,6 +449,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     default:
         break;
     }
+    delete item;
 }
 
 void resetScore()
@@ -832,21 +833,27 @@ void renderItem(Item* item)
     switch (item->getItemType())
     {
     case 1:
+        map.setEntity(temp.X, temp.Y - 1, char(8));
         g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
         break;
     case 2:
+        map.setEntity(temp.X, temp.Y - 1, char(22));
         g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
         break;
     case 3:
+        map.setEntity(temp.X, temp.Y - 1, char(43));
         g_Console.writeToBuffer(temp, (char)43, item->getCharColor());
         break;
     case 4:
+        map.setEntity(temp.X, temp.Y - 1, char(127));
         g_Console.writeToBuffer(temp, (char)127, item->getCharColor());
         break;
     case 5:
+        map.setEntity(temp.X, temp.Y - 1, char(13));
         g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
         break;
     case 6:
+        map.setEntity(temp.X, temp.Y - 1, char(7));
         g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
         break;
     }
