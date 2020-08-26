@@ -75,7 +75,7 @@ void init( void )
     }
     map.loadMap();
     // Set precision for floating point output
-    g_dElapsedTime = 0.0;
+    g_dElapsedTime = 60.0;
 
     chadCount = 0;
     copCount = 0;
@@ -269,7 +269,6 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 void update(double dt)
 {
     // get the delta time
-    g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
     switch (g_eGameState)
@@ -470,6 +469,7 @@ void updateTutorial(double dt)
 
 void updateGame(double dt)       // gameplay logic
 {
+    g_dElapsedTime -= dt;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
