@@ -1081,15 +1081,25 @@ void customerBlock()
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
 
-void checkLocation(Map map, Entity* entity)
+void checkLocation(Map &map, Entity* entity)
 {
     while (map.getEntity(entity->getPos('x'), entity->getPos('y') - 1) != ' ')
     {
         entity->reLoc();
     }
+    if (entity->getType() == 2)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'K');
+    else if (entity->getType() == 3)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'C');
+    else if (entity->getType() == 4)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'P');
+    else if (entity->getType() == 5)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, char(4));
+    else if (entity->getType() == 6)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'H');
 }
 
-void checkItem(Map map, Item* item)
+void checkItem(Map &map, Item* item)
 {
     while (map.getEntity(item->getPos('x'), item->getPos('y') - 1) != ' ')
     {
