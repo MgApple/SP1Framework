@@ -450,7 +450,15 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     default:
         break;
     }
-    delete item;
+    for (int i = 0; i < 4; i++)
+    {
+        if (item == itemPtr[i])
+        {
+            delete item;
+            itemPtr[i] = nullptr;
+            break;
+        }
+    }
 }
 
 void resetScore()
@@ -569,8 +577,10 @@ void updateGame(double dt)       // gameplay logic
         }
         for (int i = 0; i < itemCount; i++)
         {
-            if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
-                pickedUpItem(map, itemPtr[i], entity, player);
+            if (itemPtr[i] != nullptr) {
+                if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
+                    pickedUpItem(map, itemPtr[i], entity, player);
+            }
         }
     }
 
@@ -737,7 +747,8 @@ void renderGame()
     }
     for (int i = 0; i < itemCount; i++)
     {
-        renderItem(itemPtr[i]);
+        if (itemPtr[i]!=nullptr)
+            renderItem(itemPtr[i]);
     }
     renderBar();
 }
