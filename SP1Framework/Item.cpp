@@ -80,7 +80,7 @@ WORD Item::getCharColor(void)
 
 void Item::removeItem(Map& map)
 {
-	map.setEntity(pos.X, pos.Y, ' ');
+	map.setEntity(pos.X, pos.Y - 1, ' ');
 }
 
 void Item::move(Map& map, const double dt)

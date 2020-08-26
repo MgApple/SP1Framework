@@ -31,5 +31,6 @@ public:
 	bool checkCollision();
 	bool solveAStar(Map& map);
 	void movement(Map& map, const double dt);
+	void setStart(int, int);
 };
 

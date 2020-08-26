@@ -90,6 +90,7 @@ void init( void )
     playerPtr = &player;
     playerPtr->setPos('x', 1);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
+    entityList.push_back(playerPtr);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -448,6 +449,15 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     default:
         break;
     }
+    for (int i = 0; i < 4; i++)
+    {
+        if (item == itemPtr[i])
+        {
+            delete item;
+            itemPtr[i] = nullptr;
+            break;
+        }
+    }
 }
 
 void resetScore()
@@ -507,16 +517,6 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(customerPtr);
         ++customerCount;
     }
-    if (hoarderCount < 1)
-    {
-        Entity* hoarderPtr = new Hoarder;
-        checkLocation(map, hoarderPtr);
-        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
-        hoarder->solveAStar(map);
-        entityList.push_back(hoarderPtr);
-        ++hoarderCount;
-    }
     if (itemCount < 4)
     {
         bool hasTP = false;
@@ -532,6 +532,22 @@ void updateGame(double dt)       // gameplay logic
         checkItem(map, itemPtr[itemCount]);
         ++itemCount;
     }
+    if (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
+        {
+            if (itemPtr[i]->getItemType() == 1)
+                hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
+        }
+        hoarder->solveAStar(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
+    }
+
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
@@ -546,18 +562,30 @@ void updateGame(double dt)       // gameplay logic
         {
             Chad* chad = dynamic_cast<Chad*>(entity);
             if (chad->checkCollision())
+            {
                 chadPush();
+                player.setActive(true);
+                playerPtr->setCharColor(chad->getCharColor());
+                renderCharacter();
+            }
         }
         if (entity->getType() == Entity::TYPE_CUSTOMER)
         {
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision())
+            {
                 customerBlock();
+                player.setActive(true);
+                playerPtr->setCharColor(customer->getCharColor());
+                renderCharacter();
+            }
         }
         for (int i = 0; i < itemCount; i++)
         {
-            if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
-                pickedUpItem(map, itemPtr[i], entity, player);
+            if (itemPtr[i] != nullptr) {
+                if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
+                    pickedUpItem(map, itemPtr[i], entity, player);
+            }
         }
     }
 
@@ -724,7 +752,8 @@ void renderGame()
     }
     for (int i = 0; i < itemCount; i++)
     {
-        renderItem(itemPtr[i]);
+        if (itemPtr[i]!=nullptr)
+            renderItem(itemPtr[i]);
     }
     renderBar();
 }
@@ -794,7 +823,6 @@ void renderCharacter()
     temp.X = playerPtr->getPos('x');
     temp.Y = playerPtr->getPos('y');
     // Draw the location of the character
-    playerPtr->setCharColor(0x0A);
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
 
@@ -832,21 +860,27 @@ void renderItem(Item* item)
     switch (item->getItemType())
     {
     case 1:
+        map.setEntity(temp.X, temp.Y - 1, char(8));
         g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
         break;
     case 2:
+        map.setEntity(temp.X, temp.Y - 1, char(22));
         g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
         break;
     case 3:
+        map.setEntity(temp.X, temp.Y - 1, char(43));
         g_Console.writeToBuffer(temp, (char)43, item->getCharColor());
         break;
     case 4:
+        map.setEntity(temp.X, temp.Y - 1, char(127));
         g_Console.writeToBuffer(temp, (char)127, item->getCharColor());
         break;
     case 5:
+        map.setEntity(temp.X, temp.Y - 1, char(13));
         g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
         break;
     case 6:
+        map.setEntity(temp.X, temp.Y - 1, char(7));
         g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
         break;
     }
@@ -1016,19 +1050,19 @@ void chadPush()
         playerPtr->getPos('x') - 5 > 0 &&
         playerPtr->getPos('y') - 5 > 0) // pushes the player
     {
-        if (player.getDirection() == 0)
+        if (player.getDirection() == 0)                                     // UP
         {
             playerPtr->setPos('y', playerPtr->getPos('y') + 3);
         }
-        else if (player.getDirection() == 1)
+        else if (player.getDirection() == 1)                                // LEFT
         {
             playerPtr->setPos('x', playerPtr->getPos('x') + 4);
         }
-        else if (player.getDirection() == 2)
+        else if (player.getDirection() == 2)                                // DOWN
         {
             playerPtr->setPos('y', playerPtr->getPos('y') - 3);
         }
-        else if (player.getDirection() == 3)
+        else if (player.getDirection() == 3)                                // RIGHT
         {
             playerPtr->setPos('x', playerPtr->getPos('x') - 4);
         }
@@ -1047,15 +1081,25 @@ void customerBlock()
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
 
-void checkLocation(Map map, Entity* entity)
+void checkLocation(Map &map, Entity* entity)
 {
     while (map.getEntity(entity->getPos('x'), entity->getPos('y') - 1) != ' ')
     {
         entity->reLoc();
     }
+    if (entity->getType() == 2)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'K');
+    else if (entity->getType() == 3)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'C');
+    else if (entity->getType() == 4)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'P');
+    else if (entity->getType() == 5)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, char(4));
+    else if (entity->getType() == 6)
+        map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, 'H');
 }
 
-void checkItem(Map map, Item* item)
+void checkItem(Map &map, Item* item)
 {
     while (map.getEntity(item->getPos('x'), item->getPos('y') - 1) != ' ')
     {
