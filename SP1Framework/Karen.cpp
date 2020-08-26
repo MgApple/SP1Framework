@@ -14,9 +14,14 @@ Karen::~Karen()
 }
 
 bool Karen::aggro(Entity* player,Map &map)
-{
-	if (((player->getPos('x') - getPos('x')) ^ 2 + (player->getPos('y') - getPos('y')) ^ 2) < 6)
+{//needa figure this out
+	if ((pow(player->getPos('x') - getPos('x'),2) + (player->getPos('y') - getPos('y')) ^ 2) < 6)
 	{
+		int playerx = player->getPos('x');
+		int playery = player->getPos('y');
+		int karenx = getPos('x');
+		int kareny = getPos('y');
+		int check = (player->getPos('x') - getPos('x')) ^ 2 + (player->getPos('y') - getPos('y')) ^ 2;
 		int x1 = getPos('x');
 		int x2 = player->getPos('x');
 		int y1 = getPos('y');
@@ -126,10 +131,11 @@ void Karen::move(Map &map, const double dt)
 	{
 		if (aggro(getTarget(), map) == true)
 		{
+			//does this help?
 		}
 		else
 		{
-			move(map, dt);
+			Enemy::move(map, dt);
 		}
 		elapsedTime = 0.0;
 	}
