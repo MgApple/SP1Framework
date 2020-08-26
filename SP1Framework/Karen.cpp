@@ -2,16 +2,9 @@
 
 Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 {
-	/*int x;
-	int y;
-	while (true)
-	{
-		x = rand() % 80;
-		y = rand() % 25;
-		if ()*/
 	setPos('x', rand() % 79 + 1);
 	setPos('y', rand() % 23 + 1);
-	//}
+	charColor = 0x04;
 	aggrocheck = false;
 }
 
@@ -36,12 +29,12 @@ bool Karen::aggro(Entity* player,Map &map)
 			len = abs(y2 - y1);
 		for (int i = 0; i < len; i++)
 		{
-			//interpolate between(x1, y1) and (x2, y2)
+			//interpolate between(x1, y1) and (x2, y2) //estimated checks between points
 			float t = float(i) / len;
 			// at t = 0.0 we get(x1, y1); at t = 1.0 we get(x2, y2)
 			int x = round(x1 * (1.0 - t) + (x2 * t));
 			int y = round(y1 * (1.0 - t) + (y2 * t));
-			if (map.getEntity(x,y)=='w')
+			if (map.getEntity(x, y) == 'w')
 			{
 				aggrocheck = false;
 				break;
@@ -51,126 +44,81 @@ bool Karen::aggro(Entity* player,Map &map)
 	return aggrocheck;
 }
 
-void Karen::createPath(Map& map)
-{
-	// to create an array of the total number of nodes
-	nodes = new Node[consoleWidth * consoleHeight];
-	for (int x = 0; x < consoleWidth; ++x)
-	{
-		for (int y = 0; y < consoleHeight; ++y)
-		{
-			int i = y * consoleWidth + x;
-			nodes[i].pos.X = x; // to find which node
-			nodes[i].pos.Y = y;
-			// if it's a wall, set bObstacle to true
-			if (map.getEntity(x, y - 1) == 'w')
-				nodes[i].bObstacle = true;
-			else
-				nodes[i].bObstacle = false;
-			nodes[i].parent = NULL;
-			nodes[i].bVisited = false;
-		}
-	}
+//void useVisionLine(int y1, int x1, int y2, int x2)
+//{
+//    int i;               // loop counter
+//    int ystep, xstep;    // the step on y and x axis
+//    int error;           // the error accumulated during the increment
+//    int errorprev;       // *vision the previous value of the error variable
+//    int y = y1, x = x1;  // the line points
+//    int ddy, ddx;        // compulsory variables: the double values of dy and dx
+//    int dx = x2 - x1;
+//    int dy = y2 - y1;
+//    POINT(y1, x1);  // first point
+//    // NB the last point can't be here, because of its previous point (which has to be verified)
+//    if (dy < 0) {
+//        ystep = -1;
+//        dy = -dy;
+//    }
+//    else
+//        ystep = 1;
+//    if (dx < 0) {
+//        xstep = -1;
+//        dx = -dx;
+//    }
+//    else
+//        xstep = 1;
+//    ddy = 2 * dy;  // work with double values for full precision
+//    ddx = 2 * dx;
+//    if (ddx >= ddy) {  // first octant (0 <= slope <= 1)
+//      // compulsory initialization (even for errorprev, needed when dx==dy)
+//        errorprev = error = dx;  // start in the middle of the square
+//        for (i = 0; i < dx; i++) {  // do not use the first point (already done)
+//            x += xstep;
+//            error += ddy;
+//            if (error > ddx) {  // increment y if AFTER the middle ( > )
+//                y += ystep;
+//                error -= ddx;
+//                // three cases (octant == right->right-top for directions below):
+//                if (error + errorprev < ddx)  // bottom square also
+//                    POINT(y - ystep, x);
+//                else if (error + errorprev > ddx)  // left square also
+//                    POINT(y, x - xstep);
+//                else {  // corner: bottom and left squares also
+//                    POINT(y - ystep, x);
+//                    POINT(y, x - xstep);
+//                }
+//            }
+//            POINT(y, x);
+//            errorprev = error;
+//        }
+//    }
+//    else {  // the same as above
+//        errorprev = error = dy;
+//        for (i = 0; i < dy; i++) {
+//            y += ystep;
+//            error += ddx;
+//            if (error > ddy) {
+//                x += xstep;
+//                error -= ddy;
+//                if (error + errorprev < ddy)
+//                    POINT(y, x - xstep);
+//                else if (error + errorprev > ddy)
+//                    POINT(y - ystep, x);
+//                else {
+//                    POINT(y, x - xstep);
+//                    POINT(y - ystep, x);
+//                }
+//            }
+//            POINT(y, x);
+//            errorprev = error;
+//        }
+//    }
+//    // assert ((y == y2) && (x == x2));  // the last point (y2,x2) has to be the same with the last point of the algorithm
+//}
 
-	// to create connections between the nodes
-	for (int x = 0; x < consoleWidth; ++x)
-	{
-		// y = 1 because the top row is not included
-		for (int y = 0; y < consoleHeight; ++y)
-		{
-			int i = y * consoleWidth + x;
-			if (y > 1 && nodes[(y - 1) * consoleWidth + (x + 0)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y - 1) * consoleWidth + (x + 0)]);
-			if (y < consoleHeight - 1 && nodes[(y + 1) * consoleWidth + (x + 0)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 1) * consoleWidth + (x + 0)]);
-			if (x > 1 && nodes[(y + 0) * consoleWidth + (x - 1)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x - 1)]);
-			if (x < consoleWidth - 1 && nodes[(y + 0) * consoleWidth + (x + 1)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x + 1)]);
-		}
-	}
 
-	end = &nodes[pos.Y * consoleWidth + pos.X];
-	// supposed to be location of items
-	start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
-}
-
-bool Karen::solveAStar(Map& map)
-{
-	// reset navigation graph - default all node states
-	for (int x = 0; x < consoleWidth; ++x)
-	{
-		for (int y = 0; y < consoleHeight; ++y)
-		{
-			int i = y * consoleWidth + x;
-			nodes[i].bVisited = false;
-			nodes[i].globalGoal = INFINITY;
-			nodes[i].localGoal = INFINITY;
-			nodes[i].parent = NULL;
-		}
-	}
-
-	// pythagoras' theorem - sqrt((x1-x2)^2 + (y1-y2)^2)
-	auto distance = [](Node* a, Node* b)
-	{
-		return sqrtf((float)((a->pos.X - b->pos.X) * (a->pos.X - b->pos.X) + (a->pos.Y - b->pos.Y) * (a->pos.Y - b->pos.Y)));
-	};
-
-	auto heuristic = [distance](Node* a, Node* b)
-	{
-		return distance(a, b);
-	};
-
-	// start conditions
-	Node* current = start;
-	start->localGoal = 0.0f;
-	start->globalGoal = heuristic(start, end);
-
-	std::list<Node*> notTestedNodes;
-	notTestedNodes.push_back(start);
-
-	while (!notTestedNodes.empty())
-	{
-		// sort untested nodes by global goal, lowest first
-		notTestedNodes.sort([](const Node* lhs, const Node* rhs)
-			{
-				return lhs->globalGoal < rhs->globalGoal;
-			});
-
-		// front of list potentially be the lowest distance
-		while (!notTestedNodes.empty() && notTestedNodes.front()->bVisited)
-			notTestedNodes.pop_front();
-
-		// if no valid nodes left to test, break
-		if (notTestedNodes.empty())
-			break;
-
-		current = notTestedNodes.front();
-		current->bVisited = true; // go through nodes only once
-
-		// check node's neighbours
-		for (auto nodeNeighbour : current->neighbours)
-		{
-			// only if neighbour not visited and is not an obstacle
-			// add to the list
-			if (!nodeNeighbour->bVisited && nodeNeighbour->bObstacle == false)
-				notTestedNodes.push_back(nodeNeighbour);
-
-			float possiblyLowerGoal = current->localGoal + distance(current, nodeNeighbour);
-
-			// FIX LOCAL GOAL AND GLOBAL GOAL NOT UPDATING
-			if (possiblyLowerGoal < nodeNeighbour->localGoal)
-			{
-				nodeNeighbour->parent = current;
-				nodeNeighbour->localGoal = possiblyLowerGoal;
-				nodeNeighbour->globalGoal = nodeNeighbour->localGoal + heuristic(nodeNeighbour, end);
-			}
-		}
-	}
-	return true;
-}
-
-void Karen::movement(Map &map, const double dt)
+void Karen::move(Map &map, const double dt)
 {
 	elapsedTime += dt;
 
@@ -178,10 +126,6 @@ void Karen::movement(Map &map, const double dt)
 	{
 		if (aggro(getTarget(), map) == true)
 		{
-			Node* ptr = end->parent;
-			pos = ptr->pos;
-			// set next node to this node's parent
-			end = end->parent;
 		}
 		else
 		{

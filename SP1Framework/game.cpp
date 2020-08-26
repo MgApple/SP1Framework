@@ -15,6 +15,7 @@
 #include "Customer.h"
 #include "Hoarder.h"
 #include "Item.h"
+#include "Karen.h"
 
 std::string save;
 int high_score;
@@ -23,6 +24,7 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int karenCount;
 int itemCount;
 int spamCount;
 int spamIncrease;
@@ -81,6 +83,7 @@ void init( void )
     copCount = 0;
     customerCount = 0;
     hoarderCount = 0;
+    karenCount = 0;
     spamCount = 0;
     spamIncrease = 30;
 
@@ -517,6 +520,15 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(customerPtr);
         ++customerCount;
     }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->setTarget(playerPtr);
+        entityList.push_back(karenPtr);
+        ++karenCount;
+    }
     if (itemCount < 4)
     {
         bool hasTP = false;
@@ -848,6 +860,9 @@ void renderNPC(Entity* entity)
     case Entity::TYPE_HOARDER:
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
         break;
     }
 }
