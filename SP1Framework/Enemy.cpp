@@ -60,8 +60,7 @@ void Enemy::move(Map& map, const double dt)
 				x++;
 			if (collisionCheck(x, y, map) == false)
 			{
-				
-				(getPos('x'), getPos('y') - 1, ' ');
+				map.setEntity(getPos('x'), getPos('y') - 1, ' ');
 				setPos('x', x);
 				setPos('y', y);
 				if (getType() == 2)
