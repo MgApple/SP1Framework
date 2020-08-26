@@ -546,13 +546,23 @@ void updateGame(double dt)       // gameplay logic
         {
             Chad* chad = dynamic_cast<Chad*>(entity);
             if (chad->checkCollision())
+            {
                 chadPush();
+                player.setActive(true);
+                playerPtr->setCharColor(chad->getCharColor());
+                renderCharacter();
+            }
         }
         if (entity->getType() == Entity::TYPE_CUSTOMER)
         {
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision())
+            {
                 customerBlock();
+                player.setActive(true);
+                playerPtr->setCharColor(customer->getCharColor());
+                renderCharacter();
+            }
         }
         for (int i = 0; i < itemCount; i++)
         {
@@ -794,7 +804,6 @@ void renderCharacter()
     temp.X = playerPtr->getPos('x');
     temp.Y = playerPtr->getPos('y');
     // Draw the location of the character
-    playerPtr->setCharColor(0x0A);
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
 
@@ -1016,19 +1025,19 @@ void chadPush()
         playerPtr->getPos('x') - 5 > 0 &&
         playerPtr->getPos('y') - 5 > 0) // pushes the player
     {
-        if (player.getDirection() == 0)
+        if (player.getDirection() == 0)                                     // UP
         {
             playerPtr->setPos('y', playerPtr->getPos('y') + 3);
         }
-        else if (player.getDirection() == 1)
+        else if (player.getDirection() == 1)                                // LEFT
         {
             playerPtr->setPos('x', playerPtr->getPos('x') + 4);
         }
-        else if (player.getDirection() == 2)
+        else if (player.getDirection() == 2)                                // DOWN
         {
             playerPtr->setPos('y', playerPtr->getPos('y') - 3);
         }
-        else if (player.getDirection() == 3)
+        else if (player.getDirection() == 3)                                // RIGHT
         {
             playerPtr->setPos('x', playerPtr->getPos('x') - 4);
         }

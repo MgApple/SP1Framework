@@ -8,7 +8,7 @@ Player::Player() : inventory{ 0 }
 	hasStaminaBuff = false;
 	hasSecurityPass = false;
 	isActive = true;
-	charColor = 0x0C;
+	charColor = 0x0A;
 	direction = NONE;
 }
 
