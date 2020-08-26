@@ -517,16 +517,6 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(customerPtr);
         ++customerCount;
     }
-    if (hoarderCount < 1)
-    {
-        Entity* hoarderPtr = new Hoarder;
-        checkLocation(map, hoarderPtr);
-        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
-        hoarder->solveAStar(map);
-        entityList.push_back(hoarderPtr);
-        ++hoarderCount;
-    }
     if (itemCount < 4)
     {
         bool hasTP = false;
@@ -541,6 +531,21 @@ void updateGame(double dt)       // gameplay logic
             itemPtr[itemCount] = new Item(1);
         checkItem(map, itemPtr[itemCount]);
         ++itemCount;
+    }
+    if (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
+        {
+            if (itemPtr[i]->getItemType() == 1)
+                hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
+        }
+        hoarder->solveAStar(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
     }
 
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
