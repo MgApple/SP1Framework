@@ -90,6 +90,7 @@ void init( void )
     playerPtr = &player;
     playerPtr->setPos('x', 1);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
+    entityList.push_back(playerPtr);
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -533,6 +534,7 @@ void updateGame(double dt)       // gameplay logic
         checkItem(map, itemPtr[itemCount]);
         ++itemCount;
     }
+
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
