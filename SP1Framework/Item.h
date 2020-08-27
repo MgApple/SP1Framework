@@ -18,6 +18,7 @@ private:
 	COORD pos;
 	WORD charColor;
 	bool isUsable;
+	char icon;
 public:
 	Item(void);
 	Item(int i);
@@ -25,6 +26,7 @@ public:
 	int getItemType(void);
 	int getPos(char p);
 	WORD getCharColor(void);
+	char getIcon(void);
 	void removeItem(Map& map);
 	void move(Map& map, const double dt = 0);
 	void reLoc(void);

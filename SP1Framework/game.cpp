@@ -50,7 +50,7 @@ EMENUSTATE g_eMenuState = S_MENU1;
 Map map;
 
 // Console object
-Console g_Console(80, 25, "SP1 Framework");
+Console g_Console(80, 25, "Market Blackout");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -590,6 +590,7 @@ void updateGame(double dt)       // gameplay logic
         else
             itemPtr[itemCount] = new Item(1);
         checkItem(map, itemPtr[itemCount]);
+        map.setEntity(itemPtr[itemCount]->getPos('x'), itemPtr[itemCount]->getPos('y') - 1, itemPtr[itemCount]->getIcon());
         ++itemCount;
     }
     if (hoarderCount < 1)
@@ -879,10 +880,28 @@ void renderMap()
                 g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
                 g_Console.writeToBuffer(c, (char)32, colors[12]);
-            else if (map.getEntity(R, C) == 'K')
+            /*else if (map.getEntity(R, C) == 'K')
                 g_Console.writeToBuffer(c, 'K', 0xDF);
             else if (map.getEntity(R, C) == 'C')
-                g_Console.writeToBuffer(c, 'C', 0xDF);
+                g_Console.writeToBuffer(c, 'C', 0x0F);
+            else if (map.getEntity(R, C) == 'P')
+                g_Console.writeToBuffer(c, 'P', 0x1F);
+            else if (map.getEntity(R, C) == (char)4)
+                g_Console.writeToBuffer(c, (char)4, 0x0C);
+            else if (map.getEntity(R, C) == 'H')
+                g_Console.writeToBuffer(c, 'H', 0x06);
+            else if (map.getEntity(R, C) == (char)8)
+                g_Console.writeToBuffer(c, (char)8, 0x6F);
+            else if (map.getEntity(R, C) == (char)22)
+                g_Console.writeToBuffer(c, (char)22, 0x6F);
+            else if (map.getEntity(R, C) == (char)43)
+                g_Console.writeToBuffer(c, (char)43, 0x6F);
+            else if (map.getEntity(R, C) == (char)127)
+                g_Console.writeToBuffer(c, (char)127, 0x6F);
+            else if (map.getEntity(R, C) == (char)13)
+                g_Console.writeToBuffer(c, (char)13, 0x6F);
+            else if (map.getEntity(R, C) == (char)7)
+                g_Console.writeToBuffer(c, (char)7, 0x6F);*/
             else
                 g_Console.writeToBuffer(c, 'n', colors[12]);
         }
@@ -913,31 +932,31 @@ void renderCharacter()
 //    }
 //}
 
-//void renderNPC(Entity* entity)
-//{
-//    COORD temp;
-//    temp.X = entity->getPos('x');
-//    temp.Y = entity->getPos('y');
-//    switch (entity->getType())
-//    {
-//    case Entity::TYPE_CHAD:
-//        //map.setEntity(temp.X, temp.Y, 'B');
-//        g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
-//        break;
-//    case Entity::TYPE_COP:
-//        //map.setEntity(temp.X, temp.Y, 'P');
-//        g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
-//        break;
-//    case Entity::TYPE_CUSTOMER:
-//        //map.setEntity(temp.X, temp.Y, 'C');
-//        g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
-//        break;
-//    case Entity::TYPE_HOARDER:
-//        //map.setEntity(temp.X, temp.Y, 'H');
-//        g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
-//        break;
-//    }
-//}
+void renderNPC(Entity* entity)
+{
+    COORD temp;
+    temp.X = entity->getPos('x');
+    temp.Y = entity->getPos('y');
+    switch (entity->getType())
+    {
+    case Entity::TYPE_CHAD:
+        //map.setEntity(temp.X, temp.Y, 'B');
+        g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
+        break;
+    case Entity::TYPE_COP:
+        //map.setEntity(temp.X, temp.Y, 'P');
+        g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
+        break;
+    case Entity::TYPE_CUSTOMER:
+        //map.setEntity(temp.X, temp.Y, 'C');
+        g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
+        break;
+    case Entity::TYPE_HOARDER:
+        //map.setEntity(temp.X, temp.Y, 'H');
+        g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    }
+}
 
 void renderItem(Item* item)
 {
