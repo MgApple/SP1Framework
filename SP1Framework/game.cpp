@@ -15,6 +15,7 @@
 #include "Customer.h"
 #include "Hoarder.h"
 #include "Item.h"
+#include "Karen.h"
 
 std::string save;
 int high_score;
@@ -24,6 +25,7 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int karenCount;
 int itemCount;
 int spamCount;
 int spamIncrease;
@@ -82,6 +84,7 @@ void init( void )
     copCount = 0;
     customerCount = 0;
     hoarderCount = 0;
+    karenCount = 0;
     spamCount = 0;
     spamIncrease = 30;
 
@@ -367,13 +370,24 @@ void updateMenu()
     
 }
 
+//void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
+//{
+//    if (key[4].keyDown && )
+//}
+
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     switch (item->getItemType()) {
     case 1:
-        if (!(entity->getState('t'))) { // if is not holding toilet paper
-            entity->setState('t', true);
+        if (entity->getType() == 0) {
+            ++current_score;
             item->removeItem(map);
+        }
+        else {
+            if (!(entity->getState('t'))) { // if is not holding toilet paper
+                entity->setState('t', true);
+                item->removeItem(map);
+            }
         }
         break;
     case 2:
@@ -514,7 +528,7 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(copPtr);
         ++copCount;
     }
-    if (customerCount < 9)
+    if (customerCount < 5)
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
@@ -522,6 +536,15 @@ void updateGame(double dt)       // gameplay logic
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
+    }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->setTarget(playerPtr);
+        entityList.push_back(karenPtr);
+        ++karenCount;
     }
     if (itemCount < 4)
     {
@@ -549,7 +572,7 @@ void updateGame(double dt)       // gameplay logic
             if (itemPtr[i]->getItemType() == 1)
                 hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
         }
-        hoarder->solveAStar(map);
+        //hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
@@ -560,6 +583,14 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_HOARDER)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            //for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
+            //{
+            //    if (itemPtr[i]->getItemType() == 1)
+            //        hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
+            //    else
+            //        hoarder->setStart(rand() % 79 + 1, rand() % 23 + 1);
+            //}
+            hoarder->solveAStar();
             hoarder->movement(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP)
@@ -855,6 +886,9 @@ void renderNPC(Entity* entity)
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
         break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
+        break;
     }
 }
 
@@ -945,11 +979,11 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
-    /*ss.str(""); TODO
+    ss.str("");
     ss << "Current score:" << current_score;
-    c.X = 15;
+    c.X = 33;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());*/
+    g_Console.writeToBuffer(c, ss.str());
 }
 
 void renderBar()
@@ -1051,26 +1085,44 @@ void renderInputEvents()
 
 void chadPush()
 {
-    if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 > 0 &&
-        playerPtr->getPos('y') - 5 > 0) // pushes the player
+    int playerX = playerPtr->getPos('x');
+    int playerY = playerPtr->getPos('y');
+    if (player.getDirection() == 0)                                     // UP
     {
-        if (player.getDirection() == 0)                                     // UP
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') + 3);
+        if (playerY + 3 < 23) {
+            if (map.getEntity(playerX, playerY + 1) != 'w'
+                && map.getEntity(playerX, playerY + 2) != 'w'
+                && map.getEntity(playerX, playerY + 3) != 'w')
+                playerPtr->setPos('y', playerY + 3);
         }
-        else if (player.getDirection() == 1)                                // LEFT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+    }
+    else if (player.getDirection() == 1)                                // LEFT
+    {
+        if (playerX + 4 < 79) {
+            if (map.getEntity(playerX + 1, playerY) != 'w'
+                && map.getEntity(playerX + 2, playerY) != 'w'
+                && map.getEntity(playerX + 3, playerY) != 'w'
+                && map.getEntity(playerX + 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX + 4);
         }
-        else if (player.getDirection() == 2)                                // DOWN
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') - 3);
+    }
+    else if (player.getDirection() == 2)                                // DOWN
+    {
+        if (playerY - 3 > 1) {
+            if (map.getEntity(playerX, playerY - 1) != 'w'
+                && map.getEntity(playerX, playerY - 2) != 'w'
+                && map.getEntity(playerX, playerY - 3) != 'w')
+                playerPtr->setPos('y', playerY - 3);
         }
-        else if (player.getDirection() == 3)                                // RIGHT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') - 4);
+    }
+    else if (player.getDirection() == 3)                                // RIGHT
+    {
+        if (playerX - 4 > 1) {
+            if (map.getEntity(playerX - 1, playerY) != 'w'
+                && map.getEntity(playerX - 2, playerY) != 'w'
+                && map.getEntity(playerX - 3, playerY) != 'w'
+                && map.getEntity(playerX - 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX - 4);
         }
     }
 }
