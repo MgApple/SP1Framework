@@ -598,13 +598,7 @@ void updateGame(double dt)       // gameplay logic
         {
             if (itemPtr[i] != nullptr) {
                 if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
-                {
                     pickedUpItem(map, itemPtr[i], entity, player);
-                    bool checkCollision();
-                    {
-                        high_score += 5;
-                    }
-                }
             }
         }
     }
