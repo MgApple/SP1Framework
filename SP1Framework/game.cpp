@@ -367,10 +367,41 @@ void updateMenu()
     
 }
 
-//void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
-//{
-//    if (key[4].keyDown && )
-//}
+void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
+{
+    int playerX = player.getPos('x');
+    int playerY = player.getPos('y');
+    if (key[4].keyDown) {
+        if (player.getInventory(0) == 2) {
+            switch (player.getDirection())
+            {
+            case 0:
+                map.setEntity(playerX, playerY - 1, (char)23);
+                break;
+            case 1:
+                map.setEntity(playerX - 1, playerY, (char)23);
+                break;
+            case 2:
+                map.setEntity(playerX, playerY + 1, (char)23);
+                break;
+            case 3:
+                map.setEntity(playerX + 1, playerY, (char)23);
+                break;
+            }
+            
+        }
+        else if (player.getInventory(0) == 3) {
+            player.setPState('s', true);
+            player.setInventory(0, 0);
+        }
+    }
+    else if (key[5].keyDown) {
+
+    }
+    else if (key[6].keyDown) {
+
+    }
+}
 
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
@@ -836,6 +867,10 @@ void renderMap()
                 g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
                 g_Console.writeToBuffer(c, (char)32, colors[12]);
+            else if (map.getEntity(R, C) == 'K')
+                g_Console.writeToBuffer(c, 'K', 0xDF);
+            else if (map.getEntity(R, C) == 'C')
+                g_Console.writeToBuffer(c, 'C', 0xDF);
             else
                 g_Console.writeToBuffer(c, 'n', colors[12]);
         }
@@ -851,31 +886,46 @@ void renderCharacter()
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
 
-void renderNPC(Entity* entity)
-{
-    COORD temp;
-    temp.X = entity->getPos('x');
-    temp.Y = entity->getPos('y');
-    switch (entity->getType())
-    {
-    case Entity::TYPE_CHAD:
-        //map.setEntity(temp.X, temp.Y, 'B');
-        g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
-        break;
-    case Entity::TYPE_COP:
-        //map.setEntity(temp.X, temp.Y, 'P');
-        g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
-        break;
-    case Entity::TYPE_CUSTOMER:
-        //map.setEntity(temp.X, temp.Y, 'C');
-        g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
-        break;
-    case Entity::TYPE_HOARDER:
-        //map.setEntity(temp.X, temp.Y, 'H');
-        g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
-        break;
-    }
-}
+//void renderEffect()
+//{
+//    COORD temp;
+//    for (int C = 0; C < 24; C++)
+//    {
+//        temp.Y = C + 1;
+//        for (int R = 0; R < 80; R++)
+//        {
+//            temp.X = R;
+//            if (map.getEntity(R, C) == (char)23)
+//                g_Console.writeToBuffer(temp, (char)23, );
+//        }
+//    }
+//}
+
+//void renderNPC(Entity* entity)
+//{
+//    COORD temp;
+//    temp.X = entity->getPos('x');
+//    temp.Y = entity->getPos('y');
+//    switch (entity->getType())
+//    {
+//    case Entity::TYPE_CHAD:
+//        //map.setEntity(temp.X, temp.Y, 'B');
+//        g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
+//        break;
+//    case Entity::TYPE_COP:
+//        //map.setEntity(temp.X, temp.Y, 'P');
+//        g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
+//        break;
+//    case Entity::TYPE_CUSTOMER:
+//        //map.setEntity(temp.X, temp.Y, 'C');
+//        g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
+//        break;
+//    case Entity::TYPE_HOARDER:
+//        //map.setEntity(temp.X, temp.Y, 'H');
+//        g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+//        break;
+//    }
+//}
 
 void renderItem(Item* item)
 {
