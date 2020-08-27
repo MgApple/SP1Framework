@@ -460,7 +460,6 @@ void updateGame(double dt)       // gameplay logic
         Entity* karenPtr = new Karen;
         checkLocation(map, karenPtr);
         Karen* karen = dynamic_cast<Karen*>(karenPtr);
-        karen->setTarget(playerPtr);
         entityList.push_back(karenPtr);
         ++karenCount;
     }
@@ -503,6 +502,18 @@ void updateGame(double dt)       // gameplay logic
                 hoarder->solveAStar();
             }
             hoarder->movement(map, dt);
+        }
+        else if (entity->getType() == Entity::TYPE_KAREN)
+        {
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            karen->createPath(map);
+            if (karen->getIsEnd() == true)
+            {
+                karen->setStart(map);
+                karen->setIsEnd(false);
+            }
+            karen->solveAStar();
+            karen->move(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP)
             entity->move(map, dt);
@@ -833,6 +844,9 @@ void renderNPC(Entity* entity)
     case Entity::TYPE_HOARDER:
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
         break;
     }
 }

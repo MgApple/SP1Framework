@@ -5,7 +5,10 @@ Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 	setPos('x', rand() % 79 + 1);
 	setPos('y', rand() % 23 + 1);
 	charColor = 0x04;
-	aggrocheck = false;
+	//aggrocheck = false;
+	xcheck = rand() % 79 + 1;
+	ycheck = rand() % 23 + 1;
+	isEnd = true;
 }
 
 Karen::~Karen()
@@ -13,48 +16,48 @@ Karen::~Karen()
 	//empty for now
 }
 
-bool Karen::aggro(Entity* player,Map &map)
-{//needa figure this out
-	if (sqrt(pow(player->getPos('x') - getPos('x'), 2) + pow(player->getPos('y') - getPos('y'), 2)) < 10)
-	{
-		aggrocheck = true;
-		int check = pow((player->getPos('x') - getPos('x')), 2) + pow((player->getPos('y') - getPos('y')), 2);
-		int x1 = getPos('x');
-		int x2 = player->getPos('x');
-		int y1 = getPos('y');
-		int y2 = player->getPos('y');
-		int len;
-		//code to check whether wall is blocking LOS
-		if (abs(x2 - x1) > abs(y2 - y1))
-			len = abs(x2 - x1);
-		else
-			len = abs(y2 - y1);
-		for (int i = 0; i < len; i++)
-		{
-			//interpolate between(x1, y1) and (x2, y2) //estimated checks between points
-			float t = float(i) / len;
-			// at t = 0.0 we get(x1, y1); at t = 1.0 we get(x2, y2)
-			int x = round(x1 * (1.0 - t) + (x2 * t));
-			int y = round(y1 * (1.0 - t) + (y2 * t));
-			if (map.getEntity(x, y - 1) == 'w')
-			{
-				aggrocheck = false;
-				break;
-			}
-		}
-	}
-	return aggrocheck;
-}
+//bool Karen::aggro(Entity* player,Map &map)
+//{//needa figure this out
+//	if (sqrt(pow(player->getPos('x') - getPos('x'), 2) + pow(player->getPos('y') - getPos('y'), 2)) < 10)
+//	{
+//		aggrocheck = true;
+//		int check = pow((player->getPos('x') - getPos('x')), 2) + pow((player->getPos('y') - getPos('y')), 2);
+//		int x1 = getPos('x');
+//		int x2 = player->getPos('x');
+//		int y1 = getPos('y');
+//		int y2 = player->getPos('y');
+//		int len;
+//		//code to check whether wall is blocking LOS
+//		if (abs(x2 - x1) > abs(y2 - y1))
+//			len = abs(x2 - x1);
+//		else
+//			len = abs(y2 - y1);
+//		for (int i = 0; i < len; i++)
+//		{
+//			//interpolate between(x1, y1) and (x2, y2) //estimated checks between points
+//			float t = float(i) / len;
+//			// at t = 0.0 we get(x1, y1); at t = 1.0 we get(x2, y2)
+//			int x = round(x1 * (1.0 - t) + (x2 * t));
+//			int y = round(y1 * (1.0 - t) + (y2 * t));
+//			if (map.getEntity(x, y - 1) == 'w')
+//			{
+//				aggrocheck = false;
+//				break;
+//			}
+//		}
+//	}
+//	return aggrocheck;
+//}
 
 void Karen::createPath(Map& map)
 {
 	// to create an array of the total number of nodes
-	nodes = new Node[consoleWidth * consoleHeight];
-	for (int x = 0; x < consoleWidth; ++x)
+	nodes = new Node[mapWidth * mapHeight];
+	for (int x = 0; x < mapWidth; ++x)
 	{
-		for (int y = 0; y < consoleHeight; ++y)
+		for (int y = 0; y < mapHeight; ++y)
 		{
-			int i = y * consoleWidth + x;
+			int i = y * mapWidth + x;
 			nodes[i].pos.X = x; // to find which node
 			nodes[i].pos.Y = y;
 			// if it's a wall, set bObstacle to true
@@ -68,36 +71,33 @@ void Karen::createPath(Map& map)
 	}
 
 	// to create connections between the nodes
-	for (int x = 0; x < consoleWidth; ++x)
+	for (int x = 0; x < mapWidth; ++x)
 	{
-		// y = 1 because the top row is not included
-		for (int y = 0; y < consoleHeight; ++y)
+		for (int y = 0; y < mapHeight; ++y)
 		{
-			int i = y * consoleWidth + x;
-			if (y > 1 && nodes[(y - 1) * consoleWidth + (x + 0)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y - 1) * consoleWidth + (x + 0)]);
-			if (y < consoleHeight - 1 && nodes[(y + 1) * consoleWidth + (x + 0)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 1) * consoleWidth + (x + 0)]);
-			if (x > 1 && nodes[(y + 0) * consoleWidth + (x - 1)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x - 1)]);
-			if (x < consoleWidth - 1 && nodes[(y + 0) * consoleWidth + (x + 1)].bObstacle == false)
-				nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x + 1)]);
+			int i = y * mapWidth + x;
+			if (y > 1 && nodes[(y - 1) * mapWidth + (x + 0)].bObstacle == false)
+				nodes[i].neighbours.push_back(&nodes[(y - 1) * mapWidth + (x + 0)]);
+			if (y < mapHeight - 1 && nodes[(y + 1) * mapWidth + (x + 0)].bObstacle == false)
+				nodes[i].neighbours.push_back(&nodes[(y + 1) * mapWidth + (x + 0)]);
+			if (x > 1 && nodes[(y + 0) * mapWidth + (x - 1)].bObstacle == false)
+				nodes[i].neighbours.push_back(&nodes[(y + 0) * mapWidth + (x - 1)]);
+			if (x < mapWidth - 1 && nodes[(y + 0) * mapWidth + (x + 1)].bObstacle == false)
+				nodes[i].neighbours.push_back(&nodes[(y + 0) * mapWidth + (x + 1)]);
 		}
 	}
-
-	end = &nodes[pos.Y * consoleWidth + pos.X];
-	// supposed to be location of items
-	start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
+	// hoarder position
+	end = &nodes[pos.Y * mapWidth + pos.X];
 }
 
-bool Karen::solveAStar(Map& map)
+bool Karen::solveAStar()
 {
 	// reset navigation graph - default all node states
-	for (int x = 0; x < consoleWidth; ++x)
+	for (int x = 0; x < mapWidth; ++x)
 	{
-		for (int y = 0; y < consoleHeight; ++y)
+		for (int y = 0; y < mapHeight; ++y)
 		{
-			int i = y * consoleWidth + x;
+			int i = y * mapWidth + x;
 			nodes[i].bVisited = false;
 			nodes[i].globalGoal = INFINITY;
 			nodes[i].localGoal = INFINITY;
@@ -168,20 +168,46 @@ bool Karen::solveAStar(Map& map)
 void Karen::move(Map &map, const double dt)
 {
 	elapsedTime += dt;
-	aggrocheck = false;
-	moveTime = 0.2;
 	if (elapsedTime > moveTime)
 	{
-		if (aggro(getTarget(), map) == true)
+		if (getPos('x') == xcheck && getPos('y')-1 == ycheck-1)
 		{
-			//WIP
+			isEnd = true;
 		}
-		else
+		else 
 		{
-			Enemy::move(map, dt);
+			if (end->parent != NULL) 
+			{
+				Node* ptr = end->parent;
+				pos = ptr->pos;
+				// set next node to this node's parent
+				end = end->parent;
+			}
+			else
+			{
+				Enemy::move(map, dt);
+			}
 		}
 		elapsedTime = 0.0;
 	}
 }
 
+void Karen::setStart(Map &map)
+{
+	while (map.getEntity(xcheck, ycheck-1) != ' ')
+	{
+		xcheck = rand() % 79 + 1;
+		ycheck = rand() % 23 + 1;
+	}
+	start = &nodes[ycheck * consoleWidth + xcheck];
+}
 
+void Karen::setIsEnd(bool isend)
+{
+	isEnd = isend;
+}
+
+bool Karen::getIsEnd()
+{
+	return isEnd;
+}
