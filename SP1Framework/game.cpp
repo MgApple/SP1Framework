@@ -18,6 +18,7 @@
 
 std::string save;
 int high_score;
+int current_score;
 std::vector<Entity*> entityList;
 int chadCount;
 int copCount;
@@ -382,6 +383,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) { // if the player has an empty inventory slot
                     player.setInventory(i, 2);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -396,6 +398,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 3);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -411,6 +414,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                     player.setInventory(i, 4);
                     player.setPState('p', true);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -425,6 +429,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 5);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -439,6 +444,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 6);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -906,7 +912,7 @@ void renderHUD()
 
     // displays inventory
     ss.str("");
-    for (int i = 0; i < 3; i++) // TODO: find an ascii char to represent each item.
+    for (int i = 0; i < 3; i++)
     {
         int itemid = player.getInventory(i);
         if (i == 0)
@@ -914,17 +920,17 @@ void renderHUD()
         if (itemid == 0)
             ss << ' ';
         else if (itemid == 1)
-            ss << ' ';
+            ss << (char)8;
         else if (itemid == 2)
-            ss << ' ';
+            ss << (char)22;
         else if (itemid == 3)
-            ss << ' ';
+            ss << (char)43;
         else if (itemid == 4)
-            ss << ' ';
+            ss << (char)127;
         else if (itemid == 5)
-            ss << ' ';
+            ss << (char)13;
         else if (itemid == 6)
-            ss << ' ';
+            ss << (char)7;
         if (i != 3)
             ss << '|';
     }
