@@ -92,7 +92,7 @@ void init( void )
     g_eGameState = S_TITLE;
 
     playerPtr = &player;
-    playerPtr->setPos('x', 1);
+    playerPtr->setPos('x', 5);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
     entityList.push_back(playerPtr);
 
@@ -413,6 +413,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (entity->getType() == 0) {
             ++current_score;
             item->removeItem(map);
+            --itemCount;
             break;
         }
         else {
@@ -505,9 +506,10 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     {
         if (item == itemPtr[i])
         {
-            delete item;
-            itemPtr[i] = nullptr;
             break;
+            //delete item;
+            //itemPtr[i] = nullptr;
+            //break;
         }
     }
 }
