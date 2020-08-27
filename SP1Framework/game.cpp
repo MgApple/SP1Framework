@@ -17,7 +17,6 @@
 #include "Item.h"
 #include "Karen.h"
 
-std::string save;
 int high_score;
 int current_score;
 std::vector<Entity*> entityList;
@@ -61,6 +60,7 @@ Console g_Console(80, 25, "Market Blackout");
 //--------------------------------------------------------------
 void init( void )
 {
+    std::string save;
     std::ifstream savefile;
     savefile.open("save.txt");
     if (savefile) {
@@ -725,6 +725,10 @@ void renderGameOver()
         ss << "Score: " << current_score;
         g_Console.writeToBuffer(t, ss.str());
     }
+    gameover.close();
+    std::ofstream savefile("save.txt");
+    savefile << "high_score:" << high_score;
+    savefile.close();
 }
 
 void renderMap()
