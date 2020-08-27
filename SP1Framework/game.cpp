@@ -306,6 +306,7 @@ void updateMenu()
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
             g_dElapsedTime = 60.0; //reset timer
+            current_score = 0;
             g_eGameState = S_GAME;
             break;
         }
@@ -420,6 +421,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     case 1:
         if (entity->getType() == 0) {
             ++current_score;
+            if (current_score > high_score)
             high_score = current_score;
             item->removeItem(map);
             --itemCount;
