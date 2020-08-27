@@ -74,6 +74,7 @@ void renderMainMenu();  // renders the main menu
 void renderTitle();
 void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
+void renderCamera(COORD camera,int lowX, int lowY, int highX, int highY);
 void renderMap();           // renders the map to the buffer first
 bool cameracheck(Entity*);       // checks whether entity is in camera        
 void renderCharacter();     // renders the character into the buffer

@@ -502,14 +502,31 @@ void renderGameOver()
     }
 }
 
+void renderCamera(COORD camera,int lowX, int lowY, int highX, int highY)
+{
+    const WORD colors[] = {
+    0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
+    0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
+    00
+    };
+    for (int r = lowY; r < highY; r++)
+    {
+        camera.Y = r + 1;
+        for (int c = lowX; c < highX; c++)
+        {
+            camera.X = c;
+            if (map.getEntity(r, c) == 'w')
+                g_Console.writeToBuffer(camera, (char)219, colors[4]);
+            else if (map.getEntity(r, c) == ' ')
+                g_Console.writeToBuffer(camera, (char)32, colors[6]);
+        }
+    }
+}
+
 void renderMap()
 {
     // Set up sample colours, and output shadings
-    const WORD colors[] = {
-        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-        00
-    };
+
 
     /*for (int i = 0; i < 12; ++i)
     {
@@ -545,21 +562,19 @@ void renderMap()
         camera.Y = 5;
     else if (camera.Y > g_Console.getConsoleSize().Y - 5)
         camera.Y = g_Console.getConsoleSize().Y - 5;
-    for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 4; r++)
-    {
-        camera.Y = r + 1;
-        for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 13; c++)
-        {
-            camera.X = c;
-            if (map.getEntity(r, c) == 'w')
-                g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (map.getEntity(r, c) == ' ')
-                g_Console.writeToBuffer(camera, (char)32, colors[6]);
-            else
-                g_Console.writeToBuffer(camera, 'n', colors[6]);
-
-        }
-    }
+    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    //for (int r = playerPtr->getPos('y') - 5; r < playerPtr->getPos('y') + 4; r++)
+    //{
+    //    camera.Y = r + 1;
+    //    for (int c = playerPtr->getPos('x') - 12; c < playerPtr->getPos('x') + 13; c++)
+    //    {
+    //        camera.X = c;
+    //        if (map.getEntity(r, c) == 'w')
+    //            g_Console.writeToBuffer(camera, (char)219, colors[4]);
+    //        else if (map.getEntity(r, c) == ' ')
+    //            g_Console.writeToBuffer(camera, (char)32, colors[6]);
+    //    }
+    //}
 }
 
 bool cameracheck(Entity* entity)
