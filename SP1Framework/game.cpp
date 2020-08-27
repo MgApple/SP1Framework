@@ -16,6 +16,7 @@
 #include "Hoarder.h"
 #include "Item.h"
 #include "Karen.h"
+#pragma comment(lib, "winmm.lib")
 
 int high_score;
 int current_score;
@@ -381,6 +382,7 @@ void updateMenu()
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     if (entity->getType() == 0) {
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
