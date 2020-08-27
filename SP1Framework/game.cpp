@@ -15,6 +15,7 @@
 #include "Customer.h"
 #include "Hoarder.h"
 #include "Item.h"
+#include "Karen.h"
 
 std::string save;
 int high_score;
@@ -24,6 +25,7 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int karenCount;
 int itemCount;
 int spamCount;
 int spamIncrease;
@@ -48,7 +50,7 @@ EMENUSTATE g_eMenuState = S_MENU1;
 Map map;
 
 // Console object
-Console g_Console(80, 25, "SP1 Framework");
+Console g_Console(80, 25, "Market Blackout");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -82,6 +84,7 @@ void init( void )
     copCount = 0;
     customerCount = 0;
     hoarderCount = 0;
+    karenCount = 0;
     spamCount = 0;
     spamIncrease = 30;
 
@@ -367,10 +370,41 @@ void updateMenu()
     
 }
 
-//void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
-//{
-//    if (key[4].keyDown && )
-//}
+void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
+{
+    int playerX = player.getPos('x');
+    int playerY = player.getPos('y');
+    if (key[4].keyDown) {
+        if (player.getInventory(0) == 2) {
+            switch (player.getDirection())
+            {
+            case 0:
+                map.setEntity(playerX, playerY - 1, (char)23);
+                break;
+            case 1:
+                map.setEntity(playerX - 1, playerY, (char)23);
+                break;
+            case 2:
+                map.setEntity(playerX, playerY + 1, (char)23);
+                break;
+            case 3:
+                map.setEntity(playerX + 1, playerY, (char)23);
+                break;
+            }
+            
+        }
+        else if (player.getInventory(0) == 3) {
+            player.setPState('s', true);
+            player.setInventory(0, 0);
+        }
+    }
+    else if (key[5].keyDown) {
+
+    }
+    else if (key[6].keyDown) {
+
+    }
+}
 
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
@@ -535,6 +569,15 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(customerPtr);
         ++customerCount;
     }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->setTarget(playerPtr);
+        entityList.push_back(karenPtr);
+        ++karenCount;
+    }
     if (itemCount < 4)
     {
         bool hasTP = false;
@@ -548,6 +591,7 @@ void updateGame(double dt)       // gameplay logic
         else
             itemPtr[itemCount] = new Item(1);
         checkItem(map, itemPtr[itemCount]);
+        map.setEntity(itemPtr[itemCount]->getPos('x'), itemPtr[itemCount]->getPos('y') - 1, itemPtr[itemCount]->getIcon());
         ++itemCount;
     }
     if (hoarderCount < 1)
@@ -835,6 +879,28 @@ void renderMap()
                 g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
                 g_Console.writeToBuffer(c, (char)32, colors[12]);
+            /*else if (map.getEntity(R, C) == 'K')
+                g_Console.writeToBuffer(c, 'K', 0xDF);
+            else if (map.getEntity(R, C) == 'C')
+                g_Console.writeToBuffer(c, 'C', 0x0F);
+            else if (map.getEntity(R, C) == 'P')
+                g_Console.writeToBuffer(c, 'P', 0x1F);
+            else if (map.getEntity(R, C) == (char)4)
+                g_Console.writeToBuffer(c, (char)4, 0x0C);
+            else if (map.getEntity(R, C) == 'H')
+                g_Console.writeToBuffer(c, 'H', 0x06);
+            else if (map.getEntity(R, C) == (char)8)
+                g_Console.writeToBuffer(c, (char)8, 0x6F);
+            else if (map.getEntity(R, C) == (char)22)
+                g_Console.writeToBuffer(c, (char)22, 0x6F);
+            else if (map.getEntity(R, C) == (char)43)
+                g_Console.writeToBuffer(c, (char)43, 0x6F);
+            else if (map.getEntity(R, C) == (char)127)
+                g_Console.writeToBuffer(c, (char)127, 0x6F);
+            else if (map.getEntity(R, C) == (char)13)
+                g_Console.writeToBuffer(c, (char)13, 0x6F);
+            else if (map.getEntity(R, C) == (char)7)
+                g_Console.writeToBuffer(c, (char)7, 0x6F);*/
             else
                 g_Console.writeToBuffer(c, 'n', colors[12]);
         }
@@ -849,6 +915,21 @@ void renderCharacter()
     // Draw the location of the character
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
+
+//void renderEffect()
+//{
+//    COORD temp;
+//    for (int C = 0; C < 24; C++)
+//    {
+//        temp.Y = C + 1;
+//        for (int R = 0; R < 80; R++)
+//        {
+//            temp.X = R;
+//            if (map.getEntity(R, C) == (char)23)
+//                g_Console.writeToBuffer(temp, (char)23, );
+//        }
+//    }
+//}
 
 void renderNPC(Entity* entity)
 {

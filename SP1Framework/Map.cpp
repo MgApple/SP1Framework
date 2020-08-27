@@ -17,7 +17,7 @@ char Map::getEntity(int x, int y)
 	return map[x][y];
 }
 
-void Map::setEntity(int x, int y, int e)
+void Map::setEntity(int x, int y, char e)
 {
 	map[x][y] = e;
 }
