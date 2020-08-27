@@ -5,8 +5,6 @@ Entity::Entity(void)
 	pos.X = -1;
 	pos.Y = -1;
 	type = TYPE_PLAYER;
-	isSliding = false;
-	isAttracted = false;
 	isHoldingTP = false;
 	charColor = 0xFF;
 }
@@ -16,8 +14,6 @@ Entity::Entity(TYPE t)
 	pos.X = -1;
 	pos.Y = -1;
 	type = t;
-	isSliding = false;
-	isAttracted = false;
 	isHoldingTP = false;
 	charColor = 0xFF;
 }
@@ -48,26 +44,14 @@ void Entity::setPos(char p, int i)
 		pos.Y = i;
 }
 
-void Entity::setState(char att, bool state)
+void Entity::setState(bool state)
 {
-	if (att == 's')
-		isSliding = state;
-	else if (att == 'a')
-		isAttracted = state;
-	else if (att == 't')
-		isHoldingTP = state;
+	isHoldingTP = state;
 }
 
-bool Entity::getState(char att)
+bool Entity::getState(void)
 {
-	if (att == 's')
-		return isSliding;
-	else if (att == 'a')
-		return isAttracted;
-	else if (att == 't')
-		return isHoldingTP;
-	else
-		return false;
+	return isHoldingTP;
 }
 
 WORD Entity::getCharColor()

@@ -26,9 +26,9 @@ int copCount;
 int customerCount;
 int hoarderCount;
 int karenCount;
-int itemCount;
 int spamCount;
 int spamIncrease;
+bool spawnedTP = false;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -42,7 +42,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 // Game specific variables here HELP
 Entity*      playerPtr;
 Player       player;
-Item*        itemPtr[4];
+Item*        toiletPaper;
 
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
@@ -95,6 +95,8 @@ void init( void )
     playerPtr->setPos('x', 1);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
     entityList.push_back(playerPtr);
+    toiletPaper = new Item();
+
 
     /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
     g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
@@ -216,9 +218,6 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     case 0x53: key = K_S; break;
     case 0x41: key = K_A; break;
     case 0x44: key = K_D; break;
-    case 0x4A: key = K_J; break;
-    case 0x4B: key = K_K; break;
-    case 0x4C: key = K_L; break;
     case SHIFT_PRESSED: key = K_SHIFT; break;
     case VK_SPACE: key = K_SPACE; break;
     case VK_ESCAPE: key = K_ESCAPE; break;
@@ -370,146 +369,23 @@ void updateMenu()
     
 }
 
-void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
-{
-    int playerX = player.getPos('x');
-    int playerY = player.getPos('y');
-    if (key[4].keyDown) {
-        if (player.getInventory(0) == 2) {
-            switch (player.getDirection())
-            {
-            case 0:
-                map.setEntity(playerX, playerY - 1, (char)23);
-                break;
-            case 1:
-                map.setEntity(playerX - 1, playerY, (char)23);
-                break;
-            case 2:
-                map.setEntity(playerX, playerY + 1, (char)23);
-                break;
-            case 3:
-                map.setEntity(playerX + 1, playerY, (char)23);
-                break;
-            }
-            
-        }
-        else if (player.getInventory(0) == 3) {
-            player.setPState('s', true);
-            player.setInventory(0, 0);
-        }
-    }
-    else if (key[5].keyDown) {
-
-    }
-    else if (key[6].keyDown) {
-
-    }
-}
-
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
-    switch (item->getItemType()) {
-    case 1:
-        if (entity->getType() == 0) {
-            ++current_score;
-            item->removeItem(map);
-            break;
-        }
-        else {
-            if (!(entity->getState('t'))) { // if is not holding toilet paper
-                entity->setState('t', true);
-                item->removeItem(map);
-            }
-        }
-        break;
-    case 2:
-        if (entity->getType() == 0) { // if is a player
-            for (int i = 0; i < 3; i++)
-            {
-                if (player.getInventory(i) == 0) { // if the player has an empty inventory slot
-                    player.setInventory(i, 2);
-                    item->removeItem(map);
-                    break;
-                }
-            }
-        }
-        else {
-            item->removeItem(map);
-        }
-        break;
-    case 3:
-        if (entity->getType() == 0) {
-            for (int i = 0; i < 3; i++)
-            {
-                if (player.getInventory(i) == 0) {
-                    player.setInventory(i, 3);
-                    item->removeItem(map);
-                    break;
-                }
-            }
-        }
-        else {
-            item->removeItem(map);
-        }
-        break;
-    case 4:
-        if (entity->getType() == 0) {
-            for (int i = 0; i < 3; i++)
-            {
-                if (player.getInventory(i) == 0) {
-                    player.setInventory(i, 4);
-                    player.setPState('p', true);
-                    item->removeItem(map);
-                    break;
-                }
-            }
-        }
-        else {
-            item->removeItem(map);
-        }
-        break;
-    case 5:
-        if (entity->getType() == 0) {
-            for (int i = 0; i < 3; i++)
-            {
-                if (player.getInventory(i) == 0) {
-                    player.setInventory(i, 5);
-                    item->removeItem(map);
-                    break;
-                }
-            }
-        }
-        else {
-            item->removeItem(map);
-        }
-        break;
-    case 6:
-        if (entity->getType() == 0) {
-            for (int i = 0; i < 3; i++)
-            {
-                if (player.getInventory(i) == 0) {
-                    player.setInventory(i, 6);
-                    item->removeItem(map);
-                    break;
-                }
-            }
-        }
-        else {
-            item->removeItem(map);
-        }
-        break;
-    default:
-        break;
+    if (entity->getType() == 0) {
+        ++current_score;
+        if (current_score > high_score)
+            high_score = current_score;
+        item->removeItem(map);
     }
-    for (int i = 0; i < 4; i++)
-    {
-        if (item == itemPtr[i])
-        {
-            delete item;
-            itemPtr[i] = nullptr;
-            break;
+    else {
+        if (!(entity->getState())) { // if is not holding toilet paper
+            entity->setState(true);
+            item->removeItem(map);
         }
     }
+    spawnedTP = false;
+    delete item;
+    toiletPaper = nullptr;
 }
 
 void resetScore()
@@ -578,21 +454,21 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(karenPtr);
         ++karenCount;
     }
-    if (itemCount < 4)
+    if (!spawnedTP)
     {
-        bool hasTP = false;
-        for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
-        {
-            if (itemPtr[i]->getItemType() == 1)
-                hasTP = true;
+        bool isBeingHeld = false;
+        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
+            Entity* entity = (Entity*)*it;
+            if (entity->getState()) {
+                isBeingHeld = true;
+            }
         }
-        if (hasTP)
-            itemPtr[itemCount] = new Item();
-        else
-            itemPtr[itemCount] = new Item(1);
-        checkItem(map, itemPtr[itemCount]);
-        map.setEntity(itemPtr[itemCount]->getPos('x'), itemPtr[itemCount]->getPos('y') - 1, itemPtr[itemCount]->getIcon());
-        ++itemCount;
+        if (!isBeingHeld) {
+            toiletPaper = new Item();
+            checkItem(map, toiletPaper);
+            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
+            spawnedTP = true;
+        }
     }
     if (hoarderCount < 1)
     {
@@ -600,11 +476,7 @@ void updateGame(double dt)       // gameplay logic
         checkLocation(map, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         hoarder->createPath(map);
-        for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
-        {
-            if (itemPtr[i]->getItemType() == 1)
-                hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
-        }
+        hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
         //hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
@@ -648,11 +520,11 @@ void updateGame(double dt)       // gameplay logic
                 renderCharacter();
             }
         }
-        for (int i = 0; i < itemCount; i++)
-        {
-            if (itemPtr[i] != nullptr) {
-                if (entity->getPos('x') == itemPtr[i]->getPos('x') && entity->getPos('y') == itemPtr[i]->getPos('y'))
-                    pickedUpItem(map, itemPtr[i], entity, player);
+        if (spawnedTP) {
+            if (entity->getPos('x') == toiletPaper->getPos('x') && entity->getPos('y') == toiletPaper->getPos('y')) {
+                if (entity->getType() != 0)
+                    entity->setState(true);
+                pickedUpItem(map, toiletPaper, entity, player);
             }
         }
     }
@@ -818,11 +690,8 @@ void renderGame()
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
     }
-    for (int i = 0; i < itemCount; i++)
-    {
-        if (itemPtr[i]!=nullptr)
-            renderItem(itemPtr[i]);
-    }
+    if (spawnedTP)
+        renderItem(toiletPaper);
     renderBar();
 }
 
@@ -962,33 +831,8 @@ void renderItem(Item* item)
     COORD temp;
     temp.X = item->getPos('x');
     temp.Y = item->getPos('y');
-    switch (item->getItemType())
-    {
-    case 1:
-        map.setEntity(temp.X, temp.Y - 1, char(8));
-        g_Console.writeToBuffer(temp, (char)8, item->getCharColor());
-        break;
-    case 2:
-        map.setEntity(temp.X, temp.Y - 1, char(22));
-        g_Console.writeToBuffer(temp, (char)22, item->getCharColor());
-        break;
-    case 3:
-        map.setEntity(temp.X, temp.Y - 1, char(43));
-        g_Console.writeToBuffer(temp, (char)43, item->getCharColor());
-        break;
-    case 4:
-        map.setEntity(temp.X, temp.Y - 1, char(127));
-        g_Console.writeToBuffer(temp, (char)127, item->getCharColor());
-        break;
-    case 5:
-        map.setEntity(temp.X, temp.Y - 1, char(13));
-        g_Console.writeToBuffer(temp, (char)13, item->getCharColor());
-        break;
-    case 6:
-        map.setEntity(temp.X, temp.Y - 1, char(7));
-        g_Console.writeToBuffer(temp, (char)7, item->getCharColor());
-        break;
-    }
+    map.setEntity(temp.X, temp.Y - 1, (char)8);
+    g_Console.writeToBuffer(temp, (char)8, 0x6F);
 }
 
 void renderHUD()
@@ -1006,34 +850,6 @@ void renderHUD()
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 0;
-    c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());
-
-    // displays inventory
-    ss.str("");
-    for (int i = 0; i < 3; i++)
-    {
-        int itemid = player.getInventory(i);
-        if (i == 0)
-            ss << '|';
-        if (itemid == 0)
-            ss << ' ';
-        else if (itemid == 1)
-            ss << (char)8;
-        else if (itemid == 2)
-            ss << (char)22;
-        else if (itemid == 3)
-            ss << (char)43;
-        else if (itemid == 4)
-            ss << (char)127;
-        else if (itemid == 5)
-            ss << (char)13;
-        else if (itemid == 6)
-            ss << (char)7;
-        if (i != 3)
-            ss << '|';
-    }
-    c.X = 55;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
@@ -1083,12 +899,6 @@ void renderInputEvents()
         case K_A: key = "LEFT";
             break;
         case K_D: key = "RIGHT";
-            break;
-        case K_J: key = "Item slot 1";
-            break;
-        case K_K: key = "Item slot 2";
-            break;
-        case K_L: key = "Item slot 3";
             break;
         case K_SHIFT: key = "SHIFT";
             break;
@@ -1194,13 +1004,13 @@ void chadPush()
 
 void customerBlock()
 {
-    if (player.getDirection() == 0)
+    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-    else if (player.getDirection() == 1)
+    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
         playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-    else if (player.getDirection() == 2)
+    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
         playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-    else if (player.getDirection() == 3)
+    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
 

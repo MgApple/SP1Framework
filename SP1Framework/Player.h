@@ -15,16 +15,12 @@ private:
 	};
 	int inventory[3];
 	int stamina;
-	bool hasSpeedBuff, hasStaminaBuff, hasSecurityPass, isActive;
+	bool hasSpeedBuff, isActive;
 	DIRECTION direction;
 
 public:
 	Player();
 	~Player();
-	int getInventory(int idx);
-	void setInventory(int idx, int item);
-	bool getPState(char att);
-	void setPState(char att, bool state);
 	void setActive(bool);
 	bool getActive();
 	void setSpeed(bool);

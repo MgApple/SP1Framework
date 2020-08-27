@@ -22,8 +22,8 @@ public:
 	int getType(void);
 	int getPos(char p);
 	void setPos(char p, int i);
-	bool getState(char att);
-	void setState(char att, bool state);
+	bool getState(void);
+	void setState(bool state);
 	void reLoc(void);
 
 	virtual void move(Map& map, const double dt = 0) = 0; // pure virtual won't allow usage of Entity as an object
@@ -32,7 +32,7 @@ public:
 protected:
 	TYPE type;
 	COORD pos;
-	bool isSliding, isAttracted, isHoldingTP;
+	bool isHoldingTP;
 	WORD charColor;
 
 };

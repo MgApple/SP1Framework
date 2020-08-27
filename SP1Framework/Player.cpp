@@ -5,8 +5,6 @@ Player::Player() : inventory{ 0 }
 	type = TYPE_PLAYER;
 	stamina = 100;
 	hasSpeedBuff = false;
-	hasStaminaBuff = false;
-	hasSecurityPass = false;
 	isActive = true;
 	charColor = 0x0A;
 	direction = NONE;
@@ -15,34 +13,6 @@ Player::Player() : inventory{ 0 }
 Player::~Player()
 {
 	// 
-}
-
-int Player::getInventory(int idx)
-{
-	return inventory[idx];
-}
-
-void Player::setInventory(int idx, int item)
-{
-	inventory[idx] = item;
-}
-
-bool Player::getPState(char att)
-{
-	if (att == 's')
-		return hasStaminaBuff;
-	else if (att == 'p')
-		return hasSecurityPass;
-	else
-		return false;
-}
-
-void Player::setPState(char att, bool state)
-{
-	if (att == 's')
-		hasStaminaBuff = state;
-	else if (att == 'p')
-		hasSecurityPass = state;
 }
 
 void Player::setActive(bool isActive)
