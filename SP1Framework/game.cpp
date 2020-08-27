@@ -16,8 +16,8 @@
 #include "Hoarder.h"
 #include "Item.h"
 #include "Karen.h"
+#pragma comment(lib, "winmm.lib")
 
-std::string save;
 int high_score;
 int current_score;
 std::vector<Entity*> entityList;
@@ -61,6 +61,7 @@ Console g_Console(80, 25, "Market Blackout");
 //--------------------------------------------------------------
 void init( void )
 {
+    std::string save;
     std::ifstream savefile;
     savefile.open("save.txt");
     if (savefile) {
@@ -381,6 +382,7 @@ void updateMenu()
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     if (entity->getType() == 0) {
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
@@ -460,7 +462,6 @@ void updateGame(double dt)       // gameplay logic
         Entity* karenPtr = new Karen;
         checkLocation(map, karenPtr);
         Karen* karen = dynamic_cast<Karen*>(karenPtr);
-        karen->setTarget(playerPtr);
         entityList.push_back(karenPtr);
         ++karenCount;
     }
@@ -484,9 +485,7 @@ void updateGame(double dt)       // gameplay logic
     {
         Entity* hoarderPtr = new Hoarder;
         checkLocation(map, hoarderPtr);
-        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
-        hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
+        //Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         //hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
@@ -498,13 +497,25 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_HOARDER)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
-            //for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
-            //{
-            //    if (itemPtr[i]->getItemType() == 1)
-            //        hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
-            //}
-            hoarder->solveAStar();
+            if (toiletPaper != nullptr)
+            {
+                hoarder->createPath(map);
+                hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
+                hoarder->solveAStar();
+            }
             hoarder->movement(map, dt);
+        }
+        else if (entity->getType() == Entity::TYPE_KAREN)
+        {
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            karen->createPath(map);
+            if (karen->getIsEnd() == true)
+            {
+                karen->setStart(map);
+                karen->setIsEnd(false);
+            }
+            karen->solveAStar();
+            karen->move(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP)
             entity->move(map, dt);
@@ -740,6 +751,10 @@ void renderGameOver()
         ss << "Score: " << current_score;
         g_Console.writeToBuffer(t, ss.str());
     }
+    gameover.close();
+    std::ofstream savefile("save.txt");
+    savefile << "high_score:" << high_score;
+    savefile.close();
 }
 
 void renderMap()
@@ -844,6 +859,9 @@ void renderNPC(Entity* entity)
     case Entity::TYPE_HOARDER:
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
+        break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
         break;
     }
 }
