@@ -639,11 +639,11 @@ void render()
     case S_MAINMENU: renderMainMenu();
         break;
     case S_GAME: renderGame();
+        renderHUD(); // renders debug information, frame rate, elapsed time, etc
         break;
     case S_GAMEOVER: renderGameOver();
         break;
-    }
-    renderHUD();      // renders debug information, frame rate, elapsed time, etc
+    } 
     //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
