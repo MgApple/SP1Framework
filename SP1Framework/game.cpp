@@ -16,6 +16,7 @@
 #include "Hoarder.h"
 #include "Item.h"
 #include "Karen.h"
+#pragma comment(lib, "winmm.lib")
 
 int high_score;
 int current_score;
@@ -383,6 +384,7 @@ void updateMenu()
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     if (entity->getType() == 0) {
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
@@ -392,7 +394,6 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
             item->removeItem(map);
-
         }
     }
     spawnedTP = false;
@@ -459,6 +460,8 @@ void updateGame(double dt)       // gameplay logic
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
+        Cop* cop = dynamic_cast<Cop*>(copPtr);
+        cop->setPlayer(playerPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -476,7 +479,6 @@ void updateGame(double dt)       // gameplay logic
         Entity* karenPtr = new Karen;
         checkLocation(map, karenPtr);
         Karen* karen = dynamic_cast<Karen*>(karenPtr);
-        karen->setTarget(playerPtr);
         entityList.push_back(karenPtr);
         ++karenCount;
     }
@@ -520,7 +522,19 @@ void updateGame(double dt)       // gameplay logic
             }
             hoarder->movement(map, dt);
         }
-        else if (entity->getType() != Entity::TYPE_COP && !isContesting)
+        else if (entity->getType() == Entity::TYPE_KAREN)
+        {
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            karen->createPath(map);
+            if (karen->getIsEnd() == true)
+            {
+                karen->setStart(map);
+                karen->setIsEnd(false);
+            }
+            karen->solveAStar();
+            karen->move(map, dt);
+        }
+        else if (entity->getType() != Entity::TYPE_COP)
             entity->move(map, dt);
         if (entity->getType() == Entity::TYPE_CHAD)
         {
@@ -544,6 +558,19 @@ void updateGame(double dt)       // gameplay logic
                 renderCharacter();
             }
         }
+
+        if (entity->getType() == Entity::TYPE_COP)
+        {
+            Cop* cop = dynamic_cast<Cop*>(entity);
+            if (cop->checkCollision())
+            {
+                copBlock();
+                player.setActive(true);
+                playerPtr->setCharColor(cop->getCharColor());
+                renderCharacter();
+            }
+        }
+
         if (spawnedTP) {
             if (entity->getPos('x') == toiletPaper->getPos('x') && entity->getPos('y') == toiletPaper->getPos('y')) {
                 if (entity->getType() != 0)
@@ -866,6 +893,9 @@ void renderNPC(Entity* entity)
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
         break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
+        break;
     }
 }
 
@@ -1046,6 +1076,18 @@ void chadPush()
 }
 
 void customerBlock()
+{
+    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
+        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
+    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
+        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
+    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
+        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
+    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
+        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
+}
+
+void copBlock()
 {
     if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);

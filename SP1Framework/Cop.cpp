@@ -16,3 +16,20 @@ void Cop::move()
 {
 	//overload func, nothing
 }
+
+void Cop::setPlayer(Entity* target)
+{
+	this->target = target;
+}
+
+bool Cop::checkCollision()
+{
+	COORD targetPos;
+	targetPos.X = target->getPos('x');
+	targetPos.Y = target->getPos('y');
+
+	if (targetPos.X == pos.X && targetPos.Y == pos.Y)
+		return true;
+	else
+		return false;
+}

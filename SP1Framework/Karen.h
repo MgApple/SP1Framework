@@ -7,7 +7,11 @@
 class Karen :public Enemy
 {
 private:
-	bool aggrocheck;
+	//bool aggrocheck;
+	int xcheck, ycheck;
+	int mapWidth = 80;
+	int mapHeight = 25;
+	bool isEnd;
 	struct Node
 	{
 		bool bObstacle = false;
@@ -28,9 +32,12 @@ private:
 public:
 	Karen();
 	~Karen();
-	bool aggro(Entity* player,Map &map);
+	//bool aggro(Entity* player,Map &map);
 	void createPath(Map& map);
-	bool solveAStar(Map& map);
+	bool solveAStar();
+	void setStart(Map &map);
+	void setIsEnd(bool isend);
+	bool getIsEnd();
 	void move(Map& map, const double dt);
 };
 
