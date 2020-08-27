@@ -8,18 +8,23 @@ Item::Item(void)
 	{
 	case 1:
 		type = Soap;
+		isUsable = true;
 		break;
 	case 2:
 		type = Soda;
+		isUsable = true;
 		break;
 	case 3:
 		type = Pass;
+		isUsable = false;
 		break;
 	case 4:
 		type = Clock;
+		isUsable = true;
 		break;
 	case 5:
 		type = fakeTP;
+		isUsable = true;
 		break;
 	}
 	pos.X = rand() % 79 + 1;
@@ -33,21 +38,27 @@ Item::Item(int i)
 	{
 	case 1:
 		type = TP;
+		isUsable = false;
 		break;
 	case 2:
 		type = Soap;
+		isUsable = true;
 		break;
 	case 3:
 		type = Soda;
+		isUsable = true;
 		break;
 	case 4:
 		type = Pass;
+		isUsable = false;
 		break;
 	case 5:
 		type = Clock;
+		isUsable = true;
 		break;
 	case 6:
 		type = fakeTP;
+		isUsable = true;
 		break;
 	}
 	pos.X = rand() % 79 + 1;

@@ -17,6 +17,7 @@ private:
 	ITEM type;
 	COORD pos;
 	WORD charColor;
+	bool isUsable;
 public:
 	Item(void);
 	Item(int i);

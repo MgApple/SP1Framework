@@ -15,6 +15,7 @@
 #include "Customer.h"
 #include "Hoarder.h"
 #include "Item.h"
+#include "Karen.h"
 
 std::string save;
 int high_score;
@@ -24,6 +25,7 @@ int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int karenCount;
 int itemCount;
 int spamCount;
 int spamIncrease;
@@ -82,6 +84,7 @@ void init( void )
     copCount = 0;
     customerCount = 0;
     hoarderCount = 0;
+    karenCount = 0;
     spamCount = 0;
     spamIncrease = 30;
 
@@ -367,13 +370,24 @@ void updateMenu()
     
 }
 
+//void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
+//{
+//    if (key[4].keyDown && )
+//}
+
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     switch (item->getItemType()) {
     case 1:
-        if (!(entity->getState('t'))) { // if is not holding toilet paper
-            entity->setState('t', true);
+        if (entity->getType() == 0) {
+            ++current_score;
             item->removeItem(map);
+        }
+        else {
+            if (!(entity->getState('t'))) { // if is not holding toilet paper
+                entity->setState('t', true);
+                item->removeItem(map);
+            }
         }
         break;
     case 2:
@@ -522,6 +536,15 @@ void updateGame(double dt)       // gameplay logic
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
+    }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->setTarget(playerPtr);
+        entityList.push_back(karenPtr);
+        ++karenCount;
     }
     if (itemCount < 4)
     {
@@ -863,6 +886,9 @@ void renderNPC(Entity* entity)
         //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
         break;
+    case Entity::TYPE_KAREN:
+        g_Console.writeToBuffer(temp, 'K', entity->getCharColor());
+        break;
     }
 }
 
@@ -953,11 +979,11 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
-    /*ss.str(""); TODO
+    ss.str("");
     ss << "Current score:" << current_score;
-    c.X = 15;
+    c.X = 33;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());*/
+    g_Console.writeToBuffer(c, ss.str());
 }
 
 void renderBar()
