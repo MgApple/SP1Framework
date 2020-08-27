@@ -61,7 +61,7 @@ bool Hoarder::checkCollision()
     return false;
 }
 
-bool Hoarder::solveAStar(Map& map)
+bool Hoarder::solveAStar()
 {
     // reset navigation graph - default all node states
     for (int x = 0; x < consoleWidth; ++x)
