@@ -420,6 +420,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     case 1:
         if (entity->getType() == 0) {
             ++current_score;
+            high_score = current_score;
             item->removeItem(map);
             break;
         }
@@ -846,7 +847,7 @@ void renderGameOver()
         g_Console.writeToBuffer(t, ss.str());
         ss.str("");
         t.Y += 2;
-        ss << "Score: ";
+        ss << "Score: " << current_score;
         g_Console.writeToBuffer(t, ss.str());
     }
 }
