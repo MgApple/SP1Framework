@@ -1051,26 +1051,44 @@ void renderInputEvents()
 
 void chadPush()
 {
-    if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 > 0 &&
-        playerPtr->getPos('y') - 5 > 0) // pushes the player
+    int playerX = playerPtr->getPos('x');
+    int playerY = playerPtr->getPos('y');
+    if (player.getDirection() == 0)                                     // UP
     {
-        if (player.getDirection() == 0)                                     // UP
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') + 3);
+        if (playerY + 3 < 23) {
+            if (map.getEntity(playerX, playerY + 1) != 'w'
+                && map.getEntity(playerX, playerY + 2) != 'w'
+                && map.getEntity(playerX, playerY + 3) != 'w')
+                playerPtr->setPos('y', playerY + 3);
         }
-        else if (player.getDirection() == 1)                                // LEFT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+    }
+    else if (player.getDirection() == 1)                                // LEFT
+    {
+        if (playerX + 4 < 79) {
+            if (map.getEntity(playerX + 1, playerY) != 'w'
+                && map.getEntity(playerX + 2, playerY) != 'w'
+                && map.getEntity(playerX + 3, playerY) != 'w'
+                && map.getEntity(playerX + 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX + 4);
         }
-        else if (player.getDirection() == 2)                                // DOWN
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') - 3);
+    }
+    else if (player.getDirection() == 2)                                // DOWN
+    {
+        if (playerY - 3 > 1) {
+            if (map.getEntity(playerX, playerY - 1) != 'w'
+                && map.getEntity(playerX, playerY - 2) != 'w'
+                && map.getEntity(playerX, playerY - 3) != 'w')
+                playerPtr->setPos('y', playerY - 3);
         }
-        else if (player.getDirection() == 3)                                // RIGHT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') - 4);
+    }
+    else if (player.getDirection() == 3)                                // RIGHT
+    {
+        if (playerX - 4 > 1) {
+            if (map.getEntity(playerX - 1, playerY) != 'w'
+                && map.getEntity(playerX - 2, playerY) != 'w'
+                && map.getEntity(playerX - 3, playerY) != 'w'
+                && map.getEntity(playerX - 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX - 4);
         }
     }
 }
