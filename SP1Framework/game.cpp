@@ -514,7 +514,7 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(copPtr);
         ++copCount;
     }
-    if (customerCount < 9)
+    if (customerCount < 5)
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
@@ -549,7 +549,7 @@ void updateGame(double dt)       // gameplay logic
             if (itemPtr[i]->getItemType() == 1)
                 hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
         }
-        hoarder->solveAStar(map);
+        hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
