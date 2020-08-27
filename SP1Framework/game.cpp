@@ -441,6 +441,8 @@ void updateGame(double dt)       // gameplay logic
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
+        Cop* cop = dynamic_cast<Cop*>(copPtr);
+        cop->setPlayer(playerPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -528,6 +530,19 @@ void updateGame(double dt)       // gameplay logic
                 renderCharacter();
             }
         }
+
+        if (entity->getType() == Entity::TYPE_COP)
+        {
+            Cop* cop = dynamic_cast<Cop*>(entity);
+            if (cop->checkCollision())
+            {
+                copBlock();
+                player.setActive(true);
+                playerPtr->setCharColor(cop->getCharColor());
+                renderCharacter();
+            }
+        }
+
         if (spawnedTP) {
             if (entity->getPos('x') == toiletPaper->getPos('x') && entity->getPos('y') == toiletPaper->getPos('y')) {
                 if (entity->getType() != 0)
@@ -1010,6 +1025,18 @@ void chadPush()
 }
 
 void customerBlock()
+{
+    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
+        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
+    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
+        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
+    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
+        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
+    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
+        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
+}
+
+void copBlock()
 {
     if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);

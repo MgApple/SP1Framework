@@ -96,6 +96,7 @@ void renderToScreen();      // dump the contents of the buffer to the screen, on
 void renderInputEvents();   // renders the status of input events
 void chadPush();
 void customerBlock();
+void copBlock();
 void checkLocation(Map &map, Entity*);
 void checkItem(Map &map, Item*);
 
