@@ -31,6 +31,6 @@ public:
 	bool aggro(Entity* player,Map &map);
 	void createPath(Map& map);
 	bool solveAStar(Map& map);
-	void movement(Map& map, const double dt);
+	void move(Map& map, const double dt);
 };
 
