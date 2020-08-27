@@ -5,7 +5,7 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
     pos.X = 78;
     pos.Y = 12;
     charColor = 0x06;
-    moveTime = 0.4;
+    moveTime = 0.3;
     // supposed to be location of items
     start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
 }
@@ -61,7 +61,7 @@ bool Hoarder::checkCollision()
     return false;
 }
 
-bool Hoarder::solveAStar(Map& map)
+bool Hoarder::solveAStar()
 {
     // reset navigation graph - default all node states
     for (int x = 0; x < consoleWidth; ++x)

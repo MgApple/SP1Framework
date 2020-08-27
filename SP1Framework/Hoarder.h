@@ -29,7 +29,7 @@ public:
 	~Hoarder();
 	void createPath(Map& map);
 	bool checkCollision();
-	bool solveAStar(Map& map);
+	bool solveAStar();
 	void movement(Map& map, const double dt);
 	void setStart(int, int);
 };
