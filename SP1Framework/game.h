@@ -98,6 +98,7 @@ void chadPush();
 void customerBlock();
 void checkLocation(Map &map, Entity*);
 void checkItem(Map &map, Item*);
+bool contest(Entity*, Entity*);
 
 // keyboard and mouse input event managers
 void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent);  // define this function for the console to call when there are keyboard events

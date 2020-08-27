@@ -15,6 +15,7 @@ public:
 	void setTarget(Entity* target);
 	Entity* getTarget();
 	bool collisionCheck(int intendedx,int intendedy,Map &gamemap);
+	bool fight(Entity* player);
 	virtual void move(Map &map, const double dt = 0);
 
 };

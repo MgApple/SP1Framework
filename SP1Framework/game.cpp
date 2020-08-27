@@ -28,6 +28,8 @@ int karenCount;
 int spamCount;
 int spamIncrease;
 bool spawnedTP = false;
+bool isContesting = false;
+bool isGameOver = false;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -78,7 +80,7 @@ void init( void )
     }
     map.loadMap();
     // Set precision for floating point output
-    g_dElapsedTime = 60.0;
+    g_dElapsedTime = 10.0;
 
     chadCount = 0;
     copCount = 0;
@@ -86,7 +88,7 @@ void init( void )
     hoarderCount = 0;
     karenCount = 0;
     spamCount = 0;
-    spamIncrease = 30;
+    spamIncrease = 35;
 
     // sets the initial state for the game
     g_eGameState = S_TITLE;
@@ -304,7 +306,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            g_dElapsedTime = 60.0; //reset timer
+            g_dElapsedTime = 10.0; //reset timer
             current_score = 0;
             g_eGameState = S_GAME;
             break;
@@ -390,6 +392,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
             item->removeItem(map);
+
         }
     }
     spawnedTP = false;
@@ -417,9 +420,24 @@ void updateTutorial(double dt)
 void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
+    if(!isContesting)
+        player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 49)
+    if (spamIncrease >= 44)
+    {
+        isContesting = false;
+        ++current_score;
+        if (current_score > high_score)
+            high_score = current_score;
+        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+        {
+            Entity* entity = (Entity*)*it;
+            if(entity->getState() == true)
+                entity->setState(false);
+        }
+        spamIncrease = 35;
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 44)
     {
         ++spamCount;
     }
@@ -491,7 +509,7 @@ void updateGame(double dt)       // gameplay logic
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        if (entity->getType() == Entity::TYPE_HOARDER)
+        if (entity->getType() == Entity::TYPE_HOARDER && !isContesting)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
             if (toiletPaper != nullptr)
@@ -502,7 +520,7 @@ void updateGame(double dt)       // gameplay logic
             }
             hoarder->movement(map, dt);
         }
-        else if (entity->getType() != Entity::TYPE_COP)
+        else if (entity->getType() != Entity::TYPE_COP && !isContesting)
             entity->move(map, dt);
         if (entity->getType() == Entity::TYPE_CHAD)
         {
@@ -532,6 +550,10 @@ void updateGame(double dt)       // gameplay logic
                     entity->setState(true);
                 pickedUpItem(map, toiletPaper, entity, player);
             }
+        }
+        if (contest(entity, playerPtr))
+        {
+            isContesting = true;
         }
     }
 
@@ -694,10 +716,22 @@ void renderGame()
     {
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
+        if (isContesting)
+            renderBar();
     }
     if (spawnedTP)
         renderItem(toiletPaper);
-    renderBar();
+}
+
+void freeMemory(Entity* hoarder, Entity* player, Entity* customer, Entity* chad, Entity* cop, Entity* karen, Item* toiletPaper)
+{
+    delete hoarder;
+    delete player;
+    delete customer;
+    delete chad;
+    delete cop;
+    delete karen;
+    delete toiletPaper;
 }
 
 void renderGameOver()
@@ -879,9 +913,9 @@ void renderHUD()
 void renderBar()
 {
     COORD pos;
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 10; ++i)
     {
-        pos.X = 30 + i;
+        pos.X = 35 + i;
         pos.Y = 24;
         g_Console.writeToBuffer(pos, (char)176, 0x2B);
     }
@@ -1047,4 +1081,23 @@ void checkItem(Map &map, Item* item)
     {
         item->reLoc();
     }
+}
+
+bool contest(Entity* entity, Entity* player)
+{
+    int playerX = player->getPos('x');
+    int playerY = player->getPos('y');
+    int entityX = entity->getPos('x');
+    int entityY = entity->getPos('y');
+
+    if ((playerX == entityX && playerY - 1 == entityY) ||
+        (playerX == entityX && playerY + 1 == entityY) ||
+        (playerX - 1 == entityX && playerY == entityY) ||
+        (playerX + 1 == entityX && playerY == entityY))
+    {
+        if(entity->getState() == true)
+            return true;
+    }
+    else
+        return false;
 }
