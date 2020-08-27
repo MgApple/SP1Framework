@@ -2,7 +2,7 @@
 
 Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
 {
-    pos.X = 78;
+    pos.X = 74;
     pos.Y = 12;
     charColor = 0x06;
     //moveTime = 0.2;
