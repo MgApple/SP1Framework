@@ -270,6 +270,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 void update(double dt)
 {
     // get the delta time
+    g_dElapsedTime -= dt;
     g_dDeltaTime = dt;
 
     switch (g_eGameState)
@@ -300,6 +301,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            g_dElapsedTime = 60.0; //reset timer
             g_eGameState = S_GAME;
             break;
         }
@@ -344,6 +346,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            g_dElapsedTime = 10; // temp timer
             g_eMenuState = S_RESET;
             break;
         }
@@ -361,6 +364,11 @@ void updateMenu()
             break;
         }
         else
+        break;
+    case S_RESET:
+        high_score = 0;
+        if (g_dElapsedTime < 7.0)
+            g_eMenuState = S_OPTION1;
         break;
     }
     
@@ -460,15 +468,9 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     }
 }
 
-void resetScore()
-{
-    if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
-        g_eGameState = S_MAINMENU;
-}
-
 void titleWait()
 {
-    if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
+    if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
@@ -479,7 +481,6 @@ void updateTutorial(double dt)
 
 void updateGame(double dt)       // gameplay logic
 {
-    g_dElapsedTime -= dt;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
@@ -604,7 +605,7 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
-    if (g_dElapsedTime > 5.0) // wait for 5 seconds to switch to main menu, else do nothing
+    if (g_dElapsedTime < -5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
@@ -612,7 +613,9 @@ void processUserInput()
 {
     // quits the game if player hits the escape key
     if (g_skKeyEvent[K_ESCAPE].keyReleased)
-        g_bQuitGame = true;    
+        g_bQuitGame = true;  
+    if (g_dElapsedTime < 0.0)
+        g_eGameState = S_GAMEOVER;
 }
 
 //--------------------------------------------------------------
@@ -718,9 +721,6 @@ void renderMainMenu()  // renders the main menu
                 c.Y += 1;
             }
         }
-        high_score = 0;
-        
-        g_eMenuState = S_OPTION1;
         break;
     }
 }
