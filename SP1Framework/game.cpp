@@ -379,6 +379,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (entity->getType() == 0) {
             ++current_score;
             item->removeItem(map);
+            break;
         }
         else {
             if (!(entity->getState('t'))) { // if is not holding toilet paper
@@ -575,8 +576,6 @@ void updateGame(double dt)       // gameplay logic
             //{
             //    if (itemPtr[i]->getItemType() == 1)
             //        hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
-            //    else
-            //        hoarder->setStart(rand() % 79 + 1, rand() % 23 + 1);
             //}
             hoarder->solveAStar();
             hoarder->movement(map, dt);

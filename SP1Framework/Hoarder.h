@@ -18,8 +18,8 @@ private:
 	};
 
 	Node* nodes = NULL;
-	int consoleWidth = 80;
-	int consoleHeight = 25; // might be 24
+	int mapWidth = 80;
+	int mapHeight = 25; 
 
 	Node* start = NULL;
 	Node* end = NULL;
