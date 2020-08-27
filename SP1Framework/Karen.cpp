@@ -14,14 +14,12 @@ Karen::~Karen()
 }
 
 bool Karen::aggro(Entity* player,Map &map)
-{//needa figure this out
-	if ((pow(player->getPos('x') - getPos('x'),2) + (player->getPos('y') - getPos('y')) ^ 2) < 6)
+{
+	//int checker= sqrt(pow((player->getPos('x') - getPos('x')), 2) + pow((player->getPos('y') - getPos('y')), 2));
+	if (sqrt(pow(player->getPos('x') - getPos('x'),2) + pow(player->getPos('y') - getPos('y'),2)) < 10)
 	{
-		int playerx = player->getPos('x');
-		int playery = player->getPos('y');
-		int karenx = getPos('x');
-		int kareny = getPos('y');
-		int check = (player->getPos('x') - getPos('x')) ^ 2 + (player->getPos('y') - getPos('y')) ^ 2;
+		aggrocheck = true;
+		int check = pow((player->getPos('x') - getPos('x')),2) + pow((player->getPos('y') - getPos('y')),2);
 		int x1 = getPos('x');
 		int x2 = player->getPos('x');
 		int y1 = getPos('y');
@@ -39,7 +37,7 @@ bool Karen::aggro(Entity* player,Map &map)
 			// at t = 0.0 we get(x1, y1); at t = 1.0 we get(x2, y2)
 			int x = round(x1 * (1.0 - t) + (x2 * t));
 			int y = round(y1 * (1.0 - t) + (y2 * t));
-			if (map.getEntity(x, y) == 'w')
+			if (map.getEntity(x, y-1) == 'w')
 			{
 				aggrocheck = false;
 				break;
@@ -125,8 +123,8 @@ bool Karen::aggro(Entity* player,Map &map)
 
 void Karen::move(Map &map, const double dt)
 {
+	moveTime = 0.2;
 	elapsedTime += dt;
-
 	if (elapsedTime > moveTime)
 	{
 		if (aggro(getTarget(), map) == true)
