@@ -482,9 +482,7 @@ void updateGame(double dt)       // gameplay logic
     {
         Entity* hoarderPtr = new Hoarder;
         checkLocation(map, hoarderPtr);
-        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
-        hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
+        //Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         //hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
@@ -496,12 +494,12 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_HOARDER)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
-            //for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
-            //{
-            //    if (itemPtr[i]->getItemType() == 1)
-            //        hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
-            //}
-            hoarder->solveAStar();
+            if (toiletPaper != nullptr)
+            {
+                hoarder->createPath(map);
+                hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
+                hoarder->solveAStar();
+            }
             hoarder->movement(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP)
