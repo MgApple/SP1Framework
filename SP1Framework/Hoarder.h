@@ -18,8 +18,8 @@ private:
 	};
 
 	Node* nodes = NULL;
-	int consoleWidth = 80;
-	int consoleHeight = 25; // might be 24
+	int mapWidth = 80;
+	int mapHeight = 25; 
 
 	Node* start = NULL;
 	Node* end = NULL;
@@ -29,7 +29,7 @@ public:
 	~Hoarder();
 	void createPath(Map& map);
 	bool checkCollision();
-	bool solveAStar(Map& map);
+	bool solveAStar();
 	void movement(Map& map, const double dt);
 	void setStart(int, int);
 };

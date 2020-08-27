@@ -15,14 +15,17 @@
 #include "Customer.h"
 #include "Hoarder.h"
 #include "Item.h"
+#include "Karen.h"
 
 std::string save;
 int high_score;
+int current_score;
 std::vector<Entity*> entityList;
 int chadCount;
 int copCount;
 int customerCount;
 int hoarderCount;
+int karenCount;
 int itemCount;
 int spamCount;
 int spamIncrease;
@@ -47,7 +50,7 @@ EMENUSTATE g_eMenuState = S_MENU1;
 Map map;
 
 // Console object
-Console g_Console(80, 25, "SP1 Framework");
+Console g_Console(80, 25, "Market Blackout");
 
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
@@ -81,6 +84,7 @@ void init( void )
     copCount = 0;
     customerCount = 0;
     hoarderCount = 0;
+    karenCount = 0;
     spamCount = 0;
     spamIncrease = 30;
 
@@ -374,13 +378,56 @@ void updateMenu()
     
 }
 
+void useItem(Map& map, Item* item, Player& player, SKeyEvent* key)
+{
+    int playerX = player.getPos('x');
+    int playerY = player.getPos('y');
+    if (key[4].keyDown) {
+        if (player.getInventory(0) == 2) {
+            switch (player.getDirection())
+            {
+            case 0:
+                map.setEntity(playerX, playerY - 1, (char)23);
+                break;
+            case 1:
+                map.setEntity(playerX - 1, playerY, (char)23);
+                break;
+            case 2:
+                map.setEntity(playerX, playerY + 1, (char)23);
+                break;
+            case 3:
+                map.setEntity(playerX + 1, playerY, (char)23);
+                break;
+            }
+            
+        }
+        else if (player.getInventory(0) == 3) {
+            player.setPState('s', true);
+            player.setInventory(0, 0);
+        }
+    }
+    else if (key[5].keyDown) {
+
+    }
+    else if (key[6].keyDown) {
+
+    }
+}
+
 void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 {
     switch (item->getItemType()) {
     case 1:
-        if (!(entity->getState('t'))) { // if is not holding toilet paper
-            entity->setState('t', true);
+        if (entity->getType() == 0) {
+            ++current_score;
             item->removeItem(map);
+            break;
+        }
+        else {
+            if (!(entity->getState('t'))) { // if is not holding toilet paper
+                entity->setState('t', true);
+                item->removeItem(map);
+            }
         }
         break;
     case 2:
@@ -390,6 +437,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) { // if the player has an empty inventory slot
                     player.setInventory(i, 2);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -404,6 +452,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 3);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -419,6 +468,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                     player.setInventory(i, 4);
                     player.setPState('p', true);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -433,6 +483,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 5);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -447,6 +498,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
                 if (player.getInventory(i) == 0) {
                     player.setInventory(i, 6);
                     item->removeItem(map);
+                    break;
                 }
             }
         }
@@ -509,7 +561,7 @@ void updateGame(double dt)       // gameplay logic
         entityList.push_back(copPtr);
         ++copCount;
     }
-    if (customerCount < 9)
+    if (customerCount < 5)
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
@@ -517,6 +569,15 @@ void updateGame(double dt)       // gameplay logic
         customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
+    }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->setTarget(playerPtr);
+        entityList.push_back(karenPtr);
+        ++karenCount;
     }
     if (itemCount < 4)
     {
@@ -531,6 +592,7 @@ void updateGame(double dt)       // gameplay logic
         else
             itemPtr[itemCount] = new Item(1);
         checkItem(map, itemPtr[itemCount]);
+        map.setEntity(itemPtr[itemCount]->getPos('x'), itemPtr[itemCount]->getPos('y') - 1, itemPtr[itemCount]->getIcon());
         ++itemCount;
     }
     if (hoarderCount < 1)
@@ -544,7 +606,7 @@ void updateGame(double dt)       // gameplay logic
             if (itemPtr[i]->getItemType() == 1)
                 hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
         }
-        hoarder->solveAStar(map);
+        //hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
@@ -555,6 +617,12 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_HOARDER)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            //for (int i = 0; i < itemCount; i++) // check if there is any toilet paper
+            //{
+            //    if (itemPtr[i]->getItemType() == 1)
+            //        hoarder->setStart(itemPtr[i]->getPos('x'), itemPtr[i]->getPos('y'));
+            //}
+            hoarder->solveAStar();
             hoarder->movement(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP)
@@ -811,6 +879,28 @@ void renderMap()
                 g_Console.writeToBuffer(c, (char)219, colors[4]);
             else if (map.getEntity(R, C) == ' ')
                 g_Console.writeToBuffer(c, (char)32, colors[12]);
+            /*else if (map.getEntity(R, C) == 'K')
+                g_Console.writeToBuffer(c, 'K', 0xDF);
+            else if (map.getEntity(R, C) == 'C')
+                g_Console.writeToBuffer(c, 'C', 0x0F);
+            else if (map.getEntity(R, C) == 'P')
+                g_Console.writeToBuffer(c, 'P', 0x1F);
+            else if (map.getEntity(R, C) == (char)4)
+                g_Console.writeToBuffer(c, (char)4, 0x0C);
+            else if (map.getEntity(R, C) == 'H')
+                g_Console.writeToBuffer(c, 'H', 0x06);
+            else if (map.getEntity(R, C) == (char)8)
+                g_Console.writeToBuffer(c, (char)8, 0x6F);
+            else if (map.getEntity(R, C) == (char)22)
+                g_Console.writeToBuffer(c, (char)22, 0x6F);
+            else if (map.getEntity(R, C) == (char)43)
+                g_Console.writeToBuffer(c, (char)43, 0x6F);
+            else if (map.getEntity(R, C) == (char)127)
+                g_Console.writeToBuffer(c, (char)127, 0x6F);
+            else if (map.getEntity(R, C) == (char)13)
+                g_Console.writeToBuffer(c, (char)13, 0x6F);
+            else if (map.getEntity(R, C) == (char)7)
+                g_Console.writeToBuffer(c, (char)7, 0x6F);*/
             else
                 g_Console.writeToBuffer(c, 'n', colors[12]);
         }
@@ -825,6 +915,21 @@ void renderCharacter()
     // Draw the location of the character
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
+
+//void renderEffect()
+//{
+//    COORD temp;
+//    for (int C = 0; C < 24; C++)
+//    {
+//        temp.Y = C + 1;
+//        for (int R = 0; R < 80; R++)
+//        {
+//            temp.X = R;
+//            if (map.getEntity(R, C) == (char)23)
+//                g_Console.writeToBuffer(temp, (char)23, );
+//        }
+//    }
+//}
 
 void renderNPC(Entity* entity)
 {
@@ -906,7 +1011,7 @@ void renderHUD()
 
     // displays inventory
     ss.str("");
-    for (int i = 0; i < 3; i++) // TODO: find an ascii char to represent each item.
+    for (int i = 0; i < 3; i++)
     {
         int itemid = player.getInventory(i);
         if (i == 0)
@@ -914,17 +1019,17 @@ void renderHUD()
         if (itemid == 0)
             ss << ' ';
         else if (itemid == 1)
-            ss << ' ';
+            ss << (char)8;
         else if (itemid == 2)
-            ss << ' ';
+            ss << (char)22;
         else if (itemid == 3)
-            ss << ' ';
+            ss << (char)43;
         else if (itemid == 4)
-            ss << ' ';
+            ss << (char)127;
         else if (itemid == 5)
-            ss << ' ';
+            ss << (char)13;
         else if (itemid == 6)
-            ss << ' ';
+            ss << (char)7;
         if (i != 3)
             ss << '|';
     }
@@ -939,11 +1044,11 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str());
 
-    /*ss.str(""); TODO
+    ss.str("");
     ss << "Current score:" << current_score;
-    c.X = 15;
+    c.X = 33;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str());*/
+    g_Console.writeToBuffer(c, ss.str());
 }
 
 void renderBar()
@@ -1045,26 +1150,44 @@ void renderInputEvents()
 
 void chadPush()
 {
-    if (playerPtr->getPos('x') + 5 < g_Console.getConsoleSize().X &&
-        playerPtr->getPos('y') + 5 < g_Console.getConsoleSize().Y &&
-        playerPtr->getPos('x') - 5 > 0 &&
-        playerPtr->getPos('y') - 5 > 0) // pushes the player
+    int playerX = playerPtr->getPos('x');
+    int playerY = playerPtr->getPos('y');
+    if (player.getDirection() == 0)                                     // UP
     {
-        if (player.getDirection() == 0)                                     // UP
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') + 3);
+        if (playerY + 3 < 23) {
+            if (map.getEntity(playerX, playerY + 1) != 'w'
+                && map.getEntity(playerX, playerY + 2) != 'w'
+                && map.getEntity(playerX, playerY + 3) != 'w')
+                playerPtr->setPos('y', playerY + 3);
         }
-        else if (player.getDirection() == 1)                                // LEFT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') + 4);
+    }
+    else if (player.getDirection() == 1)                                // LEFT
+    {
+        if (playerX + 4 < 79) {
+            if (map.getEntity(playerX + 1, playerY) != 'w'
+                && map.getEntity(playerX + 2, playerY) != 'w'
+                && map.getEntity(playerX + 3, playerY) != 'w'
+                && map.getEntity(playerX + 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX + 4);
         }
-        else if (player.getDirection() == 2)                                // DOWN
-        {
-            playerPtr->setPos('y', playerPtr->getPos('y') - 3);
+    }
+    else if (player.getDirection() == 2)                                // DOWN
+    {
+        if (playerY - 3 > 1) {
+            if (map.getEntity(playerX, playerY - 1) != 'w'
+                && map.getEntity(playerX, playerY - 2) != 'w'
+                && map.getEntity(playerX, playerY - 3) != 'w')
+                playerPtr->setPos('y', playerY - 3);
         }
-        else if (player.getDirection() == 3)                                // RIGHT
-        {
-            playerPtr->setPos('x', playerPtr->getPos('x') - 4);
+    }
+    else if (player.getDirection() == 3)                                // RIGHT
+    {
+        if (playerX - 4 > 1) {
+            if (map.getEntity(playerX - 1, playerY) != 'w'
+                && map.getEntity(playerX - 2, playerY) != 'w'
+                && map.getEntity(playerX - 3, playerY) != 'w'
+                && map.getEntity(playerX - 4, playerY) != 'w')
+                playerPtr->setPos('x', playerX - 4);
         }
     }
 }

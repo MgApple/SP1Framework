@@ -5,9 +5,8 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
     pos.X = 78;
     pos.Y = 12;
     charColor = 0x06;
-    moveTime = 0.4;
+    //moveTime = 0.2;
     // supposed to be location of items
-    start = &nodes[(consoleHeight / 2) * (consoleWidth / 2) + (consoleWidth / 2)];
 }
 
 Hoarder::~Hoarder()
@@ -18,12 +17,12 @@ Hoarder::~Hoarder()
 void Hoarder::createPath(Map& map)
 {
     // to create an array of the total number of nodes
-    nodes = new Node[consoleWidth * consoleHeight];
-    for (int x = 0; x < consoleWidth; ++x)
+    nodes = new Node[mapWidth * mapHeight];
+    for (int x = 0; x < mapWidth; ++x)
     {
-        for (int y = 0; y < consoleHeight; ++y) 
+        for (int y = 0; y < mapHeight; ++y) 
         {
-            int i = y * consoleWidth + x;
+            int i = y * mapWidth + x;
             nodes[i].pos.X = x; // to find which node
             nodes[i].pos.Y = y;
             // if it's a wall, set bObstacle to true
@@ -37,23 +36,23 @@ void Hoarder::createPath(Map& map)
     }
 
     // to create connections between the nodes
-    for (int x = 0; x < consoleWidth; ++x)
+    for (int x = 0; x < mapWidth; ++x)
     {
-        for (int y = 0; y < consoleHeight; ++y)
+        for (int y = 0; y < mapHeight; ++y)
         {
-            int i = y * consoleWidth + x;
-            if (y > 1 && nodes[(y - 1) * consoleWidth + (x + 0)].bObstacle == false)
-                nodes[i].neighbours.push_back(&nodes[(y - 1) * consoleWidth + (x + 0)]);
-            if (y < consoleHeight - 1 && nodes[(y + 1) * consoleWidth + (x + 0)].bObstacle == false)
-                nodes[i].neighbours.push_back(&nodes[(y + 1) * consoleWidth + (x + 0)]);
-            if (x > 1 && nodes[(y + 0) * consoleWidth + (x - 1)].bObstacle == false)
-                nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x - 1)]);
-            if (x < consoleWidth - 1 && nodes[(y + 0) * consoleWidth + (x + 1)].bObstacle == false)
-                nodes[i].neighbours.push_back(&nodes[(y + 0) * consoleWidth + (x + 1)]);
+            int i = y * mapWidth + x;
+            if (y > 1 && nodes[(y - 1) * mapWidth + (x + 0)].bObstacle == false)
+                nodes[i].neighbours.push_back(&nodes[(y - 1) * mapWidth + (x + 0)]);
+            if (y < mapHeight - 1 && nodes[(y + 1) * mapWidth + (x + 0)].bObstacle == false)
+                nodes[i].neighbours.push_back(&nodes[(y + 1) * mapWidth + (x + 0)]);
+            if (x > 1 && nodes[(y + 0) * mapWidth + (x - 1)].bObstacle == false)
+                nodes[i].neighbours.push_back(&nodes[(y + 0) * mapWidth + (x - 1)]);
+            if (x < mapWidth - 1 && nodes[(y + 0) * mapWidth + (x + 1)].bObstacle == false)
+                nodes[i].neighbours.push_back(&nodes[(y + 0) * mapWidth + (x + 1)]);
         }
     }
     // hoarder position
-    end = &nodes[pos.Y * consoleWidth + pos.X]; 
+    end = &nodes[pos.Y * mapWidth + pos.X]; 
 }
 
 bool Hoarder::checkCollision()
@@ -61,14 +60,14 @@ bool Hoarder::checkCollision()
     return false;
 }
 
-bool Hoarder::solveAStar(Map& map)
+bool Hoarder::solveAStar()
 {
     // reset navigation graph - default all node states
-    for (int x = 0; x < consoleWidth; ++x)
+    for (int x = 0; x < mapWidth; ++x)
     {
-        for (int y = 0; y < consoleHeight; ++y)
+        for (int y = 0; y < mapHeight; ++y)
         {
-            int i = y * consoleWidth + x;
+            int i = y * mapWidth + x;
             nodes[i].bVisited = false;
             nodes[i].globalGoal = INFINITY;
             nodes[i].localGoal = INFINITY;
@@ -159,5 +158,5 @@ void Hoarder::movement(Map& map, const double dt)
 
 void Hoarder::setStart(int x, int y)
 {
-    start = &nodes[y * consoleWidth + x];
+    start = &nodes[y * mapWidth + x];
 }
