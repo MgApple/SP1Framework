@@ -8,7 +8,7 @@ Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 	//aggrocheck = false;
 	xcheck = rand() % 79 + 1;
 	ycheck = rand() % 23 + 1;
-	isEnd = true;
+	isEnd = false;
 }
 
 Karen::~Karen()
@@ -61,7 +61,11 @@ void Karen::createPath(Map& map)
 			nodes[i].pos.X = x; // to find which node
 			nodes[i].pos.Y = y;
 			// if it's a wall, set bObstacle to true
-			if (map.getEntity(x, y - 1) == 'w')
+			if (map.getEntity(x, y - 1) == 'w' ||
+				map.getEntity(x, y - 1) == 'C' ||
+				map.getEntity(x, y - 1) == (char)4 ||
+				map.getEntity(x, y - 1) == 'P' ||
+				map.getEntity(x, y - 1) == 'K')
 				nodes[i].bObstacle = true;
 			else
 				nodes[i].bObstacle = false;
@@ -88,6 +92,7 @@ void Karen::createPath(Map& map)
 	}
 	// hoarder position
 	end = &nodes[pos.Y * mapWidth + pos.X];
+	start = &nodes[ycheck * mapWidth + xcheck];
 }
 
 bool Karen::solveAStar()
@@ -153,7 +158,6 @@ bool Karen::solveAStar()
 
 			float possiblyLowerGoal = current->localGoal + distance(current, nodeNeighbour);
 
-			// FIX LOCAL GOAL AND GLOBAL GOAL NOT UPDATING
 			if (possiblyLowerGoal < nodeNeighbour->localGoal)
 			{
 				nodeNeighbour->parent = current;
@@ -170,23 +174,16 @@ void Karen::move(Map &map, const double dt)
 	elapsedTime += dt;
 	if (elapsedTime > moveTime)
 	{
-		if (getPos('x') == xcheck && getPos('y')-1 == ycheck-1)
+		if (end->parent != NULL) 
+		{
+			Node* ptr = end->parent;
+			pos = ptr->pos;
+			// set next node to this node's parent
+			end = end->parent;
+		}
+		else
 		{
 			isEnd = true;
-		}
-		else 
-		{
-			if (end->parent != NULL) 
-			{
-				Node* ptr = end->parent;
-				pos = ptr->pos;
-				// set next node to this node's parent
-				end = end->parent;
-			}
-			else
-			{
-				Enemy::move(map, dt);
-			}
 		}
 		elapsedTime = 0.0;
 	}
@@ -194,12 +191,19 @@ void Karen::move(Map &map, const double dt)
 
 void Karen::setStart(Map &map)
 {
-	while (map.getEntity(xcheck, ycheck-1) != ' ')
+	xcheck = rand() % 79 + 1;
+	ycheck = rand() % 23 + 1;
+	start = &nodes[ycheck * mapWidth + xcheck];
+	if (start->bObstacle == true)
 	{
-		xcheck = rand() % 79 + 1;
-		ycheck = rand() % 23 + 1;
+		while (!start->bObstacle)
+		{
+			xcheck = rand() % 79 + 1;
+			ycheck = rand() % 23 + 1;
+		}
+		start = &nodes[ycheck * mapWidth + xcheck];
+		return;
 	}
-	start = &nodes[ycheck * consoleWidth + xcheck];
 }
 
 void Karen::setIsEnd(bool isend)

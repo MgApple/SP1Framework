@@ -26,7 +26,11 @@ void Hoarder::createPath(Map& map)
             nodes[i].pos.X = x; // to find which node
             nodes[i].pos.Y = y;
             // if it's a wall, set bObstacle to true
-            if (map.getEntity(x, y - 1) == 'w')
+            if (map.getEntity(x, y - 1) == 'w' ||
+                map.getEntity(x,y-1) == 'C' ||
+                map.getEntity(x, y - 1) == (char)4 ||
+                map.getEntity(x, y - 1) == 'P' ||
+                map.getEntity(x, y - 1) == 'K' )
                 nodes[i].bObstacle = true;
             else
                 nodes[i].bObstacle = false;
@@ -123,7 +127,6 @@ bool Hoarder::solveAStar()
 
             float possiblyLowerGoal = current->localGoal + distance(current, nodeNeighbour);
 
-            // FIX LOCAL GOAL AND GLOBAL GOAL NOT UPDATING
             if (possiblyLowerGoal < nodeNeighbour->localGoal)
             {
                 nodeNeighbour->parent = current;

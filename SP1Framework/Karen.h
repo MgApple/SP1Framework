@@ -8,10 +8,6 @@ class Karen :public Enemy
 {
 private:
 	//bool aggrocheck;
-	int xcheck, ycheck;
-	int mapWidth = 80;
-	int mapHeight = 25;
-	bool isEnd;
 	struct Node
 	{
 		bool bObstacle = false;
@@ -23,10 +19,11 @@ private:
 		Node* parent = NULL;
 	};
 
+	int xcheck, ycheck;
+	int mapWidth = 80;
+	int mapHeight = 25;
+	bool isEnd;
 	Node* nodes = NULL;
-	int consoleWidth = 80;
-	int consoleHeight = 25; // might be 24
-
 	Node* start = NULL;
 	Node* end = NULL;
 public:

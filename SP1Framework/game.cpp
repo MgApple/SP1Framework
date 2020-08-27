@@ -81,7 +81,7 @@ void init( void )
     }
     map.loadMap();
     // Set precision for floating point output
-    g_dElapsedTime = 10.0;
+    g_dElapsedTime = 60.0;
 
     chadCount = 0;
     copCount = 0;
@@ -307,7 +307,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            g_dElapsedTime = 10.0; //reset timer
+            g_dElapsedTime = 60.0; //reset timer
             current_score = 0;
             g_eGameState = S_GAME;
             break;
@@ -522,7 +522,7 @@ void updateGame(double dt)       // gameplay logic
             }
             hoarder->movement(map, dt);
         }
-        else if (entity->getType() == Entity::TYPE_KAREN)
+        else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
             karen->createPath(map);
@@ -534,7 +534,7 @@ void updateGame(double dt)       // gameplay logic
             karen->solveAStar();
             karen->move(map, dt);
         }
-        else if (entity->getType() != Entity::TYPE_COP)
+        else if (entity->getType() != Entity::TYPE_COP && !isContesting)
             entity->move(map, dt);
         if (entity->getType() == Entity::TYPE_CHAD)
         {
@@ -788,6 +788,18 @@ void renderGameOver()
     std::ofstream savefile("save.txt");
     savefile << "high_score:" << high_score;
     savefile.close();
+
+    /*while (entityList.size() > 0)
+    {
+        Entity* entity = entityList.back();
+        delete entity;
+        entityList.pop_back();
+    }
+    if (playerPtr)
+    {
+        delete playerPtr;
+        playerPtr = NULL;
+    }*/
 }
 
 void renderMap()
