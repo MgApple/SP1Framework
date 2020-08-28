@@ -12,12 +12,13 @@ Hoarder::Hoarder() : Enemy(TYPE::TYPE_HOARDER)
 Hoarder::~Hoarder()
 {
     //
+    delete nodes;
 }
 
 void Hoarder::createPath(Map& map)
 {
-    // to create an array of the total number of nodes
     nodes = new Node[mapWidth * mapHeight];
+    // to create an array of the total number of nodes
     for (int x = 0; x < mapWidth; ++x)
     {
         for (int y = 0; y < mapHeight; ++y) 
@@ -56,7 +57,7 @@ void Hoarder::createPath(Map& map)
         }
     }
     // hoarder position
-    end = &nodes[pos.Y * mapWidth + pos.X]; 
+    end = &nodes[pos.Y * mapWidth + pos.X];
 }
 
 bool Hoarder::checkCollision()

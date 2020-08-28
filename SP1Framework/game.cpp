@@ -394,6 +394,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     else {
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
+            map.setEntity(entity->getPos('x'), entity->getPos('y' - 1), (char)5);
             item->removeItem(map);
         }
     }
@@ -527,6 +528,7 @@ void updateGame(double dt)       // gameplay logic
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
             karen->createPath(map);
+            karen->setStart(map);
             if (karen->getIsEnd() == true)
             {
                 karen->setStart(map);

@@ -2,8 +2,10 @@
 
 Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 {
-	setPos('x', rand() % 79 + 1);
-	setPos('y', rand() % 23 + 1);
+	//setPos('x', rand() % 79 + 1);
+	//setPos('y', rand() % 23 + 1);
+	pos.X = rand() % 79 + 1;
+	pos.Y = rand() % 23 + 1;
 	charColor = 0x04;
 	//aggrocheck = false;
 	xcheck = rand() % 79 + 1;
@@ -14,6 +16,7 @@ Karen::Karen() : Enemy(TYPE::TYPE_KAREN)
 Karen::~Karen()
 {
 	//empty for now
+	delete nodes;
 }
 
 //bool Karen::aggro(Entity* player,Map &map)
@@ -65,7 +68,7 @@ void Karen::createPath(Map& map)
 				map.getEntity(x, y - 1) == 'C' ||
 				map.getEntity(x, y - 1) == (char)4 ||
 				map.getEntity(x, y - 1) == 'P' ||
-				map.getEntity(x, y - 1) == 'K')
+				map.getEntity(x, y - 1) == 'H')
 				nodes[i].bObstacle = true;
 			else
 				nodes[i].bObstacle = false;
@@ -92,7 +95,7 @@ void Karen::createPath(Map& map)
 	}
 	// hoarder position
 	end = &nodes[pos.Y * mapWidth + pos.X];
-	start = &nodes[ycheck * mapWidth + xcheck];
+	//start = &nodes[ycheck * mapWidth + xcheck];
 }
 
 bool Karen::solveAStar()
@@ -202,7 +205,6 @@ void Karen::setStart(Map &map)
 			ycheck = rand() % 23 + 1;
 		}
 		start = &nodes[ycheck * mapWidth + xcheck];
-		return;
 	}
 }
 
