@@ -488,6 +488,7 @@ void updateGame(double dt)       // gameplay logic
         Entity* karenPtr = new Karen;
         checkLocation(map, karenPtr);
         Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->createPath(map);
         entityList.push_back(karenPtr);
         ++karenCount;
     }
@@ -511,8 +512,8 @@ void updateGame(double dt)       // gameplay logic
     {
         Entity* hoarderPtr = new Hoarder;
         checkLocation(map, hoarderPtr);
-        //Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        //hoarder->solveAStar();
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
@@ -525,7 +526,6 @@ void updateGame(double dt)       // gameplay logic
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
             if (toiletPaper != nullptr)
             {
-                hoarder->createPath(map);
                 hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
                 hoarder->solveAStar();
             }
@@ -534,8 +534,6 @@ void updateGame(double dt)       // gameplay logic
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
-            karen->createPath(map);
-            karen->setStart(map);
             if (karen->getIsEnd() == true)
             {
                 karen->setStart(map);

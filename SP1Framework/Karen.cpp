@@ -95,7 +95,7 @@ void Karen::createPath(Map& map)
 	}
 	// hoarder position
 	end = &nodes[pos.Y * mapWidth + pos.X];
-	//start = &nodes[ycheck * mapWidth + xcheck];
+	start = &nodes[ycheck * mapWidth + xcheck];
 }
 
 bool Karen::solveAStar()
@@ -197,15 +197,15 @@ void Karen::setStart(Map &map)
 	xcheck = rand() % 79 + 1;
 	ycheck = rand() % 23 + 1;
 	start = &nodes[ycheck * mapWidth + xcheck];
-	if (start->bObstacle == true)
+	if (map.getEntity(xcheck, ycheck - 1) == 'w')
 	{
-		while (!start->bObstacle)
+		while (map.getEntity(xcheck, ycheck - 1) != 'w')
 		{
 			xcheck = rand() % 79 + 1;
 			ycheck = rand() % 23 + 1;
 		}
-		start = &nodes[ycheck * mapWidth + xcheck];
 	}
+	start = &nodes[ycheck * mapWidth + xcheck];
 }
 
 void Karen::setIsEnd(bool isend)
