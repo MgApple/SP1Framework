@@ -307,7 +307,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            g_dElapsedTime = 60.0; //reset timer
+            g_dElapsedTime = 10.0; //reset timer
             current_score = 0;
             g_eGameState = S_GAME;
             break;
@@ -789,17 +789,14 @@ void renderGameOver()
     savefile << "high_score:" << high_score;
     savefile.close();
 
-    /*while (entityList.size() > 0)
-    {
-        Entity* entity = entityList.back();
-        delete entity;
-        entityList.pop_back();
-    }
-    if (playerPtr)
-    {
-        delete playerPtr;
-        playerPtr = NULL;
-    }*/
+    //for (int i = 1; i < entityList.size(); ++i)
+    //{
+    //    //Entity* entity = entityList.back();
+    //    delete entityList[i];
+    //    //entityList.pop_back();
+    //}
+    //entityList.clear();
+    
 }
 
 void renderMap()
