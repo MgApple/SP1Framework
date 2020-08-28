@@ -31,6 +31,7 @@ int spamIncrease;
 bool spawnedTP = false;
 bool isContesting = false;
 bool isGameOver = false;
+bool playerCheck = false;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -39,7 +40,6 @@ double  g_dPrevChadTime;
 double  g_dPrevCustomerTime;
 double  g_dCooldown;
 double  g_dFrozen;
-double  g_dKarenCooldown;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
@@ -85,7 +85,6 @@ void init( void )
     // Set precision for floating point output
     g_dElapsedTime = 60.0;
     g_dFrozen = 0.0;
-    g_dKarenCooldown = 0.0;
 
     chadCount = 0;
     copCount = 0;
@@ -282,10 +281,8 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime -= dt;
     g_dDeltaTime = dt;
-    if (g_dFrozen > 0)
+    if (g_dFrozen >= 0)
         g_dFrozen -= dt;
-    if (g_dKarenCooldown > 0)
-        g_dKarenCooldown -= dt;
     switch (g_eGameState)
     {
         case S_TITLE: titleWait();
@@ -430,7 +427,7 @@ void updateTutorial(double dt)
 void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    if(!isContesting)
+    if(!isContesting && g_dFrozen<=5.0)
         player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
     if (spamIncrease >= 44)
@@ -514,6 +511,7 @@ void updateGame(double dt)       // gameplay logic
         checkLocation(map, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         hoarder->createPath(map);
+        hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
@@ -535,12 +533,21 @@ void updateGame(double dt)       // gameplay logic
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
             if (karen->getIsEnd() == true)
+            if (playerCheck == true && g_dFrozen <= 5.0)
             {
-                karen->setStart(map);
-                karen->setIsEnd(false);
+                g_dFrozen = 8.0;
             }
-            karen->solveAStar();
-            karen->move(map, dt);
+            else if (g_dFrozen<=0)
+            {
+                Karen* karen = dynamic_cast<Karen*>(entity);
+                if (karen->getIsEnd() == true)
+                {
+                    karen->setStart(map);
+                    karen->setIsEnd(false);
+                }
+                karen->solveAStar();
+                karen->move(map, dt);
+            }
         }
         else if (entity->getType() != Entity::TYPE_COP && !isContesting)
             entity->move(map, dt);
@@ -814,6 +821,7 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
     0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
     00
     };
+    playerCheck = false;
     for (int r = lowY; r < highY; r++)
     {
         camera.Y = r + 1;
@@ -830,7 +838,9 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
             }
             if (map.getEntity(c, r) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (map.getEntity(c, r) == ' ')
+            else if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
+                playerCheck = true;
+            else if (map.getEntity(c, r) == ' ' && r != 0)
                 g_Console.writeToBuffer(camera, (char)32, colors[6]);
         }
     }
