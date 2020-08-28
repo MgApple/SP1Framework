@@ -718,11 +718,11 @@ void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
-    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    /*for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
         renderNPC(entity);
-    }
+    }*/
     if (spawnedTP)
         renderItem(toiletPaper);
     renderBar();
@@ -770,6 +770,12 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
         for (int c = lowX; c < highX; c++)
         {
             camera.X = c;
+            for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+            {
+                Entity* entity = (Entity*)*it;
+                if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
+                    renderNPC(entity);
+            }
             if (map.getEntity(c, r) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
             else if (map.getEntity(c, r) == ' ')
@@ -801,6 +807,11 @@ void renderMap()
     else if (camera.Y > g_Console.getConsoleSize().Y - 5)
         camera.Y = g_Console.getConsoleSize().Y - 5;
     renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    {
+        Entity* entity = (Entity*)*it;
+        
+    }
             /*else if (map.getEntity(R, C) == 'K')
                 g_Console.writeToBuffer(c, 'K', 0xDF);
             else if (map.getEntity(R, C) == 'C')
