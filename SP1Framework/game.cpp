@@ -822,7 +822,7 @@ void renderMap()
                 camera.Y = 3;
             else if (camera.Y > g_Console.getConsoleSize().Y - 3)
                 camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 4, entity->getPos('y') + 2);
+            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
         }
     }
             /*else if (map.getEntity(R, C) == 'K')
