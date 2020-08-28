@@ -38,6 +38,8 @@ double  g_dPrevPlayerTime;
 double  g_dPrevChadTime;
 double  g_dPrevCustomerTime;
 double  g_dCooldown;
+double  g_dFrozen;
+double  g_dKarenCooldown;
 SKeyEvent g_skKeyEvent[K_COUNT];
 //SMouseEvent g_mouseEvent;
 
@@ -82,6 +84,8 @@ void init( void )
     map.loadMap();
     // Set precision for floating point output
     g_dElapsedTime = 60.0;
+    g_dFrozen = 0.0;
+    g_dKarenCooldown = 0.0;
 
     chadCount = 0;
     copCount = 0;
@@ -278,7 +282,10 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime -= dt;
     g_dDeltaTime = dt;
-
+    if (g_dFrozen > 0)
+        g_dFrozen -= dt;
+    if (g_dKarenCooldown > 0)
+        g_dKarenCooldown -= dt;
     switch (g_eGameState)
     {
         case S_TITLE: titleWait();
@@ -857,7 +864,7 @@ void renderMap()
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        if (entity->getType() == Entity::TYPE_HOARDER || entity->getType() == Entity::TYPE_KAREN)
+        if (entity->getType() == Entity::TYPE_KAREN)
         {
             camera.X = entity->getPos('x') - 5;
             camera.Y = entity->getPos('y') - 2;
@@ -871,6 +878,17 @@ void renderMap()
                 camera.Y = g_Console.getConsoleSize().Y - 3;
             renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
         }
+        else if (entity->getType() == Entity::TYPE_HOARDER)
+        {
+            camera.X = entity->getPos('x') - 2;
+            camera.Y = entity->getPos('y') - 1;
+            renderCamera(camera, entity->getPos('x') - 2, entity->getPos('y') - 2, entity->getPos('x') + 3, entity->getPos('y') + 1);
+        }
+    }
+    if (spawnedTP) {
+        camera.X = toiletPaper->getPos('x') - 2;
+        camera.Y = toiletPaper->getPos('y') - 1;
+        renderCamera(camera, toiletPaper->getPos('x') - 2, toiletPaper->getPos('y') - 2, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
     /*else if (map.getEntity(R, C) == 'K')
         g_Console.writeToBuffer(c, 'K', 0xDF);
