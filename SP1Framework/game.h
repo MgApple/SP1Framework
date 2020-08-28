@@ -84,6 +84,7 @@ void renderMainMenu();  // renders the main menu
 void renderTitle();
 void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
+void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY);
 void renderMap();           // renders the map to the buffer first
 void renderCharacter();     // renders the character into the buffer
 void renderEffect();
