@@ -779,7 +779,7 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
             if (map.getEntity(c, r) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
             else if (map.getEntity(c, r) == ' ')
-                g_Console.writeToBuffer(camera, (char)32, colors[12]);
+                g_Console.writeToBuffer(camera, (char)32, colors[6]);
         }
     }
 }
@@ -810,7 +810,20 @@ void renderMap()
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        
+        if (entity->getType() == Entity::TYPE_HOARDER || entity->getType() == Entity::TYPE_KAREN)
+        {
+            camera.X = entity->getPos('x') - 5;
+            camera.Y = entity->getPos('y') - 2;
+            if (camera.X < 5)
+                camera.X = 5;
+            else if (camera.X > g_Console.getConsoleSize().X - 5)
+                camera.X = g_Console.getConsoleSize().X - 5;
+            if (camera.Y < 3)
+                camera.Y = 3;
+            else if (camera.Y > g_Console.getConsoleSize().Y - 3)
+                camera.Y = g_Console.getConsoleSize().Y - 3;
+            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 4, entity->getPos('y') + 2);
+        }
     }
             /*else if (map.getEntity(R, C) == 'K')
                 g_Console.writeToBuffer(c, 'K', 0xDF);
