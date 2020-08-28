@@ -511,7 +511,6 @@ void updateGame(double dt)       // gameplay logic
         checkLocation(map, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
         hoarder->createPath(map);
-        hoarder->solveAStar();
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
