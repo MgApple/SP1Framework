@@ -388,6 +388,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
+        g_dElapsedTime += 5.0;
         item->removeItem(map);
     }
     else {
