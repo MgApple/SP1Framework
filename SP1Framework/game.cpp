@@ -830,13 +830,13 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
                 Entity* entity = (Entity*)*it;
                 if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
                     renderNPC(entity);
+                else if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
+                    playerCheck = true;
                 if (isContesting)
                     renderBar();
             }
             if (map.getEntity(c, r) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
-                playerCheck = true;
             else if (map.getEntity(c, r) == ' ' && r != 0)
                 g_Console.writeToBuffer(camera, (char)32, colors[6]);
         }

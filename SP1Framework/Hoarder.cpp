@@ -147,10 +147,12 @@ void Hoarder::movement(Map& map, const double dt)
     {
         if (end->parent != NULL)
         {
+            map.setEntity(pos.X, pos.Y - 1, ' ');
             Node* ptr = end->parent;
             pos = ptr->pos;
             // set next node to this node's parent
             end = end->parent;
+            map.setEntity(pos.X, pos.Y - 1, 'H');
         }
         else
         {
