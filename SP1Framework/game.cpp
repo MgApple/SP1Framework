@@ -307,7 +307,7 @@ void updateMenu()
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
-            g_dElapsedTime = 10.0; //reset timer
+            g_dElapsedTime = 60.0; //reset timer
             current_score = 0;
             g_eGameState = S_GAME;
             break;
