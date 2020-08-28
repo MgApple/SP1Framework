@@ -757,16 +757,31 @@ void renderGameOver()
     savefile.close();
 }
 
+void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
+{
+    const WORD colors[] = {
+    0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
+    0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
+    00
+    };
+    for (int r = lowY; r < highY; r++)
+    {
+        camera.Y = r + 1;
+        for (int c = lowX; c < highX; c++)
+        {
+            camera.X = c;
+            if (map.getEntity(c, r) == 'w')
+                g_Console.writeToBuffer(camera, (char)219, colors[4]);
+            else if (map.getEntity(c, r) == ' ')
+                g_Console.writeToBuffer(camera, (char)32, colors[12]);
+        }
+    }
+}
+
 void renderMap()
 {
     // Set up sample colours, and output shadings
-    const WORD colors[] = {
-        0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-        0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-        00
-    };
-
-    COORD c;
+    COORD camera;
     /*for (int i = 0; i < 12; ++i)
     {
         c.X = 5 * i;
@@ -775,16 +790,17 @@ void renderMap()
         g_Console.writeToBuffer(c, " °±²Û", colors[i]);
     }*/
     //Map map;
-    for (int C = 0; C < 24; C++)
-    {
-        c.Y = C+1;
-        for (int R = 0; R < 80; R++)
-        {
-            c.X = R;
-            if (map.getEntity(R, C) == 'w')
-                g_Console.writeToBuffer(c, (char)219, colors[4]);
-            else if (map.getEntity(R, C) == ' ')
-                g_Console.writeToBuffer(c, (char)32, colors[12]);
+    camera.X = playerPtr->getPos('x') - 12;
+    camera.Y = playerPtr->getPos('y') - 5;
+    if (camera.X < 12)
+        camera.X = 12;
+    else if (camera.X > g_Console.getConsoleSize().X - 12)
+        camera.X = g_Console.getConsoleSize().X - 12;
+    if (camera.Y < 5)
+        camera.Y = 5;
+    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
+        camera.Y = g_Console.getConsoleSize().Y - 5;
+    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
             /*else if (map.getEntity(R, C) == 'K')
                 g_Console.writeToBuffer(c, 'K', 0xDF);
             else if (map.getEntity(R, C) == 'C')
@@ -807,10 +823,8 @@ void renderMap()
                 g_Console.writeToBuffer(c, (char)13, 0x6F);
             else if (map.getEntity(R, C) == (char)7)
                 g_Console.writeToBuffer(c, (char)7, 0x6F);*/
-            else
-                g_Console.writeToBuffer(c, 'n', colors[12]);
-        }
-    }
+            //else
+                //g_Console.writeToBuffer(c, 'n', colors[12]);
 }
 
 void renderCharacter()
