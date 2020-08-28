@@ -530,8 +530,6 @@ void updateGame(double dt)       // gameplay logic
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
-            Karen* karen = dynamic_cast<Karen*>(entity);
-            if (karen->getIsEnd() == true)
             if (playerCheck == true && g_dFrozen <= 5.0)
             {
                 g_dFrozen = 8.0;
