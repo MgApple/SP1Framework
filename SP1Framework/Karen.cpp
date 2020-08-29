@@ -15,7 +15,7 @@ Karen::~Karen()
 	delete nodes;
 }
 
-bool Karen::aggro(Entity* player,Map &map)
+bool Karen::aggro(Entity* player,Map &map)	//checks whether Karen is in LOS of player
 {
 	bool aggrocheck = true;
 	int x1 = getPos('x');
