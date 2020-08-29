@@ -444,7 +444,7 @@ void updateGame(double dt)       // gameplay logic
         }
         spamIncrease = 35;
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 44)
+    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 44 && isContesting)
     {
         ++spamCount;
     }
@@ -453,7 +453,7 @@ void updateGame(double dt)       // gameplay logic
         ++spamIncrease;
         spamCount = 0;
     }
-    if (chadCount < 3)
+   /* if (chadCount < 3)
     {
         Entity* chadPtr = new Chad;
         checkLocation(map, chadPtr);
@@ -513,7 +513,7 @@ void updateGame(double dt)       // gameplay logic
         hoarder->createPath(map);
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
-    }
+    }*/
 
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
@@ -762,15 +762,24 @@ void renderGame()
         renderItem(toiletPaper);
 }
 
-void freeMemory(Entity* hoarder, Entity* player, Entity* customer, Entity* chad, Entity* cop, Entity* karen, Item* toiletPaper)
+void freeMemory(Map& map)
 {
-    delete hoarder;
-    delete player;
-    delete customer;
-    delete chad;
-    delete cop;
-    delete karen;
-    delete toiletPaper;
+    // deleting and resetting
+    for (int i = 1; i < entityList.size(); ++i)
+    {
+        delete entityList[i];
+    }
+    entityList.erase(entityList.begin() + 1, entityList.end());
+    playerPtr->setPos('x', 5);
+    playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
+    isContesting = false;
+    chadCount = 0;
+    copCount = 0;
+    customerCount = 0;
+    hoarderCount = 0;
+    karenCount = 0;
+    spamCount = 0;
+    spamIncrease = 35;
 }
 
 void renderGameOver()
@@ -801,14 +810,7 @@ void renderGameOver()
     savefile << "high_score:" << high_score;
     savefile.close();
 
-    //for (int i = 1; i < entityList.size(); ++i)
-    //{
-    //    //Entity* entity = entityList.back();
-    //    delete entityList[i];
-    //    //entityList.pop_back();
-    //}
-    //entityList.clear();
-    
+    freeMemory(map);
 }
 
 void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
@@ -845,6 +847,67 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
 
 void renderMap()
 {
+    if (chadCount < 3)
+    {
+        Entity* chadPtr = new Chad;
+        checkLocation(map, chadPtr);
+        Chad* chad = dynamic_cast<Chad*>(chadPtr);
+        chad->setPlayer(playerPtr);
+        entityList.push_back(chadPtr);
+        ++chadCount;
+    }
+    if (copCount < 2)
+    {
+        Entity* copPtr = new Cop;
+        checkLocation(map, copPtr);
+        Cop* cop = dynamic_cast<Cop*>(copPtr);
+        cop->setPlayer(playerPtr);
+        entityList.push_back(copPtr);
+        ++copCount;
+    }
+    if (customerCount < 5)
+    {
+        Entity* customerPtr = new Customer;
+        checkLocation(map, customerPtr);
+        Customer* customer = dynamic_cast<Customer*>(customerPtr);
+        customer->setPlayer(playerPtr);
+        entityList.push_back(customerPtr);
+        ++customerCount;
+    }
+    if (karenCount < 2)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->createPath(map);
+        entityList.push_back(karenPtr);
+        ++karenCount;
+    }
+    if (!spawnedTP)
+    {
+        bool isBeingHeld = false;
+        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
+            Entity* entity = (Entity*)*it;
+            if (entity->getState()) {
+                isBeingHeld = true;
+            }
+        }
+        if (!isBeingHeld) {
+            toiletPaper = new Item();
+            checkItem(map, toiletPaper);
+            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
+            spawnedTP = true;
+        }
+    }
+    if (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
+    }
     // Set up sample colours, and output shadings
     COORD camera;
     /*for (int i = 0; i < 12; ++i)
