@@ -439,7 +439,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 chadPush();
                 player.setActive(true);
-                playerPtr->setCharColor(chad->getCharColor());
                 renderCharacter();
             }
         }
@@ -450,7 +449,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 customerBlock();
                 player.setActive(true);
-                playerPtr->setCharColor(customer->getCharColor());
                 renderCharacter();
             }
         }
@@ -462,7 +460,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 copBlock();
                 player.setActive(true);
-                playerPtr->setCharColor(cop->getCharColor());
                 renderCharacter();
             }
         }
