@@ -12,16 +12,6 @@ Enemy::~Enemy()
 	//blank
 }
 
-void Enemy::setTarget(Entity* target)
-{
-	this->target = target;
-}
-
-Entity* Enemy::getTarget()
-{
-	return target;
-}
-
 bool Enemy::collisionCheck(int intendedx, int intendedy, Map &map)
 {
 	bool check = false;
