@@ -585,8 +585,14 @@ void updateGame(double dt)       // gameplay logic
 
         if (spawnedTP) {
             if (entity->getPos('x') == toiletPaper->getPos('x') && entity->getPos('y') == toiletPaper->getPos('y')) {
-                if (entity->getType() != 0)
+                if (entity->getType() != 0 && entity->getType()!=2 && entity->getType()!=6)
+                {
                     entity->setState(true);
+                    COORD camera;
+                    camera.X = entity->getPos('x') - 2;
+                    camera.Y = entity->getPos('y') - 1;
+                    renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+                }
                 pickedUpItem(map, toiletPaper, entity, player);
             }
         }
@@ -904,7 +910,7 @@ void renderMap()
         entityList.push_back(customerPtr);
         ++customerCount;
     }
-    if (karenCount < 2)
+    if (karenCount < 1)
     {
         Entity* karenPtr = new Karen;
         checkLocation(map, karenPtr);
