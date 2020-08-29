@@ -796,6 +796,8 @@ void freeMemory(Map& map)
     karenCount = 0;
     spamCount = 0;
     spamIncrease = 35;
+    map.reloadMap();
+    map.loadMap();
 }
 
 void renderGameOver()
@@ -924,16 +926,7 @@ void renderMap()
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
-    // Set up sample colours, and output shadings
     COORD camera;
-    /*for (int i = 0; i < 12; ++i)
-    {
-        c.X = 5 * i;
-        c.Y = i + 1;
-        colour(colors[i]);
-        g_Console.writeToBuffer(c, " °±²Û", colors[i]);
-    }*/
-    //Map map;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
      if (camera.X < 12)
