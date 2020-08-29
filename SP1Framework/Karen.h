@@ -29,7 +29,7 @@ private:
 public:
 	Karen();
 	~Karen();
-	//bool aggro(Entity* player,Map &map);
+	bool aggro(Entity* player,Map &map);
 	void createPath(Map& map);
 	bool solveAStar();
 	void setStart(Map &map);

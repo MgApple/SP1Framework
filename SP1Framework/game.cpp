@@ -414,13 +414,13 @@ void updateGame(double dt)       // gameplay logic
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
-            if (playerCheck == true && g_dFrozen <= 0.0)
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr,map))
             {
                 g_dFrozen = 8.0;
             }
             else if (g_dFrozen<=5.0)
             {
-                Karen* karen = dynamic_cast<Karen*>(entity);
                 if (karen->getIsEnd() == true)
                 {
                     karen->setStart(map);
