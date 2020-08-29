@@ -35,6 +35,7 @@ bool playerCheck = false;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
+double  g_dPlayerTime;
 double  g_dPrevPlayerTime;
 double  g_dPrevChadTime;
 double  g_dPrevCustomerTime;
@@ -84,6 +85,7 @@ void init( void )
     map.loadMap();
     // Set precision for floating point output
     g_dElapsedTime = 60.0;
+    g_dPlayerTime = 0.0;
     g_dFrozen = 0.0;
 
     chadCount = 0;
@@ -215,7 +217,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
-    double time = g_dElapsedTime - g_dPrevPlayerTime;
+    double time = g_dPlayerTime - g_dPrevPlayerTime;
 
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
@@ -235,11 +237,11 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        /*if (time > 0.2f) */
-        {  //player.setKey(g_skKeyEvent);
+        if (time > 0.1) 
+        {  
             g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
             g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
-            g_dPrevPlayerTime = g_dElapsedTime;
+            g_dPrevPlayerTime = g_dPlayerTime;
         }
     }    
 }
@@ -282,6 +284,7 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime -= dt;
     g_dDeltaTime = dt;
+    g_dPlayerTime += dt;
     if (g_dFrozen >= 0)
         g_dFrozen -= dt;
     switch (g_eGameState)
@@ -423,7 +426,7 @@ void titleWait()
 void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    if(!isContesting && g_dFrozen<=5.0)
+    if (!isContesting && g_dFrozen <= 5.0)
         player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
     if (spamIncrease >= 44)
