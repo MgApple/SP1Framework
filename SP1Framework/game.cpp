@@ -813,7 +813,7 @@ void renderGameOver()
     freeMemory(map);
 }
 
-void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
+void renderKarenCamera(COORD camera, int lowX, int lowY, int highX, int highY)
 {
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
@@ -832,14 +832,44 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
                 Entity* entity = (Entity*)*it;
                 if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
                     renderNPC(entity);
-                else if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
-                    playerCheck = true;
                 if (isContesting)
                     renderBar();
             }
             if (map.getEntity(c, r) == 'w')
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (map.getEntity(c, r) == ' ' && r != 0)
+            else if (map.getEntity(c, r) == ' ')
+                g_Console.writeToBuffer(camera, (char)32, colors[6]);
+            if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
+                playerCheck = true;
+        }
+    }
+}
+
+void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
+{
+    const WORD colors[] = {
+    0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
+    0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
+    00
+    };
+    for (int r = lowY; r < highY; r++)
+    {
+        camera.Y = r + 1;
+        for (int c = lowX; c < highX; c++)
+        {
+            camera.X = c;
+            for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+            {
+                Entity* entity = (Entity*)*it;
+                if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
+                    renderNPC(entity);
+                
+                if (isContesting)
+                    renderBar();
+            }
+            if (map.getEntity(c, r) == 'w')
+                g_Console.writeToBuffer(camera, (char)219, colors[4]);
+            else if (map.getEntity(c, r) == ' ')
                 g_Console.writeToBuffer(camera, (char)32, colors[6]);
         }
     }
@@ -920,7 +950,7 @@ void renderMap()
     //Map map;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
-    if (camera.X < 12)
+     if (camera.X < 12)
         camera.X = 12;
     else if (camera.X > g_Console.getConsoleSize().X - 12)
         camera.X = g_Console.getConsoleSize().X - 12;
@@ -944,19 +974,19 @@ void renderMap()
                 camera.Y = 3;
             else if (camera.Y > g_Console.getConsoleSize().Y - 3)
                 camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
+            renderKarenCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, entity->getPos('x') - 2, entity->getPos('y') - 2, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, toiletPaper->getPos('x') - 2, toiletPaper->getPos('y') - 2, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
     /*else if (map.getEntity(R, C) == 'K')
         g_Console.writeToBuffer(c, 'K', 0xDF);
