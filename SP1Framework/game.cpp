@@ -469,10 +469,6 @@ void updateGame(double dt)       // gameplay logic
                 if (entity->getType() != 0 && entity->getType()!=2 && entity->getType()!=6)
                 {
                     entity->setState(true);
-                    COORD camera;
-                    camera.X = entity->getPos('x') - 2;
-                    camera.Y = entity->getPos('y') - 1;
-                    renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
                 }
                 pickedUpItem(map, toiletPaper, entity, player);
             }
@@ -780,6 +776,10 @@ void renderMap()
             Entity* entity = (Entity*)*it;
             if (entity->getState()) {
                 isBeingHeld = true;
+                COORD camera;
+                camera.X = entity->getPos('x') - 2;
+                camera.Y = entity->getPos('y') - 1;
+                renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
             }
         }
         if (!isBeingHeld) {
@@ -839,30 +839,6 @@ void renderMap()
         camera.Y = toiletPaper->getPos('y') - 1;
         renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
-    /*else if (map.getEntity(R, C) == 'K')
-        g_Console.writeToBuffer(c, 'K', 0xDF);
-    else if (map.getEntity(R, C) == 'C')
-        g_Console.writeToBuffer(c, 'C', 0x0F);
-    else if (map.getEntity(R, C) == 'P')
-        g_Console.writeToBuffer(c, 'P', 0x1F);
-    else if (map.getEntity(R, C) == (char)4)
-        g_Console.writeToBuffer(c, (char)4, 0x0C);
-    else if (map.getEntity(R, C) == 'H')
-        g_Console.writeToBuffer(c, 'H', 0x06);
-    else if (map.getEntity(R, C) == (char)8)
-        g_Console.writeToBuffer(c, (char)8, 0x6F);
-    else if (map.getEntity(R, C) == (char)22)
-        g_Console.writeToBuffer(c, (char)22, 0x6F);
-    else if (map.getEntity(R, C) == (char)43)
-        g_Console.writeToBuffer(c, (char)43, 0x6F);
-    else if (map.getEntity(R, C) == (char)127)
-        g_Console.writeToBuffer(c, (char)127, 0x6F);
-    else if (map.getEntity(R, C) == (char)13)
-        g_Console.writeToBuffer(c, (char)13, 0x6F);
-    else if (map.getEntity(R, C) == (char)7)
-        g_Console.writeToBuffer(c, (char)7, 0x6F);*/
-        //else
-            //g_Console.writeToBuffer(c, 'n', colors[12]);
 }
 
 void renderTutorialMap()
