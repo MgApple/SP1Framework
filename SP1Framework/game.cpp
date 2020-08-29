@@ -819,45 +819,15 @@ void renderGameOver()
     freeMemory(map);
 }
 
-void renderKarenCamera(COORD camera, int lowX, int lowY, int highX, int highY)
+void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool karencheck)
 {
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
     0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
     00
     };
-    playerCheck = false;
-    for (int r = lowY; r < highY; r++)
-    {
-        camera.Y = r + 1;
-        for (int c = lowX; c < highX; c++)
-        {
-            camera.X = c;
-            for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
-            {
-                Entity* entity = (Entity*)*it;
-                if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
-                    renderNPC(entity);
-                if (isContesting)
-                    renderBar();
-            }
-            if (map.getEntity(c, r) == 'w')
-                g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (map.getEntity(c, r) == ' ')
-                g_Console.writeToBuffer(camera, (char)32, colors[6]);
-            if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
-                playerCheck = true;
-        }
-    }
-}
-
-void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
-{
-    const WORD colors[] = {
-    0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-    0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-    00
-    };
+    if (karencheck==true)
+        playerCheck = false;
     for (int r = lowY; r < highY; r++)
     {
         camera.Y = r + 1;
@@ -877,6 +847,8 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
             else if (map.getEntity(c, r) == ' ')
                 g_Console.writeToBuffer(camera, (char)32, colors[6]);
+            if (karencheck==true && playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
+                playerCheck = true;
         }
     }
 }
@@ -980,7 +952,7 @@ void renderMap()
                 camera.Y = 3;
             else if (camera.Y > g_Console.getConsoleSize().Y - 3)
                 camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderKarenCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
+            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2, true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
@@ -1127,7 +1099,6 @@ void renderBar()
     g_Console.writeToBuffer(pos2, (char)178, 0x2B);
 }
 
-// this is an example of how you would use the input eventss
 void renderInputEvents()
 {
     // keyboard events
@@ -1162,47 +1133,7 @@ void renderInputEvents()
 
         COORD c = { startPos.X, startPos.Y + i };
         g_Console.writeToBuffer(c, ss.str(), 0x17);
-    }
-
-    // mouse events    
-    /*ss.str("");
-    ss << "Mouse position (" << g_mouseEvent.mousePosition.X << ", " << g_mouseEvent.mousePosition.Y << ")";
-    g_Console.writeToBuffer(g_mouseEvent.mousePosition, ss.str(), 0x59);
-    ss.str("");
-    switch (g_mouseEvent.eventFlags)
-    {
-    case 0:
-        if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-        {
-            ss.str("Left Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 1, ss.str(), 0x59);
-        }
-        else if (g_mouseEvent.buttonState == RIGHTMOST_BUTTON_PRESSED)
-        {
-            ss.str("Right Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 2, ss.str(), 0x59);
-        }
-        else
-        {
-            ss.str("Some Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 3, ss.str(), 0x59);
-        }
-        break;
-    case DOUBLE_CLICK:
-        ss.str("Double Clicked");
-        g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 4, ss.str(), 0x59);
-        break;        
-    case MOUSE_WHEELED:
-        if (g_mouseEvent.buttonState & 0xFF000000)
-            ss.str("Mouse wheeled down");
-        else
-            ss.str("Mouse wheeled up");
-        g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 5, ss.str(), 0x59);
-        break;
-    default:        
-        break;
-    }*/
-    
+    }    
 }
 
 void chadPush()
