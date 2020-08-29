@@ -75,17 +75,18 @@ void updateMenu();
 void resetScore();
 void titleWait();
 void updateGame(double dt);          // gameplay logic
-void updateTutorial(double dt);
 void gameOverWait();        // waits for time to pass in gameover screen
 // void moveCharacter();       // moves the character, collision detection, physics, etc
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderMainMenu();  // renders the main menu
 void renderTitle();
+void renderTutorial();
 void renderGame();          // renders the game stuff
 void renderGameOver();      // renders game over screen
 void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool karencheck=false);
 void renderMap();           // renders the map to the buffer first
+void renderTutorialMap();
 void renderCharacter();     // renders the character into the buffer
 void renderNPC(Entity*);
 void renderItem(Item* itemPtr);
@@ -100,6 +101,7 @@ void copBlock();
 void checkLocation(Map &map, Entity*);
 void checkItem(Map &map, Item*);
 bool contest(Entity*, Entity*);
+void freeMemory(Map& map);
 
 // keyboard and mouse input event managers
 void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent);  // define this function for the console to call when there are keyboard events

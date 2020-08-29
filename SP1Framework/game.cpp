@@ -170,7 +170,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
     {
     case S_MAINMENU: gameplayKBHandler(keyboardEvent);
         break;
-
+    case S_TUTORIAL:gameplayKBHandler(keyboardEvent);
+        break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
     }
@@ -289,7 +290,7 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
-        case S_TUTORIAL: updateTutorial(dt);
+        case S_TUTORIAL: updateGame(dt);
             break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
@@ -417,11 +418,6 @@ void titleWait()
 {
     if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
-}
-
-void updateTutorial(double dt)
-{
-
 }
 
 void updateGame(double dt)       // gameplay logic
@@ -647,6 +643,9 @@ void render()
         break;
     case S_MAINMENU: renderMainMenu();
         break;
+    case S_TUTORIAL:
+        renderTutorial();
+        break;
     case S_GAME: renderGame();
         renderHUD(); // renders debug information, frame rate, elapsed time, etc
         break;
@@ -735,6 +734,9 @@ void renderMainMenu()  // renders the main menu
         }
         break;
     }
+
+    freeMemory(map);
+
 }
 
 void renderTitle()
@@ -751,6 +753,14 @@ void renderTitle()
             t.Y += 1;
         }
     }
+}
+
+void renderTutorial()
+{
+    renderTutorialMap();        // renders the map to the buffer first
+    renderCharacter();  // renders the character into the buffer
+    if (spawnedTP)
+        renderItem(toiletPaper);
 }
 
 void renderGame()
@@ -817,8 +827,6 @@ void renderGameOver()
     std::ofstream savefile("save.txt");
     savefile << "high_score:" << high_score;
     savefile.close();
-
-    freeMemory(map);
 }
 
 void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool karencheck)
@@ -983,6 +991,112 @@ void renderMap()
         g_Console.writeToBuffer(c, (char)7, 0x6F);*/
         //else
             //g_Console.writeToBuffer(c, 'n', colors[12]);
+}
+
+void renderTutorialMap()
+{
+    if (chadCount < 1)
+    {
+        Entity* chadPtr = new Chad;
+        checkLocation(map, chadPtr);
+        Chad* chad = dynamic_cast<Chad*>(chadPtr);
+        chad->setPlayer(playerPtr);
+        entityList.push_back(chadPtr);
+        ++chadCount;
+    }
+    if (copCount < 1)
+    {
+        Entity* copPtr = new Cop;
+        checkLocation(map, copPtr);
+        Cop* cop = dynamic_cast<Cop*>(copPtr);
+        cop->setPlayer(playerPtr);
+        entityList.push_back(copPtr);
+        ++copCount;
+    }
+    if (customerCount < 1)
+    {
+        Entity* customerPtr = new Customer;
+        checkLocation(map, customerPtr);
+        Customer* customer = dynamic_cast<Customer*>(customerPtr);
+        customer->setPlayer(playerPtr);
+        entityList.push_back(customerPtr);
+        ++customerCount;
+    }
+    if (karenCount < 1)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->createPath(map);
+        entityList.push_back(karenPtr);
+        ++karenCount;
+    }
+    if (!spawnedTP)
+    {
+        bool isBeingHeld = false;
+        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
+            Entity* entity = (Entity*)*it;
+            if (entity->getState()) {
+                isBeingHeld = true;
+            }
+        }
+        if (!isBeingHeld) {
+            toiletPaper = new Item();
+            checkItem(map, toiletPaper);
+            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
+            spawnedTP = true;
+        }
+    }
+    if (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
+    }
+    COORD camera;
+    camera.X = playerPtr->getPos('x') - 12;
+    camera.Y = playerPtr->getPos('y') - 5;
+    if (camera.X < 12)
+        camera.X = 12;
+    else if (camera.X > g_Console.getConsoleSize().X - 12)
+        camera.X = g_Console.getConsoleSize().X - 12;
+    if (camera.Y < 5)
+        camera.Y = 5;
+    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
+        camera.Y = g_Console.getConsoleSize().Y - 5;
+    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    {
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() == Entity::TYPE_KAREN)
+        {
+            camera.X = entity->getPos('x') - 5;
+            camera.Y = entity->getPos('y') - 2;
+            if (camera.X < 5)
+                camera.X = 5;
+            else if (camera.X > g_Console.getConsoleSize().X - 5)
+                camera.X = g_Console.getConsoleSize().X - 5;
+            if (camera.Y < 3)
+                camera.Y = 3;
+            else if (camera.Y > g_Console.getConsoleSize().Y - 3)
+                camera.Y = g_Console.getConsoleSize().Y - 3;
+            renderKarenCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
+        }
+        else if (entity->getType() == Entity::TYPE_HOARDER)
+        {
+            camera.X = entity->getPos('x') - 2;
+            camera.Y = entity->getPos('y') - 1;
+            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+        }
+    }
+    if (spawnedTP) {
+        camera.X = toiletPaper->getPos('x') - 2;
+        camera.Y = toiletPaper->getPos('y') - 1;
+        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+    }
 }
 
 void renderCharacter()

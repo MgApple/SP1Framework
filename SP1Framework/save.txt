@@ -1,1 +1,1 @@
-high_score:28
+high_score:30

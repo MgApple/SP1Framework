@@ -19,6 +19,7 @@ public:
 	Entity(void);
 	Entity(TYPE t);
 	~Entity(void);
+
 	int getType(void);
 	int getPos(char p);
 	void setPos(char p, int i);
