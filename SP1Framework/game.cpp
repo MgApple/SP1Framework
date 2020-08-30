@@ -935,7 +935,7 @@ void renderTutorialMap()
                 camera.Y = 3;
             renderCamera(camera, tutorial,entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2,true);
         }
-        else if (entity->getType() == Entity::TYPE_HOARDER)
+        else
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
