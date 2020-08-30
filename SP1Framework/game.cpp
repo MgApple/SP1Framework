@@ -511,11 +511,15 @@ void gameOverWait()
 
 void processUserInput()
 {
+    // goes to main menu if player is in tutorial and hits the escape key
+    if (g_skKeyEvent[K_ESCAPE].keyDown && g_eGameState == S_TUTORIAL)
+        g_eGameState = S_MAINMENU;
     // quits the game if player hits the escape key
     if (g_skKeyEvent[K_ESCAPE].keyReleased)
-        g_bQuitGame = true;  
+        g_bQuitGame = true;
     if (g_dElapsedTime < 0.0)
-        g_eGameState = S_GAMEOVER;
+        if (g_dElapsedTime < 0.0 && g_eGameState != S_TUTORIAL)
+            g_eGameState = S_GAMEOVER;
 }
 
 //--------------------------------------------------------------
