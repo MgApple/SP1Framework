@@ -361,8 +361,8 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
             PlaySound(TEXT("stolen.wav"), NULL, SND_FILENAME | SND_ASYNC);
-            map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
-            item->removeItem(map);
+            if (entity->getType()!=Entity::TYPE_HOARDER && entity->getType() != Entity::TYPE_KAREN)
+                item->removeItem(map);
         }
     }
     spawnedTP = false;
