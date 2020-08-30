@@ -29,9 +29,9 @@ public:
 	~Hoarder();
 	void createPath(Map& map);
 	void updatePath(Map& map);
-	bool checkCollision();
 	bool solveAStar();
 	void movement(Map& map, const double dt);
 	void setStart(int, int);
+	bool checkCollision(Entity*);
 };
 

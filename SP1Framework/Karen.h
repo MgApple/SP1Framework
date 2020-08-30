@@ -37,5 +37,6 @@ public:
 	void setIsEnd(bool isend);
 	bool getIsEnd();
 	void move(Map& map, const double dt);
+	bool checkCollision(Entity*);
 };
 

@@ -425,6 +425,11 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 hoarder->solveAStar();
             }
             hoarder->movement(map, dt);
+            if (hoarder->checkCollision(playerPtr))
+            {
+                enemyBlock();
+                renderCharacter();
+            }
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
@@ -444,6 +449,11 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 }
                 karen->solveAStar();
                 karen->move(map, dt);
+                if (karen->checkCollision(playerPtr))
+                {
+                    enemyBlock();
+                    renderCharacter();
+                }
             }
         }
         else if (entity->getType() != Entity::TYPE_COP && !isContesting)
@@ -462,7 +472,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision(playerPtr))
             {
-                customerBlock();
+                enemyBlock();
                 renderCharacter();
             }
         }
@@ -472,7 +482,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Cop* cop = dynamic_cast<Cop*>(entity);
             if (cop->checkCollision(playerPtr))
             {
-                copBlock();
+                enemyBlock();
                 renderCharacter();
             }
         }
@@ -674,6 +684,8 @@ void freeMemory()
     entityList.erase(entityList.begin() + 1, entityList.end());
     playerPtr->setPos('x', 5);
     playerPtr->setPos('y', g_Console.getConsoleSize().Y / 2);
+    //checkItem(map, toiletPaper);
+    //checkItem(map, toiletPaper);
     isContesting = false;
     chadCount = 0;
     copCount = 0;
@@ -1163,19 +1175,7 @@ void chadPush()
     playerPtr->setPos('y', playerY);
 }
 
-void customerBlock()
-{
-    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
-        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
-        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
-        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
-        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
-}
-
-void copBlock()
+void enemyBlock()
 {
     if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);

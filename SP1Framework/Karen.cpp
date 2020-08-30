@@ -239,3 +239,15 @@ bool Karen::getIsEnd()
 {
 	return isEnd;
 }
+
+bool Karen::checkCollision(Entity* target)
+{
+	COORD targetPos;
+	targetPos.X = target->getPos('x');
+	targetPos.Y = target->getPos('y');
+
+	if (targetPos.X == pos.X && targetPos.Y == pos.Y)
+		return true;
+	else
+		return false;
+}

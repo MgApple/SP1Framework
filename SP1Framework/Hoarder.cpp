@@ -84,11 +84,6 @@ void Hoarder::updatePath(Map& map)
     }
 }
 
-bool Hoarder::checkCollision()
-{
-    return false;
-}
-
 bool Hoarder::solveAStar()
 {
     // reset navigation graph - default all node states
@@ -189,4 +184,16 @@ void Hoarder::movement(Map& map, const double dt)
 void Hoarder::setStart(int x, int y)
 {
     start = &nodes[y * mapWidth + x];
+}
+
+bool Hoarder::checkCollision(Entity* target)
+{
+    COORD targetPos;
+    targetPos.X = target->getPos('x');
+    targetPos.Y = target->getPos('y');
+
+    if (targetPos.X == pos.X && targetPos.Y == pos.Y)
+        return true;
+    else
+        return false;
 }
