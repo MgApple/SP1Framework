@@ -383,9 +383,11 @@ void updateGame(double dt)       // gameplay logic
     if (spamPos >= 44) // if the spam bar is full
     {
         isContesting = false;
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
+        g_dElapsedTime += 5.0;
         for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
         {
             Entity* entity = (Entity*)*it;
