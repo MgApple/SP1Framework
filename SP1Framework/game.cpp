@@ -431,7 +431,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 hoarder->movement(map, dt);
                 if (hoarder->checkCollision(playerPtr))
                 {
-                    enemyBlock(map);
+                    enemyBlock(map,entity);
                     renderCharacter();
                 }
                 temp.X = hoarder->getPos('x');
@@ -463,7 +463,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 karen->move(map, dt);
                 if (karen->checkCollision(playerPtr))
                 {
-                    enemyBlock(map);
+                    enemyBlock(map,entity);
                     renderCharacter();
                 }
             }
@@ -484,7 +484,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision(playerPtr))
             {
-                enemyBlock(map);
+                enemyBlock(map,entity);
                 renderCharacter();
             }
         }
@@ -494,7 +494,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Cop* cop = dynamic_cast<Cop*>(entity);
             if (cop->checkCollision(playerPtr))
             {
-                enemyBlock(map);
+                enemyBlock(map,entity);
                 renderCharacter();
             }
         }
@@ -1153,24 +1153,34 @@ void chadPush(Map& map)
     playerPtr->setPos('y', playerY);
 }
 
-void enemyBlock(Map& map)
+void enemyBlock(Map& map,Entity* entity)
 {
-    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
+    int check = 0;
+    int playerX = playerPtr->getPos('x');
+    int playerY = playerPtr->getPos('y');
+    while (entity->getPos('x') == playerX && entity->getPos('y') == playerY)
     {
-        playerPtr->setPos('y', playerPtr->getPos('y') + 1);
+        if (((player.getDirection() == 0 && player.getPos('y') + 1 < 24) || check == 1) && map.getEntity(playerX, playerY)==' ')
+        {
+            playerY++;
+        }
+        else if (((player.getDirection() == 1 && player.getPos('x') + 1 < 79) || check == 2) && map.getEntity(playerX+1, playerY-1) == ' ')
+        {
+            playerX++;
+        }
+        else if (((player.getDirection() == 2 && player.getPos('y') - 1 > 1) || check == 3) && map.getEntity(playerX, playerY - 1-1) == ' ')
+        {
+            playerY--;
+        }
+        else if (((player.getDirection() == 3 && player.getPos('x') - 1 > 1) || check == 4) && map.getEntity(playerX - 1, playerY-1) == ' ')
+        {
+            playerX--;
+        }
+        else
+            check++;
     }
-    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
-    {
-        playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-    }
-    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
-    {
-        playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-    }
-    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
-    {
-        playerPtr->setPos('x', playerPtr->getPos('x') - 1);
-    }
+    playerPtr->setPos('x', playerX);
+    playerPtr->setPos('y', playerY);
 }
 
 void checkLocation(Map &map, Entity* entity)

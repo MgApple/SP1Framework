@@ -41,7 +41,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 	}
 
 	int wall = map.getEntity(pos.X, pos.Y - 1);
-	if (wall == 'w' || wall=='K' || wall=='H')
+	if (wall == 'w')
 	{
 		if (direction == UP)
 			pos.Y++;
