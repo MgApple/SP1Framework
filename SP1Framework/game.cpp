@@ -429,7 +429,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 hoarder->movement(map, dt);
                 if (hoarder->checkCollision(playerPtr))
                 {
-                    enemyBlock();
+                    enemyBlock(map);
                     renderCharacter();
                 }
             }
@@ -459,7 +459,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 karen->move(map, dt);
                 if (karen->checkCollision(playerPtr))
                 {
-                    enemyBlock();
+                    enemyBlock(map);
                     renderCharacter();
                 }
             }
@@ -471,7 +471,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Chad* chad = dynamic_cast<Chad*>(entity);
             if (chad->checkCollision(playerPtr))
             {
-                chadPush();
+                chadPush(map);
                 renderCharacter();
             }
         }
@@ -480,7 +480,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision(playerPtr))
             {
-                enemyBlock();
+                enemyBlock(map);
                 renderCharacter();
             }
         }
@@ -490,7 +490,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Cop* cop = dynamic_cast<Cop*>(entity);
             if (cop->checkCollision(playerPtr))
             {
-                enemyBlock();
+                enemyBlock(map);
                 renderCharacter();
             }
         }
@@ -868,8 +868,7 @@ void renderTutorialMap()
     if (chadCount < 1)
     {
         Entity* chadPtr = new Chad; // create new entity
-        //checkLocation(tutorial, chadPtr); // to check if it spawns in the wall
-        //chadPtr->setPos('x', 15);
+        checkLocation(tutorial, chadPtr); // to check if it spawns in the wall
         entityList.push_back(chadPtr); // add the entity into entityList
         ++chadCount; // increase everytime an entity is made
     }
@@ -1082,7 +1081,7 @@ void renderInputEvents()
     }    
 }
 
-void chadPush()
+void chadPush(Map& map)
 {
     int playerX = playerPtr->getPos('x');
     int playerY = playerPtr->getPos('y');
@@ -1156,15 +1155,23 @@ void chadPush()
     playerPtr->setPos('y', playerY);
 }
 
-void enemyBlock()
+void enemyBlock(Map& map)
 {
-    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
+    if (player.getDirection() == 0 &&
+        player.getPos('y') + 1 < 24 &&
+        map.getEntity(player.getPos('x'), player.getPos('y') - 1) == ' ')
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
+    if (player.getDirection() == 1 && 
+        player.getPos('x') + 1 < 79 &&
+        map.getEntity(player.getPos('x') - 1, player.getPos('y')) == ' ')
         playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
+    if (player.getDirection() == 2 && 
+        player.getPos('y') - 1 > 1 && 
+        map.getEntity(player.getPos('x'), player.getPos('y') + 1) == ' ')
         playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
+    if (player.getDirection() == 3 && 
+        player.getPos('x') - 1 > 1 &&
+        map.getEntity(player.getPos('x') + 1, player.getPos('y')) == ' ')
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
 }
 

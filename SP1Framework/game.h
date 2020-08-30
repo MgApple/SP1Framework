@@ -94,8 +94,8 @@ void renderHUD();
 void renderBar();
 void renderToScreen();      // dump the contents of the buffer to the screen, one frame worth of game
 void renderInputEvents();   // renders the status of input events
-void chadPush();
-void enemyBlock();
+void chadPush(Map& map);
+void enemyBlock(Map& map);
 void checkLocation(Map &map, Entity*);
 void checkItem(Map &map, Item*);
 bool contest(Entity*, Entity*);
