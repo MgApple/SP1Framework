@@ -3,9 +3,7 @@
 Player::Player() : inventory{ 0 }
 {
 	type = TYPE_PLAYER;
-	stamina = 100;
 	hasSpeedBuff = false;
-	isActive = true;
 	charColor = 0x0A;
 	direction = NONE;
 }
@@ -13,16 +11,6 @@ Player::Player() : inventory{ 0 }
 Player::~Player()
 {
 	// 
-}
-
-void Player::setActive(bool isActive)
-{
-	this->isActive = isActive;
-}
-
-bool Player::getActive()
-{
-	return isActive;
 }
 
 void Player::setSpeed(bool speedBuff)
@@ -37,6 +25,7 @@ bool Player::getSpeed()
 
 void Player::move(Map& map, const double dt)
 {
+	// empty
 }
 
 void Player::movement(Map& map, SKeyEvent* key)
@@ -90,45 +79,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 	}
 }
 
-void Player::render()
-{
-	// Draw the location of the character
-	if(isActive)
-		charColor = 0x0A;
-}
-
 enum Player::DIRECTION Player::getDirection()
 {
 	return direction;
 }
-
-//void moveCharacter()
-//{    
-//    // Updating the location of the character based on the key release
-//    // providing a beep sound whenver we shift the character
-//    if (g_skKeyEvent[0].keyDown && g_sChar.m_cLocation.Y > 0)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.Y--;       
-//    }
-//
-//    if (g_skKeyEvent[2].keyDown && g_sChar.m_cLocation.X > 0)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.X--;        
-//    }
-//    if (g_skKeyEvent[1].keyDown && g_sChar.m_cLocation.Y < g_Console.getConsoleSize().Y - 1)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.Y++;        
-//    }
-//    if (g_skKeyEvent[3].keyDown && g_sChar.m_cLocation.X < g_Console.getConsoleSize().X - 1)
-//    {
-//        //Beep(1440, 30);
-//        g_sChar.m_cLocation.X++;        
-//    }
-//    if (g_skKeyEvent[K_SPACE].keyReleased)
-//    {
-//        g_sChar.m_bActive = !g_sChar.m_bActive;        
-//    }
-//}

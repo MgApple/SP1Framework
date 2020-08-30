@@ -236,13 +236,13 @@ void update(double dt)
     {
         case S_TITLE: titleWait();
             break;
-        case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
+        case S_MAINMENU: updateMenu();
             break;
         case S_TUTORIAL: updateGame(dt);
             break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
-        case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
+        case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen
             break;
     }
 }
@@ -372,7 +372,7 @@ void titleWait()
 {
     if (g_dElapsedTime > 59.9)
         PlaySound(TEXT("title.wav"), NULL, SND_FILENAME | SND_ASYNC);
-    if (g_dElapsedTime < 55.0) // wait for 5 seconds to switch to menu mode, else do nothing
+    if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
@@ -390,7 +390,6 @@ void updateGame(double dt)       // gameplay logic
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
-        g_dElapsedTime += 5.0;
         for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
         {
             Entity* entity = (Entity*)*it;
@@ -432,6 +431,7 @@ void updateGame(double dt)       // gameplay logic
             if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr, map))
             {
                 g_dFrozen = 8.0;
+                PlaySound(TEXT("karen_sfx.wav"), NULL, SND_FILENAME | SND_ASYNC);
             }
             if (karen->getIsEnd() == true)
             {
@@ -449,7 +449,6 @@ void updateGame(double dt)       // gameplay logic
             if (chad->checkCollision(playerPtr))
             {
                 chadPush();
-                player.setActive(true);
                 renderCharacter();
             }
         }
@@ -459,7 +458,6 @@ void updateGame(double dt)       // gameplay logic
             if (customer->checkCollision(playerPtr))
             {
                 customerBlock();
-                player.setActive(true);
                 renderCharacter();
             }
         }
@@ -470,7 +468,6 @@ void updateGame(double dt)       // gameplay logic
             if (cop->checkCollision(playerPtr))
             {
                 copBlock();
-                player.setActive(true);
                 renderCharacter();
             }
         }
@@ -490,17 +487,17 @@ void updateGame(double dt)       // gameplay logic
         }
     }
 
-    double coolDown = g_dElapsedTime - g_dCooldown;
+    double coolDown = g_dPlayerTime - g_dCooldown;
     if (player.getSpeed() && coolDown > 5.0f)
     {
         player.setSpeed(false);
-        g_dCooldown = g_dElapsedTime;
+        g_dCooldown = g_dPlayerTime;
     }
 }
 
 void gameOverWait()
 {
-    if (g_dElapsedTime < 0 && g_dElapsedTime > -0.5)
+    if (g_dElapsedTime < 0 && g_dElapsedTime > -0.1)
         PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_ASYNC);
     if (g_dElapsedTime < -5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
@@ -513,9 +510,10 @@ void processUserInput()
         g_eGameState = S_MAINMENU;
     // quits the game if player hits the escape key
     if (g_skKeyEvent[K_ESCAPE].keyReleased)
-        g_bQuitGame = true;  
-    if (g_dElapsedTime < 0.0 && g_eGameState != S_TUTORIAL)
-        g_eGameState = S_GAMEOVER;
+        g_bQuitGame = true;
+    if (g_dElapsedTime < 0.0)
+        if (g_dElapsedTime < 0.0 && g_eGameState != S_TUTORIAL)
+            g_eGameState = S_GAMEOVER;
 }
 
 //--------------------------------------------------------------
@@ -685,7 +683,7 @@ void freeMemory(Map& map)
 void renderGameOver()
 {
     COORD t;
-    t.X = 27;
+    t.X = 25;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
@@ -838,13 +836,13 @@ void renderMap()
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
@@ -1101,42 +1099,72 @@ void chadPush()
     int playerY = playerPtr->getPos('y');
     if (player.getDirection() == 0)                                     // UP
     {
-        if (playerY + 3 < 23) {
-            if (map.getEntity(playerX, playerY + 1) != 'w'
-                && map.getEntity(playerX, playerY + 2) != 'w'
-                && map.getEntity(playerX, playerY + 3) != 'w')
-                playerPtr->setPos('y', playerY + 3);
+        for (int i = 0; i < 3; i++)
+        {
+            playerY++;
+            if (playerY == 23 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerY--;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 1)                                // LEFT
     {
-        if (playerX + 4 < 79) {
-            if (map.getEntity(playerX + 1, playerY) != 'w'
-                && map.getEntity(playerX + 2, playerY) != 'w'
-                && map.getEntity(playerX + 3, playerY) != 'w'
-                && map.getEntity(playerX + 4, playerY) != 'w')
-                playerPtr->setPos('x', playerX + 4);
+        for (int i = 0; i < 4; i++)
+        {
+            playerX++;
+            if (playerX == 79 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerX--;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 2)                                // DOWN
     {
-        if (playerY - 3 > 1) {
-            if (map.getEntity(playerX, playerY - 1) != 'w'
-                && map.getEntity(playerX, playerY - 2) != 'w'
-                && map.getEntity(playerX, playerY - 3) != 'w')
-                playerPtr->setPos('y', playerY - 3);
+        for (int i = 0; i < 3; i++)
+        {
+            playerY--;
+            if (playerY == 0 || map.getEntity(playerX,playerY-1)!=' ')
+            {
+                playerY++;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 3)                                // RIGHT
     {
-        if (playerX - 4 > 1) {
-            if (map.getEntity(playerX - 1, playerY) != 'w'
-                && map.getEntity(playerX - 2, playerY) != 'w'
-                && map.getEntity(playerX - 3, playerY) != 'w'
-                && map.getEntity(playerX - 4, playerY) != 'w')
-                playerPtr->setPos('x', playerX - 4);
+        for (int i = 0; i < 4; i++)
+        {
+            playerX--;
+            if (playerX == 0 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerX++;
+                break;
+            }
         }
     }
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    {//checks if Chad still has same position as player and pushes him slightly to one side
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() == Entity::TYPE_CHAD) {
+            Chad* chad = dynamic_cast<Chad*>(entity);
+            if (chad->getPos('x')==playerX && chad->getPos('y')==playerY)
+            {
+                if (map.getEntity(playerX, playerY - 1 - 1) == ' ')
+                    playerY--;
+                else if (map.getEntity(playerX - 1, playerY - 1) == ' ')
+                    playerX--;
+                else if (map.getEntity(playerX + 1, playerY - 1) == ' ')
+                    playerX++;
+                else if (map.getEntity(playerX, playerY) == ' ')
+                    playerY++;
+            }
+        }
+    }
+    playerPtr->setPos('x', playerX);
+    playerPtr->setPos('y', playerY);
 }
 
 void customerBlock()
