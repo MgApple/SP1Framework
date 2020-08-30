@@ -689,7 +689,7 @@ void freeMemory(Map& map)
 void renderGameOver()
 {
     COORD t;
-    t.X = 25;
+    t.X = 26;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
@@ -794,7 +794,7 @@ void renderMap()
                 COORD camera;
                 camera.X = entity->getPos('x') - 2;
                 camera.Y = entity->getPos('y') - 1;
-                renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+                renderCamera(camera, camera.X, camera.Y - 1, entity->getPos('x') + 3, entity->getPos('y') + 1);
             }
         }
         if (!isBeingHeld) {
