@@ -632,7 +632,7 @@ void renderMainMenu()  // renders the main menu
 void renderTitle()
 {
     COORD t;
-    t.X = 7;
+    t.X = 12;
     t.Y = 5;
     std::ifstream title;
     std::string line;
@@ -754,7 +754,7 @@ void renderMap()
         entityList.push_back(chadPtr);
         ++chadCount;
     }
-    if (copCount < 5)
+    if (copCount < 7)
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
