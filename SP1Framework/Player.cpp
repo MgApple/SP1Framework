@@ -3,7 +3,6 @@
 Player::Player() : inventory{ 0 }
 {
 	type = TYPE_PLAYER;
-	hasSpeedBuff = false;
 	charColor = 0x0A;
 	direction = NONE;
 }
@@ -11,16 +10,6 @@ Player::Player() : inventory{ 0 }
 Player::~Player()
 {
 	// 
-}
-
-void Player::setSpeed(bool speedBuff)
-{
-	this->hasSpeedBuff = speedBuff;
-}
-
-bool Player::getSpeed()
-{
-	return hasSpeedBuff;
 }
 
 void Player::move(Map& map, const double dt)
@@ -32,41 +21,27 @@ void Player::movement(Map& map, SKeyEvent* key)
 {
 	if (key[0].keyDown && pos.Y > 0)
 	{
-		if (hasSpeedBuff)
-			pos.Y -= 2;
-		else
-			pos.Y--;
+		pos.Y--;
 		direction = UP;
 	}
 	else if (key[2].keyDown && pos.X > 0)
 	{
-		if (hasSpeedBuff)
-			pos.X -= 2;
-		else
-			pos.X--;
+		pos.X--;
 		direction = LEFT;
 	}
 	else if (key[1].keyDown && pos.Y < 25 - 1)
 	{
-		if (hasSpeedBuff)
-			pos.Y += 2;
-		else
-			pos.Y++;
+		pos.Y++;
 		direction = DOWN;
 	}
 	else if (key[3].keyDown && pos.X < 80 - 1)
 	{
-		if (hasSpeedBuff)
-			pos.X += 2;
-		else
-			pos.X++;
+		pos.X++;
 		direction = RIGHT;
 	}
-	if (key[K_SHIFT].keyDown && pos.Y > 1)
-		hasSpeedBuff = true;
 
 	int wall = map.getEntity(pos.X, pos.Y - 1);
-	if (wall == 'w')
+	if (wall == 'w' || wall=='K' || wall=='H')
 	{
 		if (direction == UP)
 			pos.Y++;

@@ -37,7 +37,6 @@ double  g_dElapsedTime;
 double  g_dDeltaTime;
 double  g_dPlayerTime;
 double  g_dPrevPlayerTime;
-double  g_dCooldown;
 double  g_dFrozen;
 SKeyEvent g_skKeyEvent[K_COUNT];
 
@@ -361,8 +360,8 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
             PlaySound(TEXT("stolen.wav"), NULL, SND_FILENAME | SND_ASYNC);
-            map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
-            item->removeItem(map);
+            if (entity->getType()!=Entity::TYPE_HOARDER && entity->getType() != Entity::TYPE_KAREN)
+                item->removeItem(map);
         }
     }
     spawnedTP = false;
@@ -510,12 +509,6 @@ void updateGame(double dt, Map &map)       // gameplay logic
         }
     }
 
-    double coolDown = g_dPlayerTime - g_dCooldown;
-    if (player.getSpeed() && coolDown > 5.0f)
-    {
-        player.setSpeed(false);
-        g_dCooldown = g_dPlayerTime;
-    }
 }
 
 void gameOverWait()
