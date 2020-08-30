@@ -624,9 +624,7 @@ void renderMainMenu()  // renders the main menu
         }
         break;
     }
-
     freeMemory(map);
-
 }
 
 void renderTitle()
@@ -717,7 +715,6 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool ka
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
     0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-    00
     };
     if (karencheck==true)
         playerCheck = false;
@@ -752,7 +749,6 @@ void renderMap()
     {
         Entity* chadPtr = new Chad;
         checkLocation(map, chadPtr);
-        Chad* chad = dynamic_cast<Chad*>(chadPtr);
         entityList.push_back(chadPtr);
         ++chadCount;
     }
@@ -760,7 +756,6 @@ void renderMap()
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
-        Cop* cop = dynamic_cast<Cop*>(copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -768,7 +763,6 @@ void renderMap()
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
-        Customer* customer = dynamic_cast<Customer*>(customerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
@@ -859,8 +853,8 @@ void renderTutorialMap()
     if (chadCount < 1)
     {
         Entity* chadPtr = new Chad; // create new entity
-        checkLocation(map, chadPtr); // to check if it spawns in the wall
-        Chad* chad = dynamic_cast<Chad*>(chadPtr); // to access the child class
+        //checkLocation(map, chadPtr); // to check if it spawns in the wall
+        //chadPtr->setPos('x', 15);
         entityList.push_back(chadPtr); // add the entity into entityList
         ++chadCount; // increase everytime an entity is made
     }
@@ -868,7 +862,6 @@ void renderTutorialMap()
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
-        Cop* cop = dynamic_cast<Cop*>(copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -876,7 +869,6 @@ void renderTutorialMap()
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
-        Customer* customer = dynamic_cast<Customer*>(customerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
