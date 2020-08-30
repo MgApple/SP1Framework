@@ -407,6 +407,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
     // each unit has to be spammed 5 times for it to increase position
     if (spamCount > 4)
     {
+        PlaySound(TEXT("minigame.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++spamPos;
         spamCount = 0;
     }
