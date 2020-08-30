@@ -306,11 +306,13 @@ void updateMenu()
     case S_MENU1:
         if (g_skKeyEvent[K_S].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_MENU2;
             break;
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            PlaySound(TEXT("menu2.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_dElapsedTime = 60.0; //reset timer
             current_score = 0;
             g_eGameState = S_GAME;
@@ -321,16 +323,19 @@ void updateMenu()
     case S_MENU2:
         if (g_skKeyEvent[K_S].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_MENU3;
             break;
         }
         else if (g_skKeyEvent[K_W].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_MENU1;
             break;
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            PlaySound(TEXT("menu2.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eGameState = S_TUTORIAL;
             break;
         }
@@ -339,11 +344,13 @@ void updateMenu()
     case S_MENU3:
         if (g_skKeyEvent[K_W].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_MENU2;
             break;
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            PlaySound(TEXT("menu2.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_OPTION1;
             break;
         }
@@ -352,11 +359,13 @@ void updateMenu()
     case S_OPTION1:
         if (g_skKeyEvent[K_S].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_OPTION2;
             break;
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            PlaySound(TEXT("menu2.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_dElapsedTime = 10; // temp timer
             g_eMenuState = S_RESET;
             break;
@@ -366,11 +375,13 @@ void updateMenu()
     case S_OPTION2:
         if (g_skKeyEvent[K_W].keyDown)
         {
+            PlaySound(TEXT("menu1.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_OPTION1;
             break;
         }
         else if (g_skKeyEvent[K_SPACE].keyDown)
         {
+            PlaySound(TEXT("menu2.wav"), NULL, SND_FILENAME | SND_ASYNC);
             g_eMenuState = S_MENU3;
             break;
         }
