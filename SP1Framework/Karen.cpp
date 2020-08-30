@@ -88,6 +88,11 @@ void Karen::createPath(Map& map)
 	// hoarder position
 	end = &nodes[pos.Y * mapWidth + pos.X];
 	start = &nodes[ycheck * mapWidth + xcheck];
+	if (start->bObstacle)
+	{
+		setStart(map);
+		start = &nodes[ycheck * mapWidth + xcheck];
+	}
 }
 
 void Karen::updatePath(Map& map)
