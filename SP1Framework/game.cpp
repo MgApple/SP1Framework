@@ -1003,6 +1003,19 @@ void renderTutorialMap()
         camera.Y = toiletPaper->getPos('y') - 1;
         renderCamera(camera, tutorial, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
+
+    COORD temp;
+    std::ostringstream ss;
+    ss << "The objective, collect as many as you can before time runs out.";
+    temp.X = 2;
+    temp.Y = 2;
+    g_Console.writeToBuffer(temp, ss.str());
+
+    ss.str(" ");
+    ss << "PRESS ESC to go back to main menu.";
+    temp.X = 2;
+    temp.Y = 3;
+    g_Console.writeToBuffer(temp, ss.str());
 }
 
 void renderCharacter()
