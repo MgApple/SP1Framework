@@ -11,5 +11,6 @@ public:
 	void setEntity(int x, int y, char e);
 	void reloadMap(void);
 	void loadMap(void);
+	void reloadtutorial(void)
 	void loadtutorial(void);
 };

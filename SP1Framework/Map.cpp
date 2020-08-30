@@ -64,3 +64,12 @@ void Map::loadtutorial(void)
 		}
 	}
 }
+
+void Map::reloadtutorial(void)
+{	
+	for (int r = 0; r < 80; r++)
+	{
+		for (int c = 0; c < 24; c++)
+			map[r][c] = ' ';
+	}
+}
