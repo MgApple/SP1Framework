@@ -214,7 +214,6 @@ void Karen::setStart(Map &map)
 {
 	xcheck = rand() % 79 + 1;
 	ycheck = rand() % 23 + 1;
-	start = &nodes[ycheck * mapWidth + xcheck];
 	if (map.getEntity(xcheck, ycheck - 1) == 'w')
 	{
 		while (map.getEntity(xcheck, ycheck - 1) != 'w')

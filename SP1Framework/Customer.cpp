@@ -20,12 +20,7 @@ Customer::~Customer()
 	//blank for now
 }
 
-void Customer::setPlayer(Entity* target)
-{
-	this->target = target;
-}
-
-bool Customer::checkCollision()
+bool Customer::checkCollision(Entity* target)
 {
 	COORD targetPos;
 	targetPos.X = target->getPos('x');
