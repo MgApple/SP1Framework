@@ -236,13 +236,13 @@ void update(double dt)
     {
         case S_TITLE: titleWait();
             break;
-        case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
+        case S_MAINMENU: updateMenu();
             break;
         case S_TUTORIAL: updateGame(dt);
             break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
-        case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen?
+        case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen
             break;
     }
 }
@@ -358,7 +358,6 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     else {
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
-            PlaySound(TEXT("stolen.wav"), NULL, SND_FILENAME | SND_ASYNC);
             map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
             item->removeItem(map);
         }
@@ -370,9 +369,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 
 void titleWait()
 {
-    if (g_dElapsedTime > 59.9)
-        PlaySound(TEXT("title.wav"), NULL, SND_FILENAME | SND_ASYNC);
-    if (g_dElapsedTime < 55.0) // wait for 5 seconds to switch to menu mode, else do nothing
+    if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
@@ -386,11 +383,9 @@ void updateGame(double dt)       // gameplay logic
     if (spamPos >= 44) // if the spam bar is full
     {
         isContesting = false;
-        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
-        g_dElapsedTime += 5.0;
         for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
         {
             Entity* entity = (Entity*)*it;
@@ -503,21 +498,16 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
-    if (g_dElapsedTime < 0 && g_dElapsedTime > -0.5)
-        PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_ASYNC);
     if (g_dElapsedTime < -5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
 
 void processUserInput()
 {
-    // goes to main menu if player is in tutorial and hits the escape key
-    if (g_skKeyEvent[K_ESCAPE].keyDown && g_eGameState == S_TUTORIAL)
-        g_eGameState = S_MAINMENU;
     // quits the game if player hits the escape key
     if (g_skKeyEvent[K_ESCAPE].keyReleased)
         g_bQuitGame = true;  
-    if (g_dElapsedTime < 0.0 && g_eGameState != S_TUTORIAL)
+    if (g_dElapsedTime < 0.0)
         g_eGameState = S_GAMEOVER;
 }
 
@@ -688,7 +678,7 @@ void freeMemory(Map& map)
 void renderGameOver()
 {
     COORD t;
-    t.X = 27;
+    t.X = 25;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
@@ -1104,42 +1094,54 @@ void chadPush()
     int playerY = playerPtr->getPos('y');
     if (player.getDirection() == 0)                                     // UP
     {
-        if (playerY + 3 < 23) {
-            if (map.getEntity(playerX, playerY + 1) != 'w'
-                && map.getEntity(playerX, playerY + 2) != 'w'
-                && map.getEntity(playerX, playerY + 3) != 'w')
-                playerPtr->setPos('y', playerY + 3);
+        for (int i = 0; i < 3; i++)
+        {
+            playerY++;
+            if (playerY == 23 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerY--;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 1)                                // LEFT
     {
-        if (playerX + 4 < 79) {
-            if (map.getEntity(playerX + 1, playerY) != 'w'
-                && map.getEntity(playerX + 2, playerY) != 'w'
-                && map.getEntity(playerX + 3, playerY) != 'w'
-                && map.getEntity(playerX + 4, playerY) != 'w')
-                playerPtr->setPos('x', playerX + 4);
+        for (int i = 0; i < 4; i++)
+        {
+            playerX++;
+            if (playerX == 79 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerX--;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 2)                                // DOWN
     {
-        if (playerY - 3 > 1) {
-            if (map.getEntity(playerX, playerY - 1) != 'w'
-                && map.getEntity(playerX, playerY - 2) != 'w'
-                && map.getEntity(playerX, playerY - 3) != 'w')
-                playerPtr->setPos('y', playerY - 3);
+        for (int i = 0; i < 3; i++)
+        {
+            playerY--;
+            if (playerY == 1 || map.getEntity(playerX,playerY-1)!=' ')
+            {
+                playerY++;
+                break;
+            }
         }
     }
     else if (player.getDirection() == 3)                                // RIGHT
     {
-        if (playerX - 4 > 1) {
-            if (map.getEntity(playerX - 1, playerY) != 'w'
-                && map.getEntity(playerX - 2, playerY) != 'w'
-                && map.getEntity(playerX - 3, playerY) != 'w'
-                && map.getEntity(playerX - 4, playerY) != 'w')
-                playerPtr->setPos('x', playerX - 4);
+        for (int i = 0; i < 4; i++)
+        {
+            playerX--;
+            if (playerX == 1 || map.getEntity(playerX, playerY-1) != ' ')
+            {
+                playerX++;
+                break;
+            }
         }
     }
+    playerPtr->setPos('x', playerX);
+    playerPtr->setPos('y', playerY);
 }
 
 void customerBlock()
