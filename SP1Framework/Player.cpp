@@ -66,7 +66,7 @@ void Player::movement(Map& map, SKeyEvent* key)
 		hasSpeedBuff = true;
 
 	int wall = map.getEntity(pos.X, pos.Y - 1);
-	if (wall == 'w')
+	if (wall == 'w' || wall=='K' || wall=='H')
 	{
 		if (direction == UP)
 			pos.Y++;
