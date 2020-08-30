@@ -17,12 +17,7 @@ void Cop::move()
 	//overload func, nothing
 }
 
-void Cop::setPlayer(Entity* target)
-{
-	this->target = target;
-}
-
-bool Cop::checkCollision()
+bool Cop::checkCollision(Entity* target)
 {
 	COORD targetPos;
 	targetPos.X = target->getPos('x');

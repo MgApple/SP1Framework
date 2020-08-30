@@ -6,7 +6,6 @@ Chad::Chad() : Enemy (TYPE::TYPE_CHAD)
 	pos.Y = rand() % 23 + 1;
 	charColor = 0x0C;
 	isEnd = false;
-	target = NULL;
 }
 
 Chad::~Chad()
@@ -14,12 +13,7 @@ Chad::~Chad()
 	//blank for now
 }
 
-void Chad::setPlayer(Entity* target)
-{
-	this->target = target;
-}
-
-bool Chad::checkCollision()
+bool Chad::checkCollision(Entity* target)
 {
 	COORD targetPos;
 	targetPos.X = target->getPos('x');

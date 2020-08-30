@@ -27,7 +27,7 @@ int customerCount;
 int hoarderCount;
 int karenCount;
 int spamCount;
-int spamIncrease;
+int spamPos;
 bool spawnedTP = false;
 bool isContesting = false;
 bool isGameOver = false;
@@ -91,7 +91,7 @@ void init( void )
     hoarderCount = 0;
     karenCount = 0;
     spamCount = 0;
-    spamIncrease = 35;
+    spamPos = 35;
 
     // sets the initial state for the game
     g_eGameState = S_TITLE;
@@ -383,9 +383,10 @@ void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     if (!isContesting && g_dFrozen <= 5.0)
-        player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
+        player.movement(map, g_skKeyEvent); // moves the character
 
-    if (spamIncrease >= 44)
+    // for contesting and stealing from other customers
+    if (spamPos >= 44) // if the spam bar is full
     {
         isContesting = false;
         ++current_score;
@@ -395,19 +396,22 @@ void updateGame(double dt)       // gameplay logic
         {
             Entity* entity = (Entity*)*it;
             if(entity->getState() == true)
-                entity->setState(false);
+                entity->setState(false); // reset all entity state
         }
-        spamIncrease = 35;
+        spamPos = 35; // reset position back to original position
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && spamIncrease < 44 && isContesting)
+    // if they are contesting and the space bar is being pressed, increase the count
+    if (g_skKeyEvent[K_SPACE].keyReleased && spamPos < 44 && isContesting) 
     {
         ++spamCount;
     }
+    // each unit has to be spammed 5 times for it to increase position
     if (spamCount > 4)
     {
-        ++spamIncrease;
+        ++spamPos;
         spamCount = 0;
     }
+    // going through entityList
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
@@ -425,11 +429,11 @@ void updateGame(double dt)       // gameplay logic
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
-            if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr,map))
+            if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr, map))
             {
                 g_dFrozen = 8.0;
             }
-            else if (g_dFrozen<=5.0)
+            else if (g_dFrozen <= 5.0)
             {
                 karen->updatePath(map);
                 if (karen->getIsEnd() == true)
@@ -446,7 +450,7 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_CHAD)
         {
             Chad* chad = dynamic_cast<Chad*>(entity);
-            if (chad->checkCollision())
+            if (chad->checkCollision(playerPtr))
             {
                 chadPush();
                 player.setActive(true);
@@ -456,7 +460,7 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_CUSTOMER)
         {
             Customer* customer = dynamic_cast<Customer*>(entity);
-            if (customer->checkCollision())
+            if (customer->checkCollision(playerPtr))
             {
                 customerBlock();
                 player.setActive(true);
@@ -467,7 +471,7 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_COP)
         {
             Cop* cop = dynamic_cast<Cop*>(entity);
-            if (cop->checkCollision())
+            if (cop->checkCollision(playerPtr))
             {
                 copBlock();
                 player.setActive(true);
@@ -674,7 +678,7 @@ void freeMemory(Map& map)
     hoarderCount = 0;
     karenCount = 0;
     spamCount = 0;
-    spamIncrease = 35;
+    spamPos = 35;
     map.reloadMap();
     map.loadMap();
 }
@@ -749,7 +753,6 @@ void renderMap()
         Entity* chadPtr = new Chad;
         checkLocation(map, chadPtr);
         Chad* chad = dynamic_cast<Chad*>(chadPtr);
-        chad->setPlayer(playerPtr);
         entityList.push_back(chadPtr);
         ++chadCount;
     }
@@ -758,7 +761,6 @@ void renderMap()
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
         Cop* cop = dynamic_cast<Cop*>(copPtr);
-        cop->setPlayer(playerPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -767,7 +769,6 @@ void renderMap()
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
-        customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
@@ -854,21 +855,20 @@ void renderMap()
 
 void renderTutorialMap()
 {
+    // this part creates the entities //
     if (chadCount < 1)
     {
-        Entity* chadPtr = new Chad;
-        checkLocation(map, chadPtr);
-        Chad* chad = dynamic_cast<Chad*>(chadPtr);
-        chad->setPlayer(playerPtr);
-        entityList.push_back(chadPtr);
-        ++chadCount;
+        Entity* chadPtr = new Chad; // create new entity
+        checkLocation(map, chadPtr); // to check if it spawns in the wall
+        Chad* chad = dynamic_cast<Chad*>(chadPtr); // to access the child class
+        entityList.push_back(chadPtr); // add the entity into entityList
+        ++chadCount; // increase everytime an entity is made
     }
     if (copCount < 1)
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
         Cop* cop = dynamic_cast<Cop*>(copPtr);
-        cop->setPlayer(playerPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -877,7 +877,6 @@ void renderTutorialMap()
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
         Customer* customer = dynamic_cast<Customer*>(customerPtr);
-        customer->setPlayer(playerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
@@ -915,6 +914,7 @@ void renderTutorialMap()
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
+    // end of creating entities //
     COORD camera;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
@@ -1061,7 +1061,7 @@ void renderBar()
         pos.Y = 24;
         g_Console.writeToBuffer(pos, (char)176, 0x2B);
     }
-    COORD pos2 = { spamIncrease,24 };
+    COORD pos2 = { spamPos,24 };
     g_Console.writeToBuffer(pos2, (char)178, 0x2B);
 }
 
