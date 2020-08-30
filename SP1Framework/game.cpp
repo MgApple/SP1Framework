@@ -50,6 +50,7 @@ SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_TITLE; // initial state s
 EMENUSTATE g_eMenuState = S_MENU1;
 Map map;
+Map tutorial;
 
 // Console object
 Console g_Console(80, 25, "Market Blackout");
@@ -80,6 +81,7 @@ void init( void )
         high_score = 0;
     }
     map.loadMap();
+    tutorial.loadtutorial();
     // Set precision for floating point output
     g_dElapsedTime = 60.0;
     g_dPlayerTime = 0.0;
@@ -238,9 +240,9 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu();
             break;
-        case S_TUTORIAL: updateGame(dt);
+        case S_TUTORIAL: updateGame(dt, tutorial);
             break;
-        case S_GAME: updateGame(dt); // gameplay logic when we are in the game
+        case S_GAME: updateGame(dt, map); // gameplay logic when we are in the game
             break;
         case S_GAMEOVER: gameOverWait(); // game logic for the gameover screen
             break;
@@ -376,7 +378,7 @@ void titleWait()
         g_eGameState = S_MAINMENU;
 }
 
-void updateGame(double dt)       // gameplay logic
+void updateGame(double dt, Map &map)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     if (!isContesting && g_dFrozen <= 5.0)
@@ -627,7 +629,7 @@ void renderMainMenu()  // renders the main menu
         }
         break;
     }
-    freeMemory(map);
+    freeMemory();
 }
 
 void renderTitle()
@@ -662,7 +664,7 @@ void renderGame()
         renderItem(toiletPaper);
 }
 
-void freeMemory(Map& map)
+void freeMemory()
 {
     // deleting and resetting
     for (int i = 1; i < entityList.size(); ++i)
@@ -680,8 +682,8 @@ void freeMemory(Map& map)
     karenCount = 0;
     spamCount = 0;
     spamPos = 35;
-    map.reloadtutorial();
-    map.loadtutorial();
+    tutorial.reloadtutorial();
+    tutorial.loadtutorial();
     map.reloadMap();
     map.loadMap();
 }
@@ -715,7 +717,7 @@ void renderGameOver()
     savefile.close();
 }
 
-void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool karencheck)
+void renderCamera(COORD camera, Map& map, int lowX, int lowY, int highX, int highY, bool karencheck)
 {
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
@@ -794,7 +796,7 @@ void renderMap()
                 COORD camera;
                 camera.X = entity->getPos('x') - 2;
                 camera.Y = entity->getPos('y') - 1;
-                renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+                renderCamera(camera, map, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1 );
             }
         }
         if (!isBeingHeld) {
@@ -816,7 +818,7 @@ void renderMap()
     COORD camera;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
-    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    renderCamera(camera, map, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
@@ -824,19 +826,19 @@ void renderMap()
         {
             camera.X = entity->getPos('x') - 7;
             camera.Y = entity->getPos('y') - 4;
-            renderCamera(camera, entity->getPos('x') - 7, entity->getPos('y') - 4, entity->getPos('x') + 8, entity->getPos('y') + 3, true);
+            renderCamera(camera, map, entity->getPos('x') - 7, entity->getPos('y') - 4, entity->getPos('x') + 8, entity->getPos('y') + 3, true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera,map, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, map, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
@@ -846,7 +848,7 @@ void renderTutorialMap()
     if (chadCount < 1)
     {
         Entity* chadPtr = new Chad; // create new entity
-        //checkLocation(map, chadPtr); // to check if it spawns in the wall
+        //checkLocation(tutorial, chadPtr); // to check if it spawns in the wall
         //chadPtr->setPos('x', 15);
         entityList.push_back(chadPtr); // add the entity into entityList
         ++chadCount; // increase everytime an entity is made
@@ -854,23 +856,23 @@ void renderTutorialMap()
     if (copCount < 1)
     {
         Entity* copPtr = new Cop;
-        checkLocation(map, copPtr);
+        checkLocation(tutorial, copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
     if (customerCount < 1)
     {
         Entity* customerPtr = new Customer;
-        checkLocation(map, customerPtr);
+        checkLocation(tutorial, customerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
     if (karenCount < 1)
     {
         Entity* karenPtr = new Karen;
-        checkLocation(map, karenPtr);
+        checkLocation(tutorial, karenPtr);
         Karen* karen = dynamic_cast<Karen*>(karenPtr);
-        karen->createPath(map);
+        karen->createPath(tutorial);
         entityList.push_back(karenPtr);
         ++karenCount;
     }
@@ -885,17 +887,17 @@ void renderTutorialMap()
         }
         if (!isBeingHeld) {
             toiletPaper = new Item();
-            checkItem(map, toiletPaper);
-            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
+            checkItem(tutorial, toiletPaper);
+            tutorial.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
             spawnedTP = true;
         }
     }
     if (hoarderCount < 1)
     {
         Entity* hoarderPtr = new Hoarder;
-        checkLocation(map, hoarderPtr);
+        checkLocation(tutorial, hoarderPtr);
         Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
+        hoarder->createPath(tutorial);
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
@@ -911,7 +913,7 @@ void renderTutorialMap()
         camera.Y = 5;
     else if (camera.Y > g_Console.getConsoleSize().Y - 5)
         camera.Y = g_Console.getConsoleSize().Y - 5;
-    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    renderCamera(camera, tutorial,playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
@@ -927,19 +929,19 @@ void renderTutorialMap()
                 camera.Y = 3;
             else if (camera.Y > g_Console.getConsoleSize().Y - 3)
                 camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2,true);
+            renderCamera(camera, tutorial,entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2,true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, tutorial, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, tutorial, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
