@@ -349,7 +349,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     else {
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
-            map.setEntity(entity->getPos('x'), entity->getPos('y' - 1), (char)5);
+            map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
             item->removeItem(map);
         }
     }
