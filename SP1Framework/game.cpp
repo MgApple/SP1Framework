@@ -691,7 +691,7 @@ void freeMemory()
 void renderGameOver()
 {
     COORD t;
-    t.X = 25;
+    t.X = 26;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
