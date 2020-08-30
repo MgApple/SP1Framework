@@ -839,13 +839,13 @@ void renderMap()
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
