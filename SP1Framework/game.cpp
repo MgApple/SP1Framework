@@ -181,7 +181,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
-    double time = g_dPlayerTime - g_dPrevPlayerTime;
+    //double time = g_dPlayerTime - g_dPrevPlayerTime;
 
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
@@ -201,7 +201,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        if (time > 0.1) 
+        //if (time > 0.5) 
         {  
             g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
             g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
