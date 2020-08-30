@@ -399,6 +399,7 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 entity->setState(false); // reset all entity state
         }
         spamPos = 35; // reset position back to original position
+        g_dElapsedTime += 5.0;
     }
     // if they are contesting and the space bar is being pressed, increase the count
     if (g_skKeyEvent[K_SPACE].keyReleased && spamPos < 44 && isContesting) 
