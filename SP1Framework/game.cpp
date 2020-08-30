@@ -1098,7 +1098,7 @@ void chadPush()
         for (int i = 0; i < 3; i++)
         {
             playerY++;
-            if (playerY == 23 || map.getEntity(playerX, playerY-1) != ' ')
+            if (playerY == 24 || map.getEntity(playerX, playerY-1) != ' ')
             {
                 playerY--;
                 break;
@@ -1110,7 +1110,7 @@ void chadPush()
         for (int i = 0; i < 4; i++)
         {
             playerX++;
-            if (playerX == 79 || map.getEntity(playerX, playerY-1) != ' ')
+            if (playerX == 80 || map.getEntity(playerX, playerY-1) != ' ')
             {
                 playerX--;
                 break;
