@@ -48,11 +48,15 @@ void Karen::createPath(Map& map)
 {
 	// to create an array of the total number of nodes
 	nodes = new Node[mapWidth * mapHeight];
+	int i = 0;
 	for (int x = 0; x < mapWidth; ++x)
 	{
 		for (int y = 0; y < mapHeight; ++y)
 		{
-			int i = y * mapWidth + x;
+			if (y == 24)
+				i = (y - 1) * mapWidth + x;
+			else
+				i = y * mapWidth + x;
 			nodes[i].pos.X = x; // to find which node
 			nodes[i].pos.Y = y;
 			// if it's a wall, set bObstacle to true
