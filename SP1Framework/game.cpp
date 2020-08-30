@@ -358,6 +358,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     else {
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
+            PlaySound(TEXT("stolen.wav"), NULL, SND_FILENAME | SND_ASYNC);
             map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
             item->removeItem(map);
         }
@@ -369,6 +370,8 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
 
 void titleWait()
 {
+    if (g_dElapsedTime > 59.9)
+        PlaySound(TEXT("title.wav"), NULL, SND_FILENAME | SND_ASYNC);
     if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing
         g_eGameState = S_MAINMENU;
 }
@@ -383,6 +386,7 @@ void updateGame(double dt)       // gameplay logic
     if (spamPos >= 44) // if the spam bar is full
     {
         isContesting = false;
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
@@ -426,6 +430,7 @@ void updateGame(double dt)       // gameplay logic
             if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr, map))
             {
                 g_dFrozen = 8.0;
+                PlaySound(TEXT("karen_sfx.wav"), NULL, SND_FILENAME | SND_ASYNC);
             }
             else if (g_dFrozen <= 5.0)
             {
@@ -498,6 +503,8 @@ void updateGame(double dt)       // gameplay logic
 
 void gameOverWait()
 {
+    if (g_dElapsedTime < 0 && g_dElapsedTime > -0.1)
+        PlaySound(TEXT("gameover.wav"), NULL, SND_FILENAME | SND_ASYNC);
     if (g_dElapsedTime < -5.0) // wait for 5 seconds to switch to main menu, else do nothing
         g_eGameState = S_MAINMENU;
 }
