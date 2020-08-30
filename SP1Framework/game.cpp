@@ -37,8 +37,6 @@ double  g_dElapsedTime;
 double  g_dDeltaTime;
 double  g_dPlayerTime;
 double  g_dPrevPlayerTime;
-double  g_dPrevChadTime;
-double  g_dPrevCustomerTime;
 double  g_dCooldown;
 double  g_dFrozen;
 SKeyEvent g_skKeyEvent[K_COUNT];
@@ -405,6 +403,7 @@ void updateGame(double dt)       // gameplay logic
         if (entity->getType() == Entity::TYPE_HOARDER && !isContesting)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            hoarder->updatePath(map);
             if (toiletPaper != nullptr)
             {
                 hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
@@ -421,6 +420,7 @@ void updateGame(double dt)       // gameplay logic
             }
             else if (g_dFrozen<=5.0)
             {
+                karen->updatePath(map);
                 if (karen->getIsEnd() == true)
                 {
                     karen->setStart(map);

@@ -31,6 +31,7 @@ public:
 	~Karen();
 	bool aggro(Entity* player,Map &map);
 	void createPath(Map& map);
+	void updatePath(Map& map);
 	bool solveAStar();
 	void setStart(Map &map);
 	void setIsEnd(bool isend);

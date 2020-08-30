@@ -90,6 +90,30 @@ void Karen::createPath(Map& map)
 	start = &nodes[ycheck * mapWidth + xcheck];
 }
 
+void Karen::updatePath(Map& map)
+{
+	for (int x = 0; x < mapWidth; ++x)
+	{
+		for (int y = 0; y < mapHeight; ++y)
+		{
+			int i = y * mapWidth + x;
+			nodes[i].pos.X = x; // to find which node
+			nodes[i].pos.Y = y;
+			// if it's a wall, set bObstacle to true
+			if (map.getEntity(x, y - 1) == 'w' ||
+				map.getEntity(x, y - 1) == 'C' ||
+				map.getEntity(x, y - 1) == (char)4 ||
+				map.getEntity(x, y - 1) == 'P' ||
+				map.getEntity(x, y - 1) == 'H')
+				nodes[i].bObstacle = true;
+			else
+				nodes[i].bObstacle = false;
+			nodes[i].parent = NULL;
+			nodes[i].bVisited = false;
+		}
+	}
+}
+
 bool Karen::solveAStar()
 {
 	// reset navigation graph - default all node states
