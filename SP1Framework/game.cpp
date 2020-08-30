@@ -452,7 +452,6 @@ void updateGame(double dt)       // gameplay logic
             if (chad->checkCollision(playerPtr))
             {
                 chadPush();
-                player.setActive(true);
                 renderCharacter();
             }
         }
@@ -462,7 +461,6 @@ void updateGame(double dt)       // gameplay logic
             if (customer->checkCollision(playerPtr))
             {
                 customerBlock();
-                player.setActive(true);
                 renderCharacter();
             }
         }
@@ -473,7 +471,6 @@ void updateGame(double dt)       // gameplay logic
             if (cop->checkCollision(playerPtr))
             {
                 copBlock();
-                player.setActive(true);
                 renderCharacter();
             }
         }

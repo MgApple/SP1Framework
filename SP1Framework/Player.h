@@ -14,20 +14,16 @@ private:
 		NONE
 	};
 	int inventory[3];
-	int stamina;
-	bool hasSpeedBuff, isActive;
+	bool hasSpeedBuff;
 	DIRECTION direction;
 
 public:
 	Player();
 	~Player();
-	void setActive(bool);
-	bool getActive();
 	void setSpeed(bool);
 	bool getSpeed();
 	void move(Map& map, const double dt);
 	void movement(Map &map, SKeyEvent* key);
-	void render();
 	enum DIRECTION getDirection();
 };
 
