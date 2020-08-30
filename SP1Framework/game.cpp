@@ -37,7 +37,6 @@ double  g_dElapsedTime;
 double  g_dDeltaTime;
 double  g_dPlayerTime;
 double  g_dPrevPlayerTime;
-double  g_dCooldown;
 double  g_dFrozen;
 SKeyEvent g_skKeyEvent[K_COUNT];
 
@@ -510,12 +509,6 @@ void updateGame(double dt, Map &map)       // gameplay logic
         }
     }
 
-    double coolDown = g_dPlayerTime - g_dCooldown;
-    if (player.getSpeed() && coolDown > 5.0f)
-    {
-        player.setSpeed(false);
-        g_dCooldown = g_dPlayerTime;
-    }
 }
 
 void gameOverWait()
