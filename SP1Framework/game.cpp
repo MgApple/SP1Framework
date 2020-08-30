@@ -431,6 +431,14 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 hoarder->movement(map, dt);
                 if (hoarder->checkCollision(playerPtr))
                 {
+                    if (g_eGameState == S_TUTORIAL) {
+                        COORD temp;
+                        std::ostringstream ss;
+                        ss << "A fellow Hoarder trying to beat you at your own game, they will try to grab the toilet paper before you do." << "PRESS SPACE TO CONTINUE";
+                        temp.X = 15;
+                        temp.Y = 12;
+                        g_Console.writeToBuffer(temp, ss.str());
+                    }
                     enemyBlock(map,entity);
                     renderCharacter();
                 }
@@ -463,6 +471,14 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 karen->move(map, dt);
                 if (karen->checkCollision(playerPtr))
                 {
+                    if (g_eGameState == S_TUTORIAL) {
+                        COORD temp;
+                        std::ostringstream ss;
+                        ss << "A feisty Mother who just wants to argue, freezes you in place for 3 seconds to argue." << "PRESS SPACE TO CONTINUE";
+                        temp.X = 15;
+                        temp.Y = 12;
+                        g_Console.writeToBuffer(temp, ss.str());
+                    }
                     enemyBlock(map,entity);
                     renderCharacter();
                 }
@@ -475,6 +491,14 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Chad* chad = dynamic_cast<Chad*>(entity);
             if (chad->checkCollision(playerPtr))
             {
+                if (g_eGameState == S_TUTORIAL) {
+                    COORD temp;
+                    std::ostringstream ss;
+                    ss << "A jerk who likes to push people when you bump into him, pushes you away when you collide with them." << "PRESS SPACE TO CONTINUE";
+                    temp.X = 15;
+                    temp.Y = 12;
+                    g_Console.writeToBuffer(temp, ss.str());
+                }   
                 chadPush(map);
                 renderCharacter();
             }
@@ -484,6 +508,14 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Customer* customer = dynamic_cast<Customer*>(entity);
             if (customer->checkCollision(playerPtr))
             {
+                if (g_eGameState == S_TUTORIAL) {
+                    COORD temp;
+                    std::ostringstream ss;
+                    ss << "A normal person who may or may not block your path." << "PRESS SPACE TO CONTINUE";
+                    temp.X = 15;
+                    temp.Y = 12;
+                    g_Console.writeToBuffer(temp, ss.str());
+                }
                 enemyBlock(map,entity);
                 renderCharacter();
             }
@@ -494,6 +526,14 @@ void updateGame(double dt, Map &map)       // gameplay logic
             Cop* cop = dynamic_cast<Cop*>(entity);
             if (cop->checkCollision(playerPtr))
             {
+                if (g_eGameState == S_TUTORIAL) {
+                    COORD temp;
+                    std::ostringstream ss;
+                    ss << "A mall cop trying to do his job, stands and blocks certain paths at random." << "PRESS SPACE TO CONTINUE";
+                    temp.X = 15;
+                    temp.Y = 12;
+                    g_Console.writeToBuffer(temp, ss.str());
+                }
                 enemyBlock(map,entity);
                 renderCharacter();
             }
@@ -504,6 +544,17 @@ void updateGame(double dt, Map &map)       // gameplay logic
                 if (entity->getType() != 0 && entity->getType()!=2 && entity->getType()!=6)
                 {
                     entity->setState(true);
+                }
+                else if (entity->getType() == 0)
+                {
+                    if (g_eGameState == S_TUTORIAL) {
+                        COORD temp;
+                        std::ostringstream ss;
+                        ss << "The objective, collect as many as you can before time runs out." << "PRESS SPACE TO CONTINUE";
+                        temp.X = 15;
+                        temp.Y = 12;
+                        g_Console.writeToBuffer(temp, ss.str());
+                    }
                 }
                 pickedUpItem(map, toiletPaper, entity, player);
             }
