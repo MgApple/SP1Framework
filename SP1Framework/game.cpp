@@ -493,11 +493,11 @@ void updateGame(double dt)       // gameplay logic
         }
     }
 
-    double coolDown = g_dElapsedTime - g_dCooldown;
+    double coolDown = g_dPlayerTime - g_dCooldown;
     if (player.getSpeed() && coolDown > 5.0f)
     {
         player.setSpeed(false);
-        g_dCooldown = g_dElapsedTime;
+        g_dCooldown = g_dPlayerTime;
     }
 }
 
