@@ -414,13 +414,13 @@ void updateGame(double dt)       // gameplay logic
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
-            if (playerCheck == true && g_dFrozen <= 0.0)
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr,map))
             {
                 g_dFrozen = 8.0;
             }
             else if (g_dFrozen<=5.0)
             {
-                Karen* karen = dynamic_cast<Karen*>(entity);
                 if (karen->getIsEnd() == true)
                 {
                     karen->setStart(map);
@@ -815,17 +815,17 @@ void renderMap()
         Entity* entity = (Entity*)*it;
         if (entity->getType() == Entity::TYPE_KAREN)
         {
-            camera.X = entity->getPos('x') - 5;
-            camera.Y = entity->getPos('y') - 2;
-            if (camera.X < 5)
-                camera.X = 5;
-            else if (camera.X > g_Console.getConsoleSize().X - 5)
-                camera.X = g_Console.getConsoleSize().X - 5;
-            if (camera.Y < 3)
-                camera.Y = 3;
-            else if (camera.Y > g_Console.getConsoleSize().Y - 3)
-                camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2, true);
+            camera.X = entity->getPos('x') - 7;
+            camera.Y = entity->getPos('y') - 4;
+            if (camera.X < 7)
+                camera.X = 7;
+            else if (camera.X > g_Console.getConsoleSize().X - 7)
+                camera.X = g_Console.getConsoleSize().X - 7;
+            if (camera.Y < 4)
+                camera.Y = 4;
+            else if (camera.Y > g_Console.getConsoleSize().Y - 4)
+                camera.Y = g_Console.getConsoleSize().Y - 4;
+            renderCamera(camera, entity->getPos('x') - 7, entity->getPos('y') - 4, entity->getPos('x') + 8, entity->getPos('y') + 3, true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
