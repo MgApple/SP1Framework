@@ -537,9 +537,12 @@ void render()
     case S_MAINMENU: renderMainMenu();
         break;
     case S_TUTORIAL:
+        map.loadtutorial();
         renderTutorial();
         break;
-    case S_GAME: renderGame();
+    case S_GAME: 
+        map.loadMap();
+        renderGame();
         renderHUD(); // renders debug information, frame rate, elapsed time, etc
         break;
     case S_GAMEOVER: renderGameOver();
@@ -681,6 +684,8 @@ void freeMemory(Map& map)
     spamPos = 35;
     map.reloadMap();
     map.loadMap();
+    map.reloadtutorial();
+    map.loadtutorial();
 }
 
 void renderGameOver()
