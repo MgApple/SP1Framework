@@ -809,7 +809,7 @@ void renderMap()
                 COORD camera;
                 camera.X = entity->getPos('x') - 2;
                 camera.Y = entity->getPos('y') - 1;
-                renderCamera(camera, map, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1 );
+                renderCamera(camera, map, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1 );
             }
         }
         if (!isBeingHeld) {
