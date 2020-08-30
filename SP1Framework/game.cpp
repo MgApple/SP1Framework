@@ -726,9 +726,13 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool ka
     for (int r = lowY; r < highY; r++)
     {
         camera.Y = r + 1;
+        if (r < 0 || r>24)
+            continue;
         for (int c = lowX; c < highX; c++)
         {
             camera.X = c;
+            if (c < 0 || c>80)
+                continue;
             for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
             {
                 Entity* entity = (Entity*)*it;
@@ -812,14 +816,6 @@ void renderMap()
     COORD camera;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
-     if (camera.X < 12)
-        camera.X = 12;
-    else if (camera.X > g_Console.getConsoleSize().X - 12)
-        camera.X = g_Console.getConsoleSize().X - 12;
-    if (camera.Y < 5)
-        camera.Y = 5;
-    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
-        camera.Y = g_Console.getConsoleSize().Y - 5;
     renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
@@ -828,14 +824,6 @@ void renderMap()
         {
             camera.X = entity->getPos('x') - 7;
             camera.Y = entity->getPos('y') - 4;
-            if (camera.X < 7)
-                camera.X = 7;
-            else if (camera.X > g_Console.getConsoleSize().X - 7)
-                camera.X = g_Console.getConsoleSize().X - 7;
-            if (camera.Y < 4)
-                camera.Y = 4;
-            else if (camera.Y > g_Console.getConsoleSize().Y - 4)
-                camera.Y = g_Console.getConsoleSize().Y - 4;
             renderCamera(camera, entity->getPos('x') - 7, entity->getPos('y') - 4, entity->getPos('x') + 8, entity->getPos('y') + 3, true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
