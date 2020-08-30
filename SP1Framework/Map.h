@@ -9,6 +9,7 @@ public:
 	~Map(void);
 	char getEntity(int x, int y);
 	void setEntity(int x, int y, char e);
+	void reloadMap(void);
 	void loadMap(void);
 	void loadtutorial(void);
 };

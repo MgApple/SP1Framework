@@ -60,6 +60,30 @@ void Hoarder::createPath(Map& map)
     end = &nodes[pos.Y * mapWidth + pos.X];
 }
 
+void Hoarder::updatePath(Map& map)
+{
+    for (int x = 0; x < mapWidth; ++x)
+    {
+        for (int y = 0; y < mapHeight; ++y)
+        {
+            int i = y * mapWidth + x;
+            nodes[i].pos.X = x; // to find which node
+            nodes[i].pos.Y = y;
+            // if it's a wall, set bObstacle to true
+            if (map.getEntity(x, y - 1) == 'w' ||
+                map.getEntity(x, y - 1) == 'C' ||
+                map.getEntity(x, y - 1) == (char)4 ||
+                map.getEntity(x, y - 1) == 'P' ||
+                map.getEntity(x, y - 1) == 'K')
+                nodes[i].bObstacle = true;
+            else
+                nodes[i].bObstacle = false;
+            nodes[i].parent = NULL;
+            nodes[i].bVisited = false;
+        }
+    }
+}
+
 bool Hoarder::checkCollision()
 {
     return false;

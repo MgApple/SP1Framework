@@ -19,6 +19,7 @@ public:
 	Entity(void);
 	Entity(TYPE t);
 	~Entity(void);
+
 	int getType(void);
 	int getPos(char p);
 	void setPos(char p, int i);
@@ -26,7 +27,7 @@ public:
 	void setState(bool state);
 	void reLoc(void);
 
-	virtual void move(Map& map, const double dt = 0) = 0; // pure virtual won't allow usage of Entity as an object
+	virtual void move(Map& map, const double dt = 0) = 0;
 	virtual WORD getCharColor();
 	virtual void setCharColor(WORD);
 protected:

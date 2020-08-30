@@ -22,6 +22,15 @@ void Map::setEntity(int x, int y, char e)
 	map[x][y] = e;
 }
 
+void Map::reloadMap(void)
+{
+	for (int r = 0; r < 80; r++)
+	{
+		for (int c = 0; c < 24; c++)
+			map[r][c] = ' ';
+	}
+}
+
 void Map::loadMap(void)
 {
 	std::ifstream mapFile;

@@ -35,15 +35,13 @@ bool playerCheck = false;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
+double  g_dPlayerTime;
 double  g_dPrevPlayerTime;
-double  g_dPrevChadTime;
-double  g_dPrevCustomerTime;
 double  g_dCooldown;
 double  g_dFrozen;
 SKeyEvent g_skKeyEvent[K_COUNT];
-//SMouseEvent g_mouseEvent;
 
-// Game specific variables here HELP
+// Game specific variables here
 Entity*      playerPtr;
 Player       player;
 Item*        toiletPaper;
@@ -84,6 +82,7 @@ void init( void )
     map.loadMap();
     // Set precision for floating point output
     g_dElapsedTime = 60.0;
+    g_dPlayerTime = 0.0;
     g_dFrozen = 0.0;
 
     chadCount = 0;
@@ -103,16 +102,10 @@ void init( void )
     entityList.push_back(playerPtr);
     toiletPaper = new Item();
 
-
-    /*g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
-    g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;
-    g_sChar.m_bActive = true;*/
-    // sets the width, height and the font name to use in the console
     g_Console.setConsoleFont(0, 16, L"Consolas");
 
     // remember to set your keyboard handler, so that your functions can be notified of input events
     g_Console.setKeyboardHandler(keyboardHandler);
-    //g_Console.setMouseHandler(mouseHandler);
 }
 
 //--------------------------------------------------------------
@@ -170,38 +163,12 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
     {
     case S_MAINMENU: gameplayKBHandler(keyboardEvent);
         break;
-
+    case S_TUTORIAL:gameplayKBHandler(keyboardEvent);
+        break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
     }
 }
-
-//--------------------------------------------------------------
-// Purpose  : This is the handler for the mouse input. Whenever there is a mouse event, this function will be called.
-//            Ideally, you should pass the key event to a specific function to handle the event.
-//            This is because in some states, some keys would be disabled. Hence, to reduce your code complexity, 
-//            it would be wise to split your keyboard input handlers separately.
-//            
-//            For the mouse event, if the mouse is not moved, no event will be sent, hence you should not reset the mouse status.
-//            However, if the mouse goes out of the window, you would not be able to know either. 
-//
-//            The MOUSE_EVENT_RECORD struct has more attributes that you can use, if you are adventurous enough.
-//
-//            In this case, we are not handling any mouse event in the Splashscreen state
-//            
-// Input    : const MOUSE_EVENT_RECORD& mouseEvent - reference to a mouse event struct
-// Output   : void
-//--------------------------------------------------------------
-//void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
-//{    
-//    switch (g_eGameState)
-//    {
-//    case S_MAINMENU: gameplayMouseHandler(mouseEvent);
-//        break;
-//    case S_GAME: // handle gameplay mouse event
-//        break;
-//    }
-//}
 
 //--------------------------------------------------------------
 // Purpose  : This is the keyboard handler in the game state. Whenever there is a keyboard event in the game state, this function will be called.
@@ -214,7 +181,7 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
 //--------------------------------------------------------------
 void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
 {
-    double time = g_dElapsedTime - g_dPrevPlayerTime;
+    double time = g_dPlayerTime - g_dPrevPlayerTime;
 
     // here, we map the key to our enums
     EKEYS key = K_COUNT;
@@ -234,33 +201,14 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent)
     // so we are tracking if a key is either pressed, or released
     if (key != K_COUNT)
     {
-        /*if (time > 0.2f) */
-        {  //player.setKey(g_skKeyEvent);
+        if (time > 0.1) 
+        {  
             g_skKeyEvent[key].keyDown = keyboardEvent.bKeyDown;
             g_skKeyEvent[key].keyReleased = !keyboardEvent.bKeyDown;
-            g_dPrevPlayerTime = g_dElapsedTime;
+            g_dPrevPlayerTime = g_dPlayerTime;
         }
     }    
 }
-
-//--------------------------------------------------------------
-// Purpose  : This is the mouse handler in the game state. Whenever there is a mouse event in the game state, this function will be called.
-//            
-//            If mouse clicks are detected, the corresponding bit for that mouse button will be set.
-//            mouse wheel, 
-//            
-// Input    : const KEY_EVENT_RECORD& keyboardEvent
-// Output   : void
-//--------------------------------------------------------------
-//void gameplayMouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
-//{
-//    if (mouseEvent.dwEventFlags & MOUSE_MOVED) // update the mouse position if there are no events
-//    {
-//        g_mouseEvent.mousePosition = mouseEvent.dwMousePosition;
-//    }
-//    g_mouseEvent.buttonState = mouseEvent.dwButtonState;
-//    g_mouseEvent.eventFlags = mouseEvent.dwEventFlags;
-//}
 
 //--------------------------------------------------------------
 // Purpose  : Update function
@@ -281,6 +229,7 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime -= dt;
     g_dDeltaTime = dt;
+    g_dPlayerTime += dt;
     if (g_dFrozen >= 0)
         g_dFrozen -= dt;
     switch (g_eGameState)
@@ -289,7 +238,7 @@ void update(double dt)
             break;
         case S_MAINMENU: updateMenu(); //temp thing until we can get menu buttons to work
             break;
-        case S_TUTORIAL: updateTutorial(dt);
+        case S_TUTORIAL: updateGame(dt);
             break;
         case S_GAME: updateGame(dt); // gameplay logic when we are in the game
             break;
@@ -409,7 +358,7 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     else {
         if (!(entity->getState())) { // if is not holding toilet paper
             entity->setState(true);
-            map.setEntity(entity->getPos('x'), entity->getPos('y' - 1), (char)5);
+            map.setEntity(entity->getPos('x'), entity->getPos('y') - 1, ' '); 
             item->removeItem(map);
         }
     }
@@ -430,15 +379,10 @@ void titleWait()
         g_eGameState = S_MAINMENU;
 }
 
-void updateTutorial(double dt)
-{
-
-}
-
 void updateGame(double dt)       // gameplay logic
 {
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    if(!isContesting && g_dFrozen<=5.0)
+    if (!isContesting && g_dFrozen <= 5.0)
         player.movement(map, g_skKeyEvent); // moves the character, collision detection, physics, etc
 
     if (spamIncrease >= 44)
@@ -464,74 +408,13 @@ void updateGame(double dt)       // gameplay logic
         ++spamIncrease;
         spamCount = 0;
     }
-   /* if (chadCount < 3)
-    {
-        Entity* chadPtr = new Chad;
-        checkLocation(map, chadPtr);
-        Chad* chad = dynamic_cast<Chad*>(chadPtr);
-        chad->setPlayer(playerPtr);
-        entityList.push_back(chadPtr);
-        ++chadCount;
-    }
-    if (copCount < 2)
-    {
-        Entity* copPtr = new Cop;
-        checkLocation(map, copPtr);
-        Cop* cop = dynamic_cast<Cop*>(copPtr);
-        cop->setPlayer(playerPtr);
-        entityList.push_back(copPtr);
-        ++copCount;
-    }
-    if (customerCount < 5)
-    {
-        Entity* customerPtr = new Customer;
-        checkLocation(map, customerPtr);
-        Customer* customer = dynamic_cast<Customer*>(customerPtr);
-        customer->setPlayer(playerPtr);
-        entityList.push_back(customerPtr);
-        ++customerCount;
-    }
-    if (karenCount < 2)
-    {
-        Entity* karenPtr = new Karen;
-        checkLocation(map, karenPtr);
-        Karen* karen = dynamic_cast<Karen*>(karenPtr);
-        karen->createPath(map);
-        entityList.push_back(karenPtr);
-        ++karenCount;
-    }
-    if (!spawnedTP)
-    {
-        bool isBeingHeld = false;
-        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
-            Entity* entity = (Entity*)*it;
-            if (entity->getState()) {
-                isBeingHeld = true;
-            }
-        }
-        if (!isBeingHeld) {
-            toiletPaper = new Item();
-            checkItem(map, toiletPaper);
-            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
-            spawnedTP = true;
-        }
-    }
-    if (hoarderCount < 1)
-    {
-        Entity* hoarderPtr = new Hoarder;
-        checkLocation(map, hoarderPtr);
-        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
-        hoarder->createPath(map);
-        entityList.push_back(hoarderPtr);
-        ++hoarderCount;
-    }*/
-
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
         if (entity->getType() == Entity::TYPE_HOARDER && !isContesting)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
+            hoarder->updatePath(map);
             if (toiletPaper != nullptr)
             {
                 hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
@@ -541,13 +424,14 @@ void updateGame(double dt)       // gameplay logic
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
-            if (playerCheck == true && g_dFrozen <= 0.0)
+            Karen* karen = dynamic_cast<Karen*>(entity);
+            if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr,map))
             {
                 g_dFrozen = 8.0;
             }
             else if (g_dFrozen<=5.0)
             {
-                Karen* karen = dynamic_cast<Karen*>(entity);
+                karen->updatePath(map);
                 if (karen->getIsEnd() == true)
                 {
                     karen->setStart(map);
@@ -566,7 +450,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 chadPush();
                 player.setActive(true);
-                playerPtr->setCharColor(chad->getCharColor());
                 renderCharacter();
             }
         }
@@ -577,7 +460,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 customerBlock();
                 player.setActive(true);
-                playerPtr->setCharColor(customer->getCharColor());
                 renderCharacter();
             }
         }
@@ -589,7 +471,6 @@ void updateGame(double dt)       // gameplay logic
             {
                 copBlock();
                 player.setActive(true);
-                playerPtr->setCharColor(cop->getCharColor());
                 renderCharacter();
             }
         }
@@ -599,10 +480,6 @@ void updateGame(double dt)       // gameplay logic
                 if (entity->getType() != 0 && entity->getType()!=2 && entity->getType()!=6)
                 {
                     entity->setState(true);
-                    COORD camera;
-                    camera.X = entity->getPos('x') - 2;
-                    camera.Y = entity->getPos('y') - 1;
-                    renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
                 }
                 pickedUpItem(map, toiletPaper, entity, player);
             }
@@ -619,11 +496,6 @@ void updateGame(double dt)       // gameplay logic
         player.setSpeed(false);
         g_dCooldown = g_dElapsedTime;
     }
-    //chadPush(); // checks if chad pushes player
-    //customer->move();
-    //customerBlock();
-    //moveCharacter();    
-                        // sound can be played here too.
 }
 
 void gameOverWait()
@@ -658,13 +530,15 @@ void render()
         break;
     case S_MAINMENU: renderMainMenu();
         break;
+    case S_TUTORIAL:
+        renderTutorial();
+        break;
     case S_GAME: renderGame();
         renderHUD(); // renders debug information, frame rate, elapsed time, etc
         break;
     case S_GAMEOVER: renderGameOver();
         break;
     } 
-    //renderInputEvents();    // renders status of input events
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
 
@@ -746,6 +620,9 @@ void renderMainMenu()  // renders the main menu
         }
         break;
     }
+
+    freeMemory(map);
+
 }
 
 void renderTitle()
@@ -764,17 +641,18 @@ void renderTitle()
     }
 }
 
+void renderTutorial()
+{
+    renderTutorialMap();        // renders the map to the buffer first
+    renderCharacter();  // renders the character into the buffer
+    if (spawnedTP)
+        renderItem(toiletPaper);
+}
+
 void renderGame()
 {
     renderMap();        // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
-    /*for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
-    {
-        Entity* entity = (Entity*)*it;
-        renderNPC(entity);
-        if (isContesting)
-            renderBar();
-    }*/
     if (spawnedTP)
         renderItem(toiletPaper);
 }
@@ -797,6 +675,8 @@ void freeMemory(Map& map)
     karenCount = 0;
     spamCount = 0;
     spamIncrease = 35;
+    map.reloadMap();
+    map.loadMap();
 }
 
 void renderGameOver()
@@ -826,49 +706,17 @@ void renderGameOver()
     std::ofstream savefile("save.txt");
     savefile << "high_score:" << high_score;
     savefile.close();
-
-    freeMemory(map);
 }
 
-void renderKarenCamera(COORD camera, int lowX, int lowY, int highX, int highY)
+void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool karencheck)
 {
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
     0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
     00
     };
-    playerCheck = false;
-    for (int r = lowY; r < highY; r++)
-    {
-        camera.Y = r + 1;
-        for (int c = lowX; c < highX; c++)
-        {
-            camera.X = c;
-            for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
-            {
-                Entity* entity = (Entity*)*it;
-                if (entity->getPos('x') == camera.X && entity->getPos('y') == camera.Y)
-                    renderNPC(entity);
-                if (isContesting)
-                    renderBar();
-            }
-            if (map.getEntity(c, r) == 'w')
-                g_Console.writeToBuffer(camera, (char)219, colors[4]);
-            else if (map.getEntity(c, r) == ' ')
-                g_Console.writeToBuffer(camera, (char)32, colors[6]);
-            if (playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
-                playerCheck = true;
-        }
-    }
-}
-
-void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
-{
-    const WORD colors[] = {
-    0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
-    0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-    00
-    };
+    if (karencheck==true)
+        playerCheck = false;
     for (int r = lowY; r < highY; r++)
     {
         camera.Y = r + 1;
@@ -888,6 +736,8 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY)
                 g_Console.writeToBuffer(camera, (char)219, colors[4]);
             else if (map.getEntity(c, r) == ' ')
                 g_Console.writeToBuffer(camera, (char)32, colors[6]);
+            if (karencheck==true && playerPtr->getPos('x') == camera.X && playerPtr->getPos('y') == camera.Y)
+                playerCheck = true;
         }
     }
 }
@@ -937,6 +787,10 @@ void renderMap()
             Entity* entity = (Entity*)*it;
             if (entity->getState()) {
                 isBeingHeld = true;
+                COORD camera;
+                camera.X = entity->getPos('x') - 2;
+                camera.Y = entity->getPos('y') - 1;
+                renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
             }
         }
         if (!isBeingHeld) {
@@ -955,19 +809,116 @@ void renderMap()
         entityList.push_back(hoarderPtr);
         ++hoarderCount;
     }
-    // Set up sample colours, and output shadings
     COORD camera;
-    /*for (int i = 0; i < 12; ++i)
-    {
-        c.X = 5 * i;
-        c.Y = i + 1;
-        colour(colors[i]);
-        g_Console.writeToBuffer(c, " °±²Û", colors[i]);
-    }*/
-    //Map map;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
      if (camera.X < 12)
+        camera.X = 12;
+    else if (camera.X > g_Console.getConsoleSize().X - 12)
+        camera.X = g_Console.getConsoleSize().X - 12;
+    if (camera.Y < 5)
+        camera.Y = 5;
+    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
+        camera.Y = g_Console.getConsoleSize().Y - 5;
+    renderCamera(camera, playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    {
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() == Entity::TYPE_KAREN)
+        {
+            camera.X = entity->getPos('x') - 7;
+            camera.Y = entity->getPos('y') - 4;
+            if (camera.X < 7)
+                camera.X = 7;
+            else if (camera.X > g_Console.getConsoleSize().X - 7)
+                camera.X = g_Console.getConsoleSize().X - 7;
+            if (camera.Y < 4)
+                camera.Y = 4;
+            else if (camera.Y > g_Console.getConsoleSize().Y - 4)
+                camera.Y = g_Console.getConsoleSize().Y - 4;
+            renderCamera(camera, entity->getPos('x') - 7, entity->getPos('y') - 4, entity->getPos('x') + 8, entity->getPos('y') + 3, true);
+        }
+        else if (entity->getType() == Entity::TYPE_HOARDER)
+        {
+            camera.X = entity->getPos('x') - 2;
+            camera.Y = entity->getPos('y') - 1;
+            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+        }
+    }
+    if (spawnedTP) {
+        camera.X = toiletPaper->getPos('x') - 2;
+        camera.Y = toiletPaper->getPos('y') - 1;
+        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+    }
+}
+
+void renderTutorialMap()
+{
+    if (chadCount < 1)
+    {
+        Entity* chadPtr = new Chad;
+        checkLocation(map, chadPtr);
+        Chad* chad = dynamic_cast<Chad*>(chadPtr);
+        chad->setPlayer(playerPtr);
+        entityList.push_back(chadPtr);
+        ++chadCount;
+    }
+    if (copCount < 1)
+    {
+        Entity* copPtr = new Cop;
+        checkLocation(map, copPtr);
+        Cop* cop = dynamic_cast<Cop*>(copPtr);
+        cop->setPlayer(playerPtr);
+        entityList.push_back(copPtr);
+        ++copCount;
+    }
+    if (customerCount < 1)
+    {
+        Entity* customerPtr = new Customer;
+        checkLocation(map, customerPtr);
+        Customer* customer = dynamic_cast<Customer*>(customerPtr);
+        customer->setPlayer(playerPtr);
+        entityList.push_back(customerPtr);
+        ++customerCount;
+    }
+    if (karenCount < 1)
+    {
+        Entity* karenPtr = new Karen;
+        checkLocation(map, karenPtr);
+        Karen* karen = dynamic_cast<Karen*>(karenPtr);
+        karen->createPath(map);
+        entityList.push_back(karenPtr);
+        ++karenCount;
+    }
+    if (!spawnedTP)
+    {
+        bool isBeingHeld = false;
+        for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it) {
+            Entity* entity = (Entity*)*it;
+            if (entity->getState()) {
+                isBeingHeld = true;
+            }
+        }
+        if (!isBeingHeld) {
+            toiletPaper = new Item();
+            checkItem(map, toiletPaper);
+            map.setEntity(toiletPaper->getPos('x'), toiletPaper->getPos('y') - 1, (char)8);
+            spawnedTP = true;
+        }
+    }
+    if (hoarderCount < 1)
+    {
+        Entity* hoarderPtr = new Hoarder;
+        checkLocation(map, hoarderPtr);
+        Hoarder* hoarder = dynamic_cast<Hoarder*>(hoarderPtr);
+        hoarder->createPath(map);
+        entityList.push_back(hoarderPtr);
+        ++hoarderCount;
+    }
+    COORD camera;
+    camera.X = playerPtr->getPos('x') - 12;
+    camera.Y = playerPtr->getPos('y') - 5;
+    if (camera.X < 12)
         camera.X = 12;
     else if (camera.X > g_Console.getConsoleSize().X - 12)
         camera.X = g_Console.getConsoleSize().X - 12;
@@ -991,7 +942,7 @@ void renderMap()
                 camera.Y = 3;
             else if (camera.Y > g_Console.getConsoleSize().Y - 3)
                 camera.Y = g_Console.getConsoleSize().Y - 3;
-            renderKarenCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2);
+            renderCamera(camera, entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2,true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
@@ -1005,30 +956,6 @@ void renderMap()
         camera.Y = toiletPaper->getPos('y') - 1;
         renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
-    /*else if (map.getEntity(R, C) == 'K')
-        g_Console.writeToBuffer(c, 'K', 0xDF);
-    else if (map.getEntity(R, C) == 'C')
-        g_Console.writeToBuffer(c, 'C', 0x0F);
-    else if (map.getEntity(R, C) == 'P')
-        g_Console.writeToBuffer(c, 'P', 0x1F);
-    else if (map.getEntity(R, C) == (char)4)
-        g_Console.writeToBuffer(c, (char)4, 0x0C);
-    else if (map.getEntity(R, C) == 'H')
-        g_Console.writeToBuffer(c, 'H', 0x06);
-    else if (map.getEntity(R, C) == (char)8)
-        g_Console.writeToBuffer(c, (char)8, 0x6F);
-    else if (map.getEntity(R, C) == (char)22)
-        g_Console.writeToBuffer(c, (char)22, 0x6F);
-    else if (map.getEntity(R, C) == (char)43)
-        g_Console.writeToBuffer(c, (char)43, 0x6F);
-    else if (map.getEntity(R, C) == (char)127)
-        g_Console.writeToBuffer(c, (char)127, 0x6F);
-    else if (map.getEntity(R, C) == (char)13)
-        g_Console.writeToBuffer(c, (char)13, 0x6F);
-    else if (map.getEntity(R, C) == (char)7)
-        g_Console.writeToBuffer(c, (char)7, 0x6F);*/
-        //else
-            //g_Console.writeToBuffer(c, 'n', colors[12]);
 }
 
 void renderCharacter()
@@ -1138,7 +1065,6 @@ void renderBar()
     g_Console.writeToBuffer(pos2, (char)178, 0x2B);
 }
 
-// this is an example of how you would use the input eventss
 void renderInputEvents()
 {
     // keyboard events
@@ -1173,47 +1099,7 @@ void renderInputEvents()
 
         COORD c = { startPos.X, startPos.Y + i };
         g_Console.writeToBuffer(c, ss.str(), 0x17);
-    }
-
-    // mouse events    
-    /*ss.str("");
-    ss << "Mouse position (" << g_mouseEvent.mousePosition.X << ", " << g_mouseEvent.mousePosition.Y << ")";
-    g_Console.writeToBuffer(g_mouseEvent.mousePosition, ss.str(), 0x59);
-    ss.str("");
-    switch (g_mouseEvent.eventFlags)
-    {
-    case 0:
-        if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-        {
-            ss.str("Left Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 1, ss.str(), 0x59);
-        }
-        else if (g_mouseEvent.buttonState == RIGHTMOST_BUTTON_PRESSED)
-        {
-            ss.str("Right Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 2, ss.str(), 0x59);
-        }
-        else
-        {
-            ss.str("Some Button Pressed");
-            g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 3, ss.str(), 0x59);
-        }
-        break;
-    case DOUBLE_CLICK:
-        ss.str("Double Clicked");
-        g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 4, ss.str(), 0x59);
-        break;        
-    case MOUSE_WHEELED:
-        if (g_mouseEvent.buttonState & 0xFF000000)
-            ss.str("Mouse wheeled down");
-        else
-            ss.str("Mouse wheeled up");
-        g_Console.writeToBuffer(g_mouseEvent.mousePosition.X, g_mouseEvent.mousePosition.Y + 5, ss.str(), 0x59);
-        break;
-    default:        
-        break;
-    }*/
-    
+    }    
 }
 
 void chadPush()
