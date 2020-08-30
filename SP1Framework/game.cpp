@@ -32,6 +32,7 @@ bool spawnedTP = false;
 bool isContesting = false;
 bool isGameOver = false;
 bool playerCheck = false;
+COORD temp;
 
 double  g_dElapsedTime;
 double  g_dDeltaTime;
@@ -432,6 +433,8 @@ void updateGame(double dt, Map &map)       // gameplay logic
                     enemyBlock(map);
                     renderCharacter();
                 }
+                temp.X = hoarder->getPos('x');
+                temp.Y = hoarder->getPos('y');
             }
             else
             {
@@ -1151,22 +1154,22 @@ void chadPush(Map& map)
 
 void enemyBlock(Map& map)
 {
-    if (player.getDirection() == 0 &&
-        player.getPos('y') + 1 < 24 &&
-        map.getEntity(player.getPos('x'), player.getPos('y') - 1) == ' ')
+    if (player.getDirection() == 0 && player.getPos('y') + 1 < 24)
+    {
         playerPtr->setPos('y', playerPtr->getPos('y') + 1);
-    if (player.getDirection() == 1 && 
-        player.getPos('x') + 1 < 79 &&
-        map.getEntity(player.getPos('x') - 1, player.getPos('y')) == ' ')
+    }
+    else if (player.getDirection() == 1 && player.getPos('x') + 1 < 79)
+    {
         playerPtr->setPos('x', playerPtr->getPos('x') + 1);
-    if (player.getDirection() == 2 && 
-        player.getPos('y') - 1 > 1 && 
-        map.getEntity(player.getPos('x'), player.getPos('y') + 1) == ' ')
+    }
+    else if (player.getDirection() == 2 && player.getPos('y') - 1 > 1)
+    {
         playerPtr->setPos('y', playerPtr->getPos('y') - 1);
-    if (player.getDirection() == 3 && 
-        player.getPos('x') - 1 > 1 &&
-        map.getEntity(player.getPos('x') + 1, player.getPos('y')) == ' ')
+    }
+    else if (player.getDirection() == 3 && player.getPos('x') - 1 > 1)
+    {
         playerPtr->setPos('x', playerPtr->getPos('x') - 1);
+    }
 }
 
 void checkLocation(Map &map, Entity* entity)
