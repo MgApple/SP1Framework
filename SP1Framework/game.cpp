@@ -427,19 +427,22 @@ void updateGame(double dt)       // gameplay logic
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
         {
             Karen* karen = dynamic_cast<Karen*>(entity);
-            karen->updatePath(map);
             if (playerCheck == true && g_dFrozen <= 0.0 && karen->aggro(playerPtr, map))
             {
                 g_dFrozen = 8.0;
                 PlaySound(TEXT("karen_sfx.wav"), NULL, SND_FILENAME | SND_ASYNC);
             }
-            if (karen->getIsEnd() == true)
+            else if (g_dFrozen <= 5.0)
             {
-                karen->setStart(map);
-                karen->setIsEnd(false);
+                karen->updatePath(map);
+                if (karen->getIsEnd() == true)
+                {
+                    karen->setStart(map);
+                    karen->setIsEnd(false);
+                }
+                karen->solveAStar();
+                karen->move(map, dt);
             }
-            karen->solveAStar();
-            karen->move(map, dt);
         }
         else if (entity->getType() != Entity::TYPE_COP && !isContesting)
             entity->move(map, dt);
@@ -806,7 +809,7 @@ void renderMap()
     COORD camera;
     camera.X = playerPtr->getPos('x') - 12;
     camera.Y = playerPtr->getPos('y') - 5;
-    if (camera.X < 12)
+     if (camera.X < 12)
         camera.X = 12;
     else if (camera.X > g_Console.getConsoleSize().X - 12)
         camera.X = g_Console.getConsoleSize().X - 12;
