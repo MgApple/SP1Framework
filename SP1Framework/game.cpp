@@ -839,13 +839,13 @@ void renderMap()
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
@@ -1129,7 +1129,7 @@ void chadPush()
         for (int i = 0; i < 3; i++)
         {
             playerY--;
-            if (playerY == 1 || map.getEntity(playerX,playerY-1)!=' ')
+            if (playerY == 0 || map.getEntity(playerX,playerY-1)!=' ')
             {
                 playerY++;
                 break;
@@ -1141,10 +1141,28 @@ void chadPush()
         for (int i = 0; i < 4; i++)
         {
             playerX--;
-            if (playerX == 1 || map.getEntity(playerX, playerY-1) != ' ')
+            if (playerX == 0 || map.getEntity(playerX, playerY-1) != ' ')
             {
                 playerX++;
                 break;
+            }
+        }
+    }
+    for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
+    {//checks if Chad still has same position as player and pushes him slightly to one side
+        Entity* entity = (Entity*)*it;
+        if (entity->getType() == Entity::TYPE_CHAD) {
+            Chad* chad = dynamic_cast<Chad*>(entity);
+            if (chad->getPos('x')==playerX && chad->getPos('y')==playerY)
+            {
+                if (map.getEntity(playerX, playerY - 1 - 1) == ' ')
+                    playerY--;
+                else if (map.getEntity(playerX - 1, playerY - 1) == ' ')
+                    playerX--;
+                else if (map.getEntity(playerX + 1, playerY - 1) == ' ')
+                    playerX++;
+                else if (map.getEntity(playerX, playerY) == ' ')
+                    playerY++;
             }
         }
     }
