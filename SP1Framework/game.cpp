@@ -680,7 +680,7 @@ void freeMemory(Map& map)
 void renderGameOver()
 {
     COORD t;
-    t.X = 25;
+    t.X = 27;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
