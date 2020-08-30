@@ -747,21 +747,21 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool ka
 
 void renderMap()
 {
-    if (chadCount < 3)
+    if (chadCount < 5)
     {
         Entity* chadPtr = new Chad;
         checkLocation(map, chadPtr);
         entityList.push_back(chadPtr);
         ++chadCount;
     }
-    if (copCount < 2)
+    if (copCount < 5)
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
-    if (customerCount < 5)
+    if (customerCount < 10)
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);

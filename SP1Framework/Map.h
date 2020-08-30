@@ -3,7 +3,6 @@ class Map
 {
 private:
 	char map[80][24];
-	char tutorial[24][50];
 public:
 	Map(void);
 	~Map(void);
@@ -11,6 +10,6 @@ public:
 	void setEntity(int x, int y, char e);
 	void reloadMap(void);
 	void loadMap(void);
-	void reloadtutorial(void)
+	void reloadtutorial(void);
 	void loadtutorial(void);
 };
