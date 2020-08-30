@@ -386,9 +386,11 @@ void updateGame(double dt)       // gameplay logic
     if (spamPos >= 44) // if the spam bar is full
     {
         isContesting = false;
+        PlaySound(TEXT("sfx_point.wav"), NULL, SND_FILENAME | SND_ASYNC);
         ++current_score;
         if (current_score > high_score)
             high_score = current_score;
+        g_dElapsedTime += 5.0;
         for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
         {
             Entity* entity = (Entity*)*it;
@@ -509,10 +511,13 @@ void gameOverWait()
 
 void processUserInput()
 {
+    // goes to main menu if player is in tutorial and hits the escape key
+    if (g_skKeyEvent[K_ESCAPE].keyDown && g_eGameState == S_TUTORIAL)
+        g_eGameState = S_MAINMENU;
     // quits the game if player hits the escape key
     if (g_skKeyEvent[K_ESCAPE].keyReleased)
         g_bQuitGame = true;  
-    if (g_dElapsedTime < 0.0)
+    if (g_dElapsedTime < 0.0 && g_eGameState != S_TUTORIAL)
         g_eGameState = S_GAMEOVER;
 }
 
@@ -623,9 +628,7 @@ void renderMainMenu()  // renders the main menu
         }
         break;
     }
-
     freeMemory(map);
-
 }
 
 void renderTitle()
@@ -685,7 +688,7 @@ void freeMemory(Map& map)
 void renderGameOver()
 {
     COORD t;
-    t.X = 25;
+    t.X = 27;
     t.Y = 2;
     std::ifstream gameover;
     std::string line;
@@ -716,7 +719,6 @@ void renderCamera(COORD camera, int lowX, int lowY, int highX, int highY,bool ka
     const WORD colors[] = {
     0x1A, 0x2B, 0x3C, 0x4D, 0x5E, 0x6F,
     0xA1, 0xB2, 0xC3, 0xD4, 0xE5, 0xF6,
-    00
     };
     if (karencheck==true)
         playerCheck = false;
@@ -751,7 +753,6 @@ void renderMap()
     {
         Entity* chadPtr = new Chad;
         checkLocation(map, chadPtr);
-        Chad* chad = dynamic_cast<Chad*>(chadPtr);
         entityList.push_back(chadPtr);
         ++chadCount;
     }
@@ -759,7 +760,6 @@ void renderMap()
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
-        Cop* cop = dynamic_cast<Cop*>(copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -767,7 +767,6 @@ void renderMap()
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
-        Customer* customer = dynamic_cast<Customer*>(customerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
@@ -858,8 +857,8 @@ void renderTutorialMap()
     if (chadCount < 1)
     {
         Entity* chadPtr = new Chad; // create new entity
-        checkLocation(map, chadPtr); // to check if it spawns in the wall
-        Chad* chad = dynamic_cast<Chad*>(chadPtr); // to access the child class
+        //checkLocation(map, chadPtr); // to check if it spawns in the wall
+        //chadPtr->setPos('x', 15);
         entityList.push_back(chadPtr); // add the entity into entityList
         ++chadCount; // increase everytime an entity is made
     }
@@ -867,7 +866,6 @@ void renderTutorialMap()
     {
         Entity* copPtr = new Cop;
         checkLocation(map, copPtr);
-        Cop* cop = dynamic_cast<Cop*>(copPtr);
         entityList.push_back(copPtr);
         ++copCount;
     }
@@ -875,7 +873,6 @@ void renderTutorialMap()
     {
         Entity* customerPtr = new Customer;
         checkLocation(map, customerPtr);
-        Customer* customer = dynamic_cast<Customer*>(customerPtr);
         entityList.push_back(customerPtr);
         ++customerCount;
     }
