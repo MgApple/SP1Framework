@@ -367,12 +367,6 @@ void pickedUpItem(Map& map, Item* item, Entity* entity, Player& player)
     toiletPaper = nullptr;
 }
 
-void resetScore()
-{
-    if (g_dElapsedTime > 2.0) // wait for 2 seconds to switch to menu mode, else do nothing
-        g_eGameState = S_MAINMENU;
-}
-
 void titleWait()
 {
     if (g_dElapsedTime < 57.0) // wait for 3 seconds to switch to menu mode, else do nothing

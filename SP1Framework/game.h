@@ -72,7 +72,6 @@ void render      ( void );      // renders the current state of the game to the 
 void shutdown    ( void );      // do clean up, free memory
 
 void updateMenu();
-void resetScore();
 void titleWait();
 void updateGame(double dt);          // gameplay logic
 void gameOverWait();        // waits for time to pass in gameover screen
