@@ -907,12 +907,8 @@ void renderTutorialMap()
     camera.Y = playerPtr->getPos('y') - 5;
     if (camera.X < 12)
         camera.X = 12;
-    else if (camera.X > g_Console.getConsoleSize().X - 12)
-        camera.X = g_Console.getConsoleSize().X - 12;
     if (camera.Y < 5)
         camera.Y = 5;
-    else if (camera.Y > g_Console.getConsoleSize().Y - 5)
-        camera.Y = g_Console.getConsoleSize().Y - 5;
     renderCamera(camera, tutorial,playerPtr->getPos('x') - 12, playerPtr->getPos('y') - 5, playerPtr->getPos('x') + 13, playerPtr->getPos('y') + 4);
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
@@ -923,25 +919,21 @@ void renderTutorialMap()
             camera.Y = entity->getPos('y') - 2;
             if (camera.X < 5)
                 camera.X = 5;
-            else if (camera.X > g_Console.getConsoleSize().X - 5)
-                camera.X = g_Console.getConsoleSize().X - 5;
             if (camera.Y < 3)
                 camera.Y = 3;
-            else if (camera.Y > g_Console.getConsoleSize().Y - 3)
-                camera.Y = g_Console.getConsoleSize().Y - 3;
             renderCamera(camera, tutorial,entity->getPos('x') - 5, entity->getPos('y') - 3, entity->getPos('x') + 6, entity->getPos('y') + 2,true);
         }
         else if (entity->getType() == Entity::TYPE_HOARDER)
         {
             camera.X = entity->getPos('x') - 2;
             camera.Y = entity->getPos('y') - 1;
-            renderCamera(camera, tutorial, camera.X, camera.Y, entity->getPos('x') + 3, entity->getPos('y') + 1);
+            renderCamera(camera, tutorial, camera.X, camera.Y-1, entity->getPos('x') + 3, entity->getPos('y') + 1);
         }
     }
     if (spawnedTP) {
         camera.X = toiletPaper->getPos('x') - 2;
         camera.Y = toiletPaper->getPos('y') - 1;
-        renderCamera(camera, tutorial, camera.X, camera.Y, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
+        renderCamera(camera, tutorial, camera.X, camera.Y-1, toiletPaper->getPos('x') + 3, toiletPaper->getPos('y') + 1);
     }
 }
 
@@ -954,21 +946,6 @@ void renderCharacter()
     g_Console.writeToBuffer(temp, (char)21, playerPtr->getCharColor());
 }
 
-//void renderEffect()
-//{
-//    COORD temp;
-//    for (int C = 0; C < 24; C++)
-//    {
-//        temp.Y = C + 1;
-//        for (int R = 0; R < 80; R++)
-//        {
-//            temp.X = R;
-//            if (map.getEntity(R, C) == (char)23)
-//                g_Console.writeToBuffer(temp, (char)23, );
-//        }
-//    }
-//}
-
 void renderNPC(Entity* entity)
 {
     COORD temp;
@@ -977,19 +954,15 @@ void renderNPC(Entity* entity)
     switch (entity->getType())
     {
     case Entity::TYPE_CHAD:
-        //map.setEntity(temp.X, temp.Y, 'B');
         g_Console.writeToBuffer(temp, (char)4, entity->getCharColor());
         break;
     case Entity::TYPE_COP:
-        //map.setEntity(temp.X, temp.Y, 'P');
         g_Console.writeToBuffer(temp, 'P', entity->getCharColor());
         break;
     case Entity::TYPE_CUSTOMER:
-        //map.setEntity(temp.X, temp.Y, 'C');
         g_Console.writeToBuffer(temp, 'C', entity->getCharColor());
         break;
     case Entity::TYPE_HOARDER:
-        //map.setEntity(temp.X, temp.Y, 'H');
         g_Console.writeToBuffer(temp, 'H', entity->getCharColor());
         break;
     case Entity::TYPE_KAREN:
