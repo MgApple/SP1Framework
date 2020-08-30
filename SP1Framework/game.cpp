@@ -415,20 +415,28 @@ void updateGame(double dt, Map &map)       // gameplay logic
     for (std::vector<Entity*>::iterator it = entityList.begin(); it != entityList.end(); ++it)
     {
         Entity* entity = (Entity*)*it;
-        if (entity->getType() == Entity::TYPE_HOARDER && !isContesting)
+        if (entity->getType() == Entity::TYPE_HOARDER)
         {
             Hoarder* hoarder = dynamic_cast<Hoarder*>(entity);
-            hoarder->updatePath(map);
-            if (toiletPaper != nullptr)
+            if (!isContesting)
             {
-                hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
-                hoarder->solveAStar();
+                hoarder->updatePath(map);
+                if (toiletPaper != nullptr)
+                {
+                    hoarder->setStart(toiletPaper->getPos('x'), toiletPaper->getPos('y'));
+                    hoarder->solveAStar();
+                }
+                hoarder->movement(map, dt);
+                if (hoarder->checkCollision(playerPtr))
+                {
+                    enemyBlock();
+                    renderCharacter();
+                }
             }
-            hoarder->movement(map, dt);
-            if (hoarder->checkCollision(playerPtr))
+            else
             {
-                enemyBlock();
-                renderCharacter();
+                hoarder->setPos('x', hoarder->getPos('x'));
+                hoarder->setPos('y', hoarder->getPos('y'));
             }
         }
         else if (entity->getType() == Entity::TYPE_KAREN && !isContesting)
